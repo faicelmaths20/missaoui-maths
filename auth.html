@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Missaoui — Connexion</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #f7f6f2; --dark: #1a1a2e; --accent: #e63946;
+      --accent2: #457b9d; --green: #2ecc71; --muted: #6b6b7b;
+      --border: #e8e8ec; --shadow: 0 4px 32px rgba(26,26,46,0.10);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); min-height: 100vh; display: flex; flex-direction: column; }
+    nav { background: rgba(247,246,242,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 5vw; height: 64px; }
+    .nav-logo { font-family: 'DM Serif Display', serif; font-size: 1.4rem; color: var(--dark); text-decoration: none; display: flex; align-items: center; gap: 10px; }
+    .nav-logo-icon { background: var(--accent); color: white; border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; }
+    .main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 20px; }
+    .auth-container { display: grid; grid-template-columns: 1fr 1fr; max-width: 860px; width: 100%; background: white; border-radius: 24px; box-shadow: var(--shadow); overflow: hidden; border: 1px solid var(--border); }
+    .auth-left { background: linear-gradient(135deg, var(--dark) 0%, #16213e 100%); padding: 50px 40px; display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; }
+    .auth-left::before { content: '∑ π ∫ √'; position: absolute; bottom: 20px; right: -10px; font-family: 'DM Serif Display', serif; font-size: 4rem; opacity: 0.05; color: white; letter-spacing: 10px; pointer-events: none; }
+    .auth-left h2 { font-family: 'DM Serif Display', serif; font-size: 2rem; color: white; margin-bottom: 14px; }
+    .auth-left h2 em { color: var(--accent); font-style: italic; }
+    .auth-left p { color: rgba(255,255,255,0.55); font-size: 0.9rem; line-height: 1.7; margin-bottom: 32px; }
+    .feature-list { list-style: none; }
+    .feature-list li { display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,0.8); font-size: 0.88rem; margin-bottom: 12px; }
+    .feature-list li::before { content: '✓'; background: rgba(46,204,113,0.2); color: var(--green); width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 700; flex-shrink: 0; }
+    .auth-right { padding: 50px 40px; }
+    .auth-tabs { display: flex; margin-bottom: 32px; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+    .auth-tab { flex: 1; padding: 11px; text-align: center; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: all 0.2s; border: none; background: transparent; font-family: 'DM Sans', sans-serif; color: var(--muted); }
+    .auth-tab.active { background: var(--dark); color: white; }
+    .auth-form { display: none; }
+    .auth-form.active { display: block; }
+    .form-title { font-family: 'DM Serif Display', serif; font-size: 1.5rem; margin-bottom: 6px; }
+    .form-subtitle { color: var(--muted); font-size: 0.88rem; margin-bottom: 28px; }
+    .form-group { margin-bottom: 16px; }
+    .form-label { font-size: 0.82rem; font-weight: 600; margin-bottom: 6px; display: block; }
+    .form-input { width: 100%; border: 1.5px solid var(--border); border-radius: 10px; padding: 11px 14px; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; outline: none; transition: border 0.2s; background: var(--bg); }
+    .form-input:focus { border-color: var(--accent2); background: white; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .code-input { width: 100%; border: 2px solid var(--border); border-radius: 12px; padding: 14px; font-family: 'DM Serif Display', serif; font-size: 1.8rem; text-align: center; letter-spacing: 8px; outline: none; transition: border 0.2s; background: var(--bg); text-transform: uppercase; }
+    .code-input:focus { border-color: var(--accent2); background: white; }
+    .btn-submit { width: 100%; background: var(--dark); color: white; border: none; border-radius: 10px; padding: 13px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.2s; margin-top: 8px; }
+    .btn-submit:hover { background: var(--accent2); }
+    .form-error { background: #ffeaec; color: var(--accent); border: 1px solid #ffd0d3; border-radius: 10px; padding: 10px 14px; font-size: 0.84rem; margin-bottom: 16px; display: none; }
+    .hint-box { background: #f0f8ff; border: 1px solid #c8e6f5; border-radius: 10px; padding: 12px 14px; font-size: 0.82rem; color: var(--accent2); margin-bottom: 16px; line-height: 1.5; }
+    #dashboardEleve, #dashboardProf { display: none; min-height: 100vh; background: var(--bg); }
+    .dash-header { background: white; border-bottom: 1px solid var(--border); padding: 20px 5vw; display: flex; justify-content: space-between; align-items: center; }
+    .dash-welcome { font-family: 'DM Serif Display', serif; font-size: 1.3rem; }
+    .dash-welcome span { color: var(--accent2); }
+    .btn-logout { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 8px 18px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; cursor: pointer; font-weight: 500; transition: all 0.2s; }
+    .btn-logout:hover { background: var(--accent); color: white; border-color: var(--accent); }
+    .dash-body { max-width: 1000px; margin: 0 auto; padding: 40px 5vw; }
+    .dash-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 40px; }
+    .dash-card { background: white; border: 1px solid var(--border); border-radius: 16px; padding: 24px; text-align: center; transition: all 0.2s; }
+    .dash-card:hover { box-shadow: var(--shadow); transform: translateY(-3px); }
+    .dash-card-icon { font-size: 2rem; margin-bottom: 12px; }
+    .dash-card-title { font-weight: 700; font-size: 1rem; margin-bottom: 6px; }
+    .dash-card-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
+    .dash-card-btn { margin-top: 16px; background: var(--dark); color: white; border: none; border-radius: 8px; padding: 8px 16px; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+    .dash-card-btn:hover { background: var(--accent2); }
+    .admin-section { background: linear-gradient(135deg, var(--dark), #16213e); border-radius: 16px; padding: 28px; color: white; margin-bottom: 30px; }
+    .admin-section h3 { font-family: 'DM Serif Display', serif; font-size: 1.3rem; margin-bottom: 8px; }
+    .admin-section p { color: rgba(255,255,255,0.6); font-size: 0.85rem; margin-bottom: 16px; }
+    .code-display { background: rgba(255,255,255,0.1); border-radius: 10px; padding: 16px; display: flex; justify-content: space-between; align-items: center; }
+    .code-value { font-family: 'DM Serif Display', serif; font-size: 2.5rem; letter-spacing: 8px; color: #2ecc71; }
+    .btn-copy-code { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 8px 16px; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 600; cursor: pointer; }
+    .btn-copy-code:hover { background: rgba(255,255,255,0.25); }
+    .dash-section-title { font-family: 'DM Serif Display', serif; font-size: 1.3rem; margin-bottom: 16px; }
+    .doc-list { display: flex; flex-direction: column; gap: 10px; }
+    .doc-row { display: flex; align-items: center; gap: 14px; background: white; border: 1px solid var(--border); border-radius: 12px; padding: 14px 18px; transition: all 0.2s; }
+    .doc-row:hover { border-color: var(--accent2); }
+    .doc-row-icon { width: 38px; height: 38px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+    .doc-row-name { font-weight: 600; font-size: 0.9rem; }
+    .doc-row-meta { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+    .doc-row-btn { margin-left: auto; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px; font-size: 0.78rem; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; white-space: nowrap; }
+    .doc-row-btn:hover { background: var(--accent2); color: white; border-color: var(--accent2); }
+    .toast { position: fixed; bottom: 28px; right: 28px; background: var(--dark); color: white; border-radius: 12px; padding: 13px 20px; font-size: 0.88rem; font-weight: 500; transform: translateY(80px); opacity: 0; transition: all 0.3s; z-index: 9999; }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    @media (max-width: 700px) { .auth-container { grid-template-columns: 1fr; } .auth-left { display: none; } .auth-right { padding: 36px 24px; } .form-row { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<nav>
+      <a style="text-decoration:none;display:flex;align-items:center;gap:10px;" href="#">
+    <svg width="38" height="38" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="mFront" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff6b7a"/>
+      <stop offset="40%" style="stop-color:#e63946"/>
+      <stop offset="100%" style="stop-color:#9b1d26"/>
+    </linearGradient>
+  </defs>
+  <rect width="44" height="44" rx="10" fill="#1a1a2e"/>
+  <text x="22" y="32" text-anchor="middle" fill="url(#mFront)" style="font-family:Georgia,serif;font-size:28px;font-weight:900;">M</text>
+</svg>
+    <span style="font-family:Georgia,serif;font-size:1.4rem;font-weight:700;color:#1a1a2e;letter-spacing:1px;">Missaoui</span>
+  </a>
+</nav>
+
+<!-- AUTH -->
+<div id="authSection" class="main">
+  <div class="auth-container">
+    <div class="auth-left">
+      <h2>Bienvenue sur <em>Missaoui</em></h2>
+      <p>La plateforme de votre professeur de maths. Accédez à tous vos cours, exercices et corrections.</p>
+      <ul class="feature-list">
+        <li>Téléchargez vos cours et exercices PDF</li>
+        <li>Regardez les vidéos explicatives</li>
+        <li>Accédez aux corrections détaillées</li>
+        <li>Rejoignez les cours en ligne en direct</li>
+        <li>Suivez votre progression</li>
+      </ul>
+    </div>
+    <div class="auth-right">
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="switchTab('eleve')">Élève</button>
+        <button class="auth-tab" onclick="switchTab('prof')">Professeur</button>
+      </div>
+
+      <!-- ELEVE -->
+      <div class="auth-form active" id="eleveForm">
+        <h2 class="form-title">Espace élève</h2>
+        <p class="form-subtitle">Entrez vos informations pour accéder à vos cours</p>
+        <div class="form-error" id="eleveError"></div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Prénom</label>
+            <input class="form-input" id="elevePrenom" type="text" placeholder="Ahmed"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Nom</label>
+            <input class="form-input" id="eleveNom" type="text" placeholder="Benali"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Code d'accès (donné par le professeur)</label>
+          <input class="code-input" id="eleveCode" type="text" maxlength="6" placeholder="······" oninput="this.value=this.value.toUpperCase()"/>
+        </div>
+        <div class="hint-box">💡 Le code d'accès vous est donné par votre professeur. Contactez-le si vous ne l'avez pas.</div>
+        <button class="btn-submit" onclick="loginEleve()">Accéder à mes cours →</button>
+      </div>
+
+      <!-- PROF -->
+      <div class="auth-form" id="profForm">
+        <h2 class="form-title">Espace professeur</h2>
+        <p class="form-subtitle">Connexion réservée à l'enseignant</p>
+        <div class="form-error" id="profError"></div>
+        <div class="form-group">
+          <label class="form-label">Mot de passe</label>
+          <input class="form-input" id="profPassword" type="password" placeholder="••••••••"/>
+        </div>
+        <button class="btn-submit" onclick="loginProf()">Se connecter →</button>
+        <p style="font-size:0.78rem;color:var(--muted);margin-top:12px;text-align:center;">Mot de passe par défaut : <strong>mathspace2024</strong></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD ELEVE -->
+<div id="dashboardEleve">
+  <div class="dash-header">
+    <div class="dash-welcome">Bonjour, <span id="eleveName">Élève</span> 👋</div>
+    <button class="btn-logout" onclick="logout()">Se déconnecter</button>
+  </div>
+  <div class="dash-body">
+    <div class="dash-grid">
+      <div class="dash-card"><div class="dash-card-icon">📁</div><div class="dash-card-title">Mes Cours</div><div class="dash-card-desc">Accédez à tous vos cours PDF</div><button class="dash-card-btn" onclick="window.location.href='index.html#documents'">Voir les cours</button></div>
+      <div class="dash-card"><div class="dash-card-icon">🎬</div><div class="dash-card-title">Vidéos</div><div class="dash-card-desc">Regardez les explications vidéo</div><button class="dash-card-btn" onclick="window.location.href='index.html#documents'">Voir les vidéos</button></div>
+      <div class="dash-card"><div class="dash-card-icon">✅</div><div class="dash-card-title">Corrections</div><div class="dash-card-desc">Consultez les corrections détaillées</div><button class="dash-card-btn" onclick="window.location.href='index.html#documents'">Voir corrections</button></div>
+      <div class="dash-card"><div class="dash-card-icon">🎓</div><div class="dash-card-title">Cours en ligne</div><div class="dash-card-desc">Rejoignez les sessions en direct</div><button class="dash-card-btn" onclick="window.location.href='cours-en-ligne.html'">Rejoindre →</button></div>
+    </div>
+    <h2 class="dash-section-title">📚 Derniers documents</h2>
+    <div class="doc-list">
+      <div class="doc-row"><div class="doc-row-icon" style="background:#ffeaec;">📄</div><div><div class="doc-row-name">Fonctions — Cours Terminale</div><div class="doc-row-meta">PDF · Lycée Terminale</div></div><button class="doc-row-btn" onclick="showToast('⬇ Bientôt disponible')">⬇ Télécharger</button></div>
+      <div class="doc-row"><div class="doc-row-icon" style="background:#e8f4fd;">🎬</div><div><div class="doc-row-name">Trigonométrie — Vidéo</div><div class="doc-row-meta">Vidéo · 28 min</div></div><button class="doc-row-btn" onclick="showToast('▶ Bientôt disponible')">▶ Regarder</button></div>
+      <div class="doc-row"><div class="doc-row-icon" style="background:#e8f8ee;">✅</div><div><div class="doc-row-name">DS Géométrie — Correction</div><div class="doc-row-meta">PDF · Correction complète</div></div><button class="doc-row-btn" onclick="showToast('⬇ Bientôt disponible')">⬇ Télécharger</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD PROF -->
+<div id="dashboardProf">
+  <div class="dash-header">
+    <div class="dash-welcome">Bonjour, <span style="color:var(--accent)">Prof. Faicel</span> 👨‍🏫</div>
+    <button class="btn-logout" onclick="logout()">Se déconnecter</button>
+  </div>
+  <div class="dash-body">
+    <div class="admin-section">
+      <h3>🔑 Code d'accès élèves</h3>
+      <p>Partagez ce code avec vos élèves pour qu'ils accèdent à la plateforme</p>
+      <div class="code-display">
+        <div class="code-value" id="accessCodeDisplay">MATH27</div>
+        <button class="btn-copy-code" onclick="copyCode()">📋 Copier le code</button>
+      </div>
+    </div>
+    <div class="dash-grid">
+      <div class="dash-card"><div class="dash-card-icon">🏠</div><div class="dash-card-title">Page d'accueil</div><div class="dash-card-desc">Retournez au site principal</div><button class="dash-card-btn" onclick="window.location.href='index.html'">Aller au site →</button></div>
+      <div class="dash-card"><div class="dash-card-icon">🎓</div><div class="dash-card-title">Cours en ligne</div><div class="dash-card-desc">Démarrez une session en direct</div><button class="dash-card-btn" onclick="window.location.href='cours-en-ligne.html'">Démarrer →</button></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const ACCESS_CODE = 'MATH27';
+  const PROF_PASSWORD = 'MATHPROF2027';
+
+  window.addEventListener('load', () => {
+    const s = JSON.parse(localStorage.getItem('ms_session') || 'null');
+    if (s?.role === 'eleve') showDashboardEleve(s);
+    else if (s?.role === 'prof') showDashboardProf();
+  });
+
+  function switchTab(tab) {
+    document.querySelectorAll('.auth-tab').forEach((t,i) => t.classList.toggle('active',(tab==='eleve'&&i===0)||(tab==='prof'&&i===1)));
+    document.getElementById('eleveForm').classList.toggle('active', tab==='eleve');
+    document.getElementById('profForm').classList.toggle('active', tab==='prof');
+  }
+
+  function loginEleve() {
+    const prenom = document.getElementById('elevePrenom').value.trim();
+    const nom = document.getElementById('eleveNom').value.trim();
+    const code = document.getElementById('eleveCode').value.trim().toUpperCase();
+    const err = document.getElementById('eleveError');
+    err.style.display = 'none';
+    if (!prenom||!nom) { err.textContent='⚠️ Entrez votre prénom et nom.'; err.style.display='block'; return; }
+    if (!code) { err.textContent='⚠️ Entrez le code d\'accès.'; err.style.display='block'; return; }
+    if (code !== ACCESS_CODE) { err.textContent='⚠️ Code incorrect. Demandez-le à votre professeur.'; err.style.display='block'; return; }
+    const s = {role:'eleve', prenom, nom};
+    localStorage.setItem('ms_session', JSON.stringify(s));
+    showDashboardEleve(s);
+  }
+
+  function loginProf() {
+    const pw = document.getElementById('profPassword').value;
+    const err = document.getElementById('profError');
+    err.style.display = 'none';
+    if (pw !== PROF_PASSWORD) { err.textContent='⚠️ Mot de passe incorrect.'; err.style.display='block'; return; }
+    localStorage.setItem('ms_session', JSON.stringify({role:'prof'}));
+    showDashboardProf();
+  }
+
+  function logout() {
+    localStorage.removeItem('ms_session');
+    document.getElementById('dashboardEleve').style.display='none';
+    document.getElementById('dashboardProf').style.display='none';
+    document.getElementById('authSection').style.display='flex';
+    showToast('👋 Déconnecté');
+  }
+
+  function showDashboardEleve(s) {
+    document.getElementById('authSection').style.display='none';
+    document.getElementById('dashboardEleve').style.display='block';
+    document.getElementById('eleveName').textContent = s.prenom+' '+s.nom;
+    showToast('🎓 Bienvenue '+s.prenom+' !');
+  }
+
+  function showDashboardProf() {
+    document.getElementById('authSection').style.display='none';
+    document.getElementById('dashboardProf').style.display='block';
+    document.getElementById('accessCodeDisplay').textContent = ACCESS_CODE;
+    showToast('👨‍🏫 Bienvenue Professeur Faicel !');
+  }
+
+  function copyCode() {
+    navigator.clipboard.writeText(ACCESS_CODE).then(()=>showToast('✅ Code copié : '+ACCESS_CODE));
+  }
+
+  function showToast(msg) {
+    const t=document.getElementById('toast');
+    t.textContent=msg; t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'),3000);
+  }
+
+  document.addEventListener('keydown',(e)=>{
+    if(e.key==='Enter'){
+      document.getElementById('eleveForm').classList.contains('active')?loginEleve():loginProf();
+    }
+  });
+</script>
+</body>
+</html>

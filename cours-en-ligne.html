@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Missaoui — Cours en ligne</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #f7f6f2;
+      --dark: #1a1a2e;
+      --accent: #e63946;
+      --accent2: #457b9d;
+      --green: #2ecc71;
+      --light: #ffffff;
+      --muted: #6b6b7b;
+      --border: #e8e8ec;
+      --radius: 16px;
+      --shadow: 0 4px 32px rgba(26,26,46,0.08);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--dark);
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 200;
+      background: rgba(247,246,242,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5vw; height: 64px;
+    }
+    .nav-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.4rem; color: var(--dark);
+      text-decoration: none; display: flex; align-items: center; gap: 10px;
+    }
+    .nav-logo-icon {
+      background: var(--accent); color: white;
+      border-radius: 8px; width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+    }
+    .nav-back {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 10px; padding: 8px 16px;
+      font-family: 'DM Sans', sans-serif; font-size: 0.85rem;
+      cursor: pointer; font-weight: 500; color: var(--dark);
+      text-decoration: none;
+    }
+
+    /* LAYOUT */
+    .page { max-width: 1200px; margin: 0 auto; padding: 40px 5vw; }
+
+    /* HEADER */
+    .page-header {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      margin-bottom: 36px; flex-wrap: wrap; gap: 20px;
+    }
+    .page-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem; margin-bottom: 6px;
+    }
+    .page-sub { color: var(--muted); font-size: 0.95rem; }
+    .live-badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: #fff0f0; color: var(--accent);
+      border: 1px solid #ffd0d3;
+      border-radius: 100px; padding: 7px 16px;
+      font-size: 0.82rem; font-weight: 600;
+    }
+    .live-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 1.4s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.8)} }
+
+    /* MAIN GRID */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 24px;
+      align-items: start;
+    }
+
+    /* VIDEO AREA */
+    .video-area {
+      background: var(--dark);
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      min-height: 480px;
+    }
+    .video-placeholder {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      min-height: 480px; color: white;
+      text-align: center; padding: 40px;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    }
+    .video-placeholder-icon { font-size: 4rem; margin-bottom: 20px; opacity: 0.6; }
+    .video-placeholder h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.6rem; margin-bottom: 10px;
+    }
+    .video-placeholder p { color: rgba(255,255,255,0.55); font-size: 0.9rem; line-height: 1.6; max-width: 380px; }
+    .math-bg {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 8rem; opacity: 0.04;
+      font-family: 'DM Serif Display', serif;
+      pointer-events: none;
+      letter-spacing: 20px;
+    }
+
+    /* JITSI CONTAINER */
+    #jitsi-container {
+      display: none;
+      width: 100%; height: 560px;
+      border-radius: 20px; overflow: hidden;
+    }
+    #jitsi-container iframe {
+      width: 100%; height: 100%; border: none;
+    }
+
+    /* CONTROLS */
+    .controls {
+      background: white; border-radius: 16px;
+      padding: 20px; margin-top: 16px;
+      border: 1px solid var(--border);
+      display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
+    }
+    .btn-start {
+      background: var(--green); color: white;
+      border: none; border-radius: 12px;
+      padding: 13px 28px; font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem; font-weight: 700;
+      cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .btn-start:hover { background: #27ae60; transform: translateY(-2px); }
+    .btn-stop {
+      background: var(--accent); color: white;
+      border: none; border-radius: 12px;
+      padding: 13px 24px; font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+      display: none;
+    }
+    .btn-stop:hover { background: #c0392b; }
+    .btn-copy {
+      background: var(--bg); color: var(--dark);
+      border: 1px solid var(--border); border-radius: 12px;
+      padding: 12px 20px; font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem; font-weight: 500;
+      cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .btn-copy:hover { border-color: var(--accent2); background: white; }
+    .room-info {
+      margin-left: auto; display: flex; align-items: center; gap: 10px;
+      font-size: 0.85rem; color: var(--muted);
+    }
+    .room-code {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 8px; padding: 6px 12px;
+      font-weight: 600; color: var(--dark);
+      font-size: 0.88rem; letter-spacing: 0.04em;
+    }
+
+    /* SIDEBAR */
+    .sidebar { display: flex; flex-direction: column; gap: 20px; }
+
+    /* ROOM SETUP */
+    .card {
+      background: white; border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px;
+    }
+    .card-title {
+      font-weight: 700; font-size: 1rem;
+      margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
+    }
+    .form-group { margin-bottom: 14px; }
+    .form-label { font-size: 0.82rem; font-weight: 600; margin-bottom: 6px; display: block; color: var(--dark); }
+    .form-input {
+      width: 100%; border: 1.5px solid var(--border);
+      border-radius: 10px; padding: 10px 13px;
+      font-family: 'DM Sans', sans-serif; font-size: 0.88rem;
+      outline: none; transition: border 0.2s; background: var(--bg);
+    }
+    .form-input:focus { border-color: var(--accent2); background: white; }
+    .form-select {
+      width: 100%; border: 1.5px solid var(--border);
+      border-radius: 10px; padding: 10px 13px;
+      font-family: 'DM Sans', sans-serif; font-size: 0.88rem;
+      outline: none; background: var(--bg); cursor: pointer;
+    }
+    .btn-schedule {
+      width: 100%; background: var(--dark); color: white;
+      border: none; border-radius: 10px; padding: 12px;
+      font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+      font-weight: 600; cursor: pointer; transition: background 0.2s;
+      margin-top: 4px;
+    }
+    .btn-schedule:hover { background: var(--accent2); }
+
+    /* PLANNED SESSIONS */
+    .session-item {
+      border: 1px solid var(--border); border-radius: 12px;
+      padding: 14px 16px; margin-bottom: 10px;
+      transition: all 0.2s; cursor: pointer;
+    }
+    .session-item:hover { border-color: var(--accent2); box-shadow: var(--shadow); }
+    .session-header {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      margin-bottom: 6px;
+    }
+    .session-title { font-weight: 600; font-size: 0.88rem; }
+    .session-status {
+      font-size: 0.72rem; font-weight: 700;
+      padding: 3px 8px; border-radius: 6px;
+      text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .session-status.upcoming { background: #e8f4fd; color: var(--accent2); }
+    .session-status.live { background: #ffe8e8; color: var(--accent); }
+    .session-meta { font-size: 0.78rem; color: var(--muted); }
+    .join-btn {
+      width: 100%; margin-top: 10px;
+      background: var(--accent2); color: white;
+      border: none; border-radius: 8px; padding: 8px;
+      font-family: 'DM Sans', sans-serif; font-size: 0.82rem;
+      font-weight: 600; cursor: pointer; transition: background 0.2s;
+    }
+    .join-btn:hover { background: var(--accent); }
+
+    /* PARTICIPANTS */
+    .participants-list { display: flex; flex-direction: column; gap: 10px; }
+    .participant {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .avatar {
+      width: 34px; height: 34px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem; font-weight: 700; flex-shrink: 0;
+      color: white;
+    }
+    .participant-name { font-size: 0.88rem; font-weight: 500; }
+    .participant-status { font-size: 0.75rem; color: var(--muted); }
+    .online-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--green); margin-left: auto; flex-shrink: 0;
+    }
+
+    /* LINK SHARE */
+    .link-share {
+      background: linear-gradient(135deg, #f0f8ff, #e8f4fd);
+      border: 1px solid #c8e6f5;
+      border-radius: 14px; padding: 20px;
+    }
+    .link-share p { font-size: 0.85rem; color: var(--muted); margin-bottom: 10px; }
+    .link-box {
+      display: flex; gap: 8px; align-items: center;
+    }
+    .link-input {
+      flex: 1; border: 1px solid var(--border);
+      border-radius: 8px; padding: 8px 12px;
+      font-size: 0.78rem; background: white;
+      color: var(--muted); outline: none;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .btn-copy-link {
+      background: var(--accent2); color: white;
+      border: none; border-radius: 8px; padding: 8px 14px;
+      font-size: 0.78rem; font-weight: 600;
+      cursor: pointer; font-family: 'DM Sans', sans-serif;
+      white-space: nowrap; transition: background 0.2s;
+    }
+    .btn-copy-link:hover { background: var(--accent); }
+
+    /* TOAST */
+    .toast {
+      position: fixed; bottom: 30px; right: 30px;
+      background: var(--dark); color: white;
+      border-radius: 12px; padding: 14px 22px;
+      font-size: 0.88rem; font-weight: 500;
+      transform: translateY(80px); opacity: 0;
+      transition: all 0.3s; z-index: 9999;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+
+    @media (max-width: 900px) {
+      .main-grid { grid-template-columns: 1fr; }
+      .room-info { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+      <a style="text-decoration:none;display:flex;align-items:center;gap:10px;" href="#">
+    <svg width="38" height="38" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="mFront" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff6b7a"/>
+      <stop offset="40%" style="stop-color:#e63946"/>
+      <stop offset="100%" style="stop-color:#9b1d26"/>
+    </linearGradient>
+  </defs>
+  <rect width="44" height="44" rx="10" fill="#1a1a2e"/>
+  <text x="22" y="32" text-anchor="middle" fill="url(#mFront)" style="font-family:Georgia,serif;font-size:28px;font-weight:900;">M</text>
+</svg>
+    <span style="font-family:Georgia,serif;font-size:1.4rem;font-weight:700;color:#1a1a2e;letter-spacing:1px;">Missaoui</span>
+  </a>
+  <a class="nav-back" href="mathsite.html">← Retour au site</a>
+</nav>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">🎓 Cours en ligne</h1>
+      <p class="page-sub">Lancez une session de cours en direct avec vos élèves via Jitsi Meet</p>
+    </div>
+    <div class="live-badge">
+      <div class="live-dot"></div>
+      Jitsi Meet intégré
+    </div>
+  </div>
+
+  <div class="main-grid">
+
+    <!-- VIDEO + CONTROLS -->
+    <div>
+      <!-- VIDEO PLACEHOLDER -->
+      <div class="video-area" id="videoArea">
+        <div class="math-bg">∑ π ∫</div>
+        <div class="video-placeholder" id="videoPlaceholder">
+          <div class="video-placeholder-icon">📹</div>
+          <h3>Prêt à enseigner ?</h3>
+          <p>Configurez votre salle à droite, puis cliquez sur <strong>"Démarrer le cours"</strong> pour lancer votre session en direct avec vos élèves.</p>
+        </div>
+        <div id="jitsi-container"></div>
+      </div>
+
+      <!-- CONTROLS BAR -->
+      <div class="controls">
+        <button class="btn-start" id="btnStart" onclick="startCourse()">
+          ▶ Démarrer le cours
+        </button>
+        <button class="btn-stop" id="btnStop" onclick="stopCourse()">
+          ⏹ Terminer
+        </button>
+        <button class="btn-copy" onclick="copyLink()">
+          🔗 Copier le lien élèves
+        </button>
+        <div class="room-info">
+          <span>Salle :</span>
+          <span class="room-code" id="roomCodeDisplay">—</span>
+        </div>
+      </div>
+
+      <!-- LINK SHARE -->
+      <div class="link-share" style="margin-top:16px;">
+        <p>🔗 <strong>Lien à partager avec vos élèves :</strong></p>
+        <div class="link-box">
+          <input class="link-input" id="shareLink" readonly value="Configurez d'abord la salle →"/>
+          <button class="btn-copy-link" onclick="copyLink()">Copier</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+      <!-- ROOM SETUP -->
+      <div class="card">
+        <div class="card-title">⚙️ Configuration de la salle</div>
+        <div class="form-group">
+          <label class="form-label">Nom du cours</label>
+          <input class="form-input" id="courseName" type="text" placeholder="Ex: Algèbre — Terminale" oninput="updateRoomCode()"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Niveau</label>
+          <select class="form-select" id="courseLevel">
+            <option value="college-6">Collège — 6ème</option>
+            <option value="college-5">Collège — 5ème</option>
+            <option value="college-4">Collège — 4ème</option>
+            <option value="college-3">Collège — 3ème</option>
+            <option value="lycee-2nde">Lycée — Seconde</option>
+            <option value="lycee-1ere" selected>Lycée — Première</option>
+            <option value="lycee-term">Lycée — Terminale</option>
+            <option value="universite">Université</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Votre nom (affiché aux élèves)</label>
+          <input class="form-input" id="teacherName" type="text" placeholder="Prof. Faicel" value="Prof. Faicel"/>
+        </div>
+        <button class="btn-schedule" onclick="startCourse()">▶ Démarrer maintenant</button>
+      </div>
+
+      <!-- SESSIONS PLANIFIÉES -->
+      <div class="card">
+        <div class="card-title">📅 Sessions planifiées</div>
+
+        <div class="session-item">
+          <div class="session-header">
+            <div class="session-title">Dérivées — Terminale</div>
+            <span class="session-status live">🔴 En direct</span>
+          </div>
+          <div class="session-meta">Aujourd'hui · 10h00 · 45 min</div>
+          <button class="join-btn" onclick="joinSession('Missaoui-Derivees-Term')">Rejoindre →</button>
+        </div>
+
+        <div class="session-item">
+          <div class="session-header">
+            <div class="session-title">Trigonométrie — 1ère</div>
+            <span class="session-status upcoming">Demain</span>
+          </div>
+          <div class="session-meta">Demain · 14h00 · 1h</div>
+          <button class="join-btn" style="background:var(--muted);" onclick="showToast('📅 Session pas encore démarrée')">Planifié</button>
+        </div>
+
+        <div class="session-item">
+          <div class="session-header">
+            <div class="session-title">Probabilités — 2nde</div>
+            <span class="session-status upcoming">Vendredi</span>
+          </div>
+          <div class="session-meta">Vendredi · 09h00 · 1h</div>
+          <button class="join-btn" style="background:var(--muted);" onclick="showToast('📅 Session pas encore démarrée')">Planifié</button>
+        </div>
+      </div>
+
+      <!-- PARTICIPANTS -->
+      <div class="card">
+        <div class="card-title">👥 Élèves connectés <span style="color:var(--muted);font-weight:400;font-size:0.82rem;" id="connectedCount">(0)</span></div>
+        <div class="participants-list" id="participantsList">
+          <div style="color:var(--muted);font-size:0.85rem;text-align:center;padding:12px 0;">
+            Démarrez le cours pour voir les élèves connectés
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">✅ Lien copié !</div>
+
+<!-- JITSI SCRIPT -->
+<script src="https://meet.jit.si/external_api.js"></script>
+<script>
+  let jitsiApi = null;
+  let currentRoom = '';
+  const JITSI_DOMAIN = 'meet.jit.si';
+
+  // Fake participants for demo
+  const fakeParticipants = [
+    { name: 'Ahmed B.', color: '#457b9d', initial: 'A' },
+    { name: 'Sara M.', color: '#e63946', initial: 'S' },
+    { name: 'Youssef K.', color: '#2ecc71', initial: 'Y' },
+    { name: 'Lina T.', color: '#f39c12', initial: 'L' },
+  ];
+
+  function generateRoomCode(name, level) {
+    const clean = (name || 'Missaoui')
+      .replace(/[^a-zA-ZÀ-ÿ0-9\s]/g, '')
+      .trim()
+      .replace(/\s+/g, '-')
+      .substring(0, 20);
+    const lvl = (level || 'cours').toUpperCase().replace('-', '');
+    const rand = Math.floor(Math.random() * 9000 + 1000);
+    return `Missaoui-${clean || 'Cours'}-${rand}`;
+  }
+
+  function updateRoomCode() {
+    const name = document.getElementById('courseName').value;
+    if (name.length > 2) {
+      const code = generateRoomCode(name);
+      document.getElementById('roomCodeDisplay').textContent = code.substring(0, 22) + '...';
+      document.getElementById('shareLink').value = `https://meet.jit.si/${code}`;
+    }
+  }
+
+  function startCourse() {
+    const name = document.getElementById('courseName').value || 'Cours de Maths';
+    const level = document.getElementById('courseLevel').value;
+    const teacher = document.getElementById('teacherName').value || 'Professeur';
+
+    currentRoom = generateRoomCode(name, level);
+
+    // Update UI
+    document.getElementById('shareLink').value = `https://meet.jit.si/${currentRoom}`;
+    document.getElementById('roomCodeDisplay').textContent = currentRoom.substring(0, 18) + '...';
+    document.getElementById('videoPlaceholder').style.display = 'none';
+    document.getElementById('jitsi-container').style.display = 'block';
+    document.getElementById('btnStart').style.display = 'none';
+    document.getElementById('btnStop').style.display = 'inline-block';
+
+    // Launch Jitsi
+    if (jitsiApi) { jitsiApi.dispose(); }
+
+    try {
+      jitsiApi = new JitsiMeetExternalAPI(JITSI_DOMAIN, {
+        roomName: currentRoom,
+        parentNode: document.getElementById('jitsi-container'),
+        width: '100%',
+        height: 560,
+        userInfo: { displayName: teacher },
+        configOverwrite: {
+          startWithAudioMuted: false,
+          startWithVideoMuted: false,
+          enableWelcomePage: false,
+          prejoinPageEnabled: false,
+          disableDeepLinking: true,
+        },
+        interfaceConfigOverwrite: {
+          TOOLBAR_BUTTONS: [
+            'microphone', 'camera', 'desktop', 'fullscreen',
+            'fodeviceselection', 'hangup', 'chat', 'recording',
+            'whiteboard', 'participants-pane', 'tileview',
+            'videobackgroundblur', 'settings', 'raisehand',
+          ],
+          SHOW_JITSI_WATERMARK: false,
+          SHOW_WATERMARK_FOR_GUESTS: false,
+          DEFAULT_BACKGROUND: '#1a1a2e',
+          BRAND_WATERMARK_LINK: '',
+        },
+      });
+
+      jitsiApi.addEventListener('videoConferenceJoined', () => {
+        showToast('🎓 Cours démarré ! Partagez le lien avec vos élèves');
+        simulateParticipants();
+      });
+
+      jitsiApi.addEventListener('participantJoined', (p) => {
+        showToast(`👋 ${p.displayName || 'Un élève'} a rejoint le cours`);
+      });
+
+    } catch(e) {
+      // Fallback if Jitsi script blocked
+      document.getElementById('jitsi-container').innerHTML = `
+        <div style="background:linear-gradient(135deg,#1a1a2e,#16213e);height:560px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;text-align:center;padding:40px;border-radius:20px;">
+          <div style="font-size:3rem;margin-bottom:20px;">🎓</div>
+          <h3 style="font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:12px;">Cours démarré !</h3>
+          <p style="color:rgba(255,255,255,0.6);margin-bottom:28px;line-height:1.6;">
+            Partagez ce lien avec vos élèves pour qu'ils rejoignent le cours :
+          </p>
+          <div style="background:rgba(255,255,255,0.1);border-radius:12px;padding:14px 24px;font-size:0.88rem;margin-bottom:24px;word-break:break-all;">
+            https://meet.jit.si/${currentRoom}
+          </div>
+          <a href="https://meet.jit.si/${currentRoom}" target="_blank" 
+             style="background:#2ecc71;color:white;padding:14px 28px;border-radius:12px;text-decoration:none;font-weight:700;font-size:0.95rem;">
+            Ouvrir Jitsi Meet →
+          </a>
+        </div>`;
+      simulateParticipants();
+      showToast('🎓 Cours créé ! Ouvrez le lien pour démarrer');
+    }
+  }
+
+  function joinSession(roomName) {
+    document.getElementById('courseName').value = roomName.replace('Missaoui-','').replace(/-/g,' ');
+    currentRoom = roomName;
+    document.getElementById('shareLink').value = `https://meet.jit.si/${roomName}`;
+    startCourse();
+  }
+
+  function stopCourse() {
+    if (jitsiApi) { jitsiApi.dispose(); jitsiApi = null; }
+    document.getElementById('jitsi-container').style.display = 'none';
+    document.getElementById('jitsi-container').innerHTML = '';
+    document.getElementById('videoPlaceholder').style.display = 'flex';
+    document.getElementById('btnStart').style.display = 'flex';
+    document.getElementById('btnStop').style.display = 'none';
+    document.getElementById('roomCodeDisplay').textContent = '—';
+    document.getElementById('shareLink').value = 'Configurez d\'abord la salle →';
+    clearParticipants();
+    showToast('⏹ Cours terminé');
+  }
+
+  function copyLink() {
+    const link = document.getElementById('shareLink').value;
+    if (link.startsWith('https')) {
+      navigator.clipboard.writeText(link).then(() => showToast('🔗 Lien copié dans le presse-papier !'));
+    } else {
+      showToast('⚠️ Démarrez d\'abord le cours');
+    }
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  function simulateParticipants() {
+    const list = document.getElementById('participantsList');
+    list.innerHTML = '';
+    let count = 0;
+    fakeParticipants.forEach((p, i) => {
+      setTimeout(() => {
+        const div = document.createElement('div');
+        div.className = 'participant';
+        div.innerHTML = `
+          <div class="avatar" style="background:${p.color}">${p.initial}</div>
+          <div>
+            <div class="participant-name">${p.name}</div>
+            <div class="participant-status">Connecté</div>
+          </div>
+          <div class="online-dot"></div>`;
+        list.appendChild(div);
+        count++;
+        document.getElementById('connectedCount').textContent = `(${count})`;
+      }, i * 800);
+    });
+  }
+
+  function clearParticipants() {
+    document.getElementById('participantsList').innerHTML = `
+      <div style="color:var(--muted);font-size:0.85rem;text-align:center;padding:12px 0;">
+        Démarrez le cours pour voir les élèves connectés
+      </div>`;
+    document.getElementById('connectedCount').textContent = '(0)';
+  }
+
+  // Init room code
+  updateRoomCode();
+</script>
+</body>
+</html>

@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Missaoui — Plateforme Maths</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #f7f6f2;
+      --dark: #1a1a2e;
+      --accent: #e63946;
+      --accent2: #457b9d;
+      --light: #ffffff;
+      --muted: #6b6b7b;
+      --card: #ffffff;
+      --border: #e8e8ec;
+      --radius: 16px;
+      --shadow: 0 4px 32px rgba(26,26,46,0.08);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--dark);
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(247,246,242,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5vw;
+      height: 64px;
+    }
+    .nav-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.5rem;
+      color: var(--dark);
+      text-decoration: none;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .nav-logo span {
+      display: inline-block;
+      background: var(--accent);
+      color: white;
+      border-radius: 8px;
+      width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+    }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a {
+      text-decoration: none; color: var(--muted);
+      font-size: 0.92rem; font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--dark); }
+    .nav-btn {
+      background: var(--dark); color: white;
+      border: none; border-radius: 10px;
+      padding: 9px 20px; font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem; font-weight: 600;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .nav-btn:hover { background: var(--accent); }
+
+    /* HERO */
+    .hero {
+      display: grid; grid-template-columns: 1fr 1fr;
+      align-items: center; gap: 60px;
+      padding: 100px 8vw 80px;
+      max-width: 1200px; margin: 0 auto;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 100px; padding: 6px 14px;
+      font-size: 0.8rem; font-weight: 500; color: var(--muted);
+      margin-bottom: 24px;
+    }
+    .hero-badge::before {
+      content: ''; width: 8px; height: 8px;
+      border-radius: 50%; background: #2ecc71;
+    }
+    .hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.4rem, 4vw, 3.4rem);
+      line-height: 1.15;
+      color: var(--dark);
+      margin-bottom: 20px;
+    }
+    .hero h1 em {
+      font-style: italic; color: var(--accent);
+    }
+    .hero p {
+      color: var(--muted); font-size: 1.05rem;
+      line-height: 1.7; margin-bottom: 36px;
+    }
+    .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--dark); color: white;
+      border: none; border-radius: 12px;
+      padding: 14px 28px; font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+      text-decoration: none; display: inline-block;
+    }
+    .btn-primary:hover { background: var(--accent); transform: translateY(-2px); }
+    .btn-secondary {
+      background: transparent; color: var(--dark);
+      border: 2px solid var(--border); border-radius: 12px;
+      padding: 12px 24px; font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem; font-weight: 500;
+      cursor: pointer; transition: all 0.2s;
+      text-decoration: none; display: inline-block;
+    }
+    .btn-secondary:hover { border-color: var(--dark); }
+
+    /* HERO VISUAL */
+    .hero-visual {
+      background: white;
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 30px;
+      border: 1px solid var(--border);
+      animation: float 4s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .visual-header {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 20px;
+    }
+    .dot { width: 12px; height: 12px; border-radius: 50%; }
+    .dot.r { background: #ff5f57; }
+    .dot.y { background: #febc2e; }
+    .dot.g { background: #28c840; }
+    .visual-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.1rem; margin-left: 8px; color: var(--dark);
+    }
+    .visual-card {
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin-bottom: 12px;
+      display: flex; align-items: center; gap: 14px;
+      border: 1px solid var(--border);
+    }
+    .visual-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; flex-shrink: 0;
+    }
+    .visual-icon.red { background: #ffeaec; }
+    .visual-icon.blue { background: #e8f4fd; }
+    .visual-icon.green { background: #e8f8ee; }
+    .visual-card-title { font-weight: 600; font-size: 0.9rem; }
+    .visual-card-sub { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+    .visual-progress {
+      margin-top: 16px;
+      background: var(--bg);
+      border-radius: 12px; padding: 16px;
+      border: 1px solid var(--border);
+    }
+    .progress-label {
+      display: flex; justify-content: space-between;
+      font-size: 0.82rem; color: var(--muted); margin-bottom: 8px;
+    }
+    .progress-bar {
+      height: 6px; background: var(--border); border-radius: 10px; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; background: linear-gradient(90deg, var(--accent2), var(--accent));
+      border-radius: 10px; width: 72%;
+      animation: grow 1.5s ease forwards;
+    }
+    @keyframes grow { from { width: 0; } to { width: 72%; } }
+
+    /* STATS */
+    .stats {
+      display: flex; justify-content: center; gap: 40px;
+      padding: 40px 8vw;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: white;
+    }
+    .stat { text-align: center; }
+    .stat-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2.2rem; color: var(--dark);
+    }
+    .stat-label { font-size: 0.85rem; color: var(--muted); margin-top: 4px; }
+
+    /* SECTIONS */
+    section { padding: 80px 8vw; max-width: 1200px; margin: 0 auto; }
+
+    .section-tag {
+      display: inline-block;
+      background: #f0f4ff; color: var(--accent2);
+      border-radius: 100px; padding: 5px 14px;
+      font-size: 0.78rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      margin-bottom: 12px; color: var(--dark);
+    }
+    .section-sub {
+      color: var(--muted); font-size: 1rem;
+      max-width: 520px; line-height: 1.7;
+      margin-bottom: 48px;
+    }
+
+    /* FEATURES GRID */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .feature-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      transition: all 0.25s;
+      position: relative; overflow: hidden;
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.3s;
+    }
+    .feature-card:hover { box-shadow: var(--shadow); transform: translateY(-4px); }
+    .feature-card:hover::before { transform: scaleX(1); }
+    .feature-icon {
+      font-size: 1.8rem; margin-bottom: 16px;
+      display: inline-block;
+    }
+    .feature-title {
+      font-weight: 700; font-size: 1.05rem;
+      margin-bottom: 8px; color: var(--dark);
+    }
+    .feature-desc {
+      font-size: 0.88rem; color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* DOCUMENTS SECTION */
+    .docs-section { background: white; border-radius: 24px; padding: 40px; border: 1px solid var(--border); }
+    .docs-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 28px;
+    }
+    .docs-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.4rem;
+    }
+    .docs-search {
+      display: flex; gap: 10px; align-items: center;
+    }
+    .search-input {
+      border: 1px solid var(--border); border-radius: 10px;
+      padding: 8px 14px; font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem; background: var(--bg);
+      outline: none; width: 220px;
+      transition: border 0.2s;
+    }
+    .search-input:focus { border-color: var(--accent2); }
+    .filter-btn {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 10px; padding: 8px 14px;
+      font-family: 'DM Sans', sans-serif; font-size: 0.88rem;
+      cursor: pointer; font-weight: 500;
+      transition: all 0.2s;
+    }
+    .filter-btn.active, .filter-btn:hover {
+      background: var(--dark); color: white; border-color: var(--dark);
+    }
+    .filters { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+    .docs-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    .doc-item {
+      border: 1px solid var(--border); border-radius: 12px;
+      padding: 18px; cursor: pointer;
+      transition: all 0.2s; background: var(--bg);
+    }
+    .doc-item:hover { border-color: var(--accent2); background: white; box-shadow: var(--shadow); }
+    .doc-type {
+      display: inline-block; padding: 3px 10px; border-radius: 6px;
+      font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em; margin-bottom: 10px;
+    }
+    .doc-type.pdf { background: #ffeaec; color: var(--accent); }
+    .doc-type.video { background: #e8f4fd; color: var(--accent2); }
+    .doc-type.correction { background: #e8f8ee; color: #2ecc71; }
+    .doc-name { font-weight: 600; font-size: 0.9rem; margin-bottom: 6px; }
+    .doc-meta { font-size: 0.78rem; color: var(--muted); }
+    .doc-action {
+      margin-top: 12px;
+      display: flex; gap: 8px;
+    }
+    .btn-dl {
+      background: var(--dark); color: white;
+      border: none; border-radius: 8px;
+      padding: 6px 12px; font-size: 0.78rem;
+      cursor: pointer; font-family: 'DM Sans', sans-serif;
+      font-weight: 500; flex: 1;
+      transition: background 0.2s;
+    }
+    .btn-dl:hover { background: var(--accent); }
+
+    /* COURS EN LIGNE */
+    .live-section {
+      background: linear-gradient(135deg, var(--dark) 0%, #16213e 100%);
+      border-radius: 24px; padding: 50px;
+      color: white; position: relative; overflow: hidden;
+    }
+    .live-section::before {
+      content: '∑ ∫ π √';
+      position: absolute; right: 5%; top: 50%; transform: translateY(-50%);
+      font-size: 5rem; opacity: 0.05;
+      font-family: 'DM Serif Display', serif;
+      letter-spacing: 20px;
+    }
+    .live-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(230,57,70,0.2); color: #e63946;
+      border-radius: 100px; padding: 5px 12px;
+      font-size: 0.78rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      margin-bottom: 20px;
+    }
+    .live-tag::before {
+      content: ''; width: 8px; height: 8px;
+      border-radius: 50%; background: var(--accent);
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; } 50% { opacity: 0.3; }
+    }
+    .live-section h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem; margin-bottom: 12px;
+    }
+    .live-section p {
+      color: rgba(255,255,255,0.65);
+      line-height: 1.7; max-width: 460px;
+      margin-bottom: 32px;
+    }
+    .live-cards {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px; margin-bottom: 32px;
+    }
+    .live-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px; padding: 20px;
+      transition: all 0.2s;
+    }
+    .live-card:hover {
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.2);
+    }
+    .live-card-icon { font-size: 1.5rem; margin-bottom: 10px; }
+    .live-card-title { font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; }
+    .live-card-sub { font-size: 0.78rem; color: rgba(255,255,255,0.5); }
+    .btn-white {
+      background: white; color: var(--dark);
+      border: none; border-radius: 12px;
+      padding: 14px 28px; font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem; font-weight: 700;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .btn-white:hover { background: var(--accent); color: white; transform: translateY(-2px); }
+
+    /* ESPACE ELEVES */
+    .students-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 32px;
+      align-items: center;
+    }
+    .login-card {
+      background: white; border: 1px solid var(--border);
+      border-radius: 24px; padding: 40px;
+      box-shadow: var(--shadow);
+    }
+    .login-card h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.5rem; margin-bottom: 8px;
+    }
+    .login-card p { color: var(--muted); font-size: 0.9rem; margin-bottom: 28px; }
+    .form-group { margin-bottom: 16px; }
+    .form-label { font-size: 0.83rem; font-weight: 600; margin-bottom: 6px; display: block; color: var(--dark); }
+    .form-input {
+      width: 100%; border: 1.5px solid var(--border);
+      border-radius: 10px; padding: 11px 14px;
+      font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+      outline: none; transition: border 0.2s;
+      background: var(--bg);
+    }
+    .form-input:focus { border-color: var(--accent2); background: white; }
+    .btn-form {
+      width: 100%; background: var(--dark); color: white;
+      border: none; border-radius: 10px;
+      padding: 13px; font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem; font-weight: 600;
+      cursor: pointer; transition: background 0.2s; margin-top: 8px;
+    }
+    .btn-form:hover { background: var(--accent); }
+    .divider {
+      text-align: center; color: var(--muted);
+      font-size: 0.82rem; margin: 16px 0;
+      position: relative;
+    }
+    .divider::before, .divider::after {
+      content: ''; position: absolute;
+      top: 50%; width: 40%; height: 1px;
+      background: var(--border);
+    }
+    .divider::before { left: 0; }
+    .divider::after { right: 0; }
+    .students-info h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.8rem; margin-bottom: 16px;
+    }
+    .students-info p { color: var(--muted); line-height: 1.7; margin-bottom: 24px; }
+    .checklist { list-style: none; }
+    .checklist li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 0.9rem; margin-bottom: 12px;
+      color: var(--dark);
+    }
+    .checklist li::before {
+      content: '✓'; 
+      background: #e8f8ee; color: #2ecc71;
+      width: 22px; height: 22px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 700; flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--dark); color: white;
+      padding: 60px 8vw 30px;
+    }
+    .footer-grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px; margin-bottom: 48px;
+    }
+    .footer-brand .nav-logo { color: white; font-size: 1.3rem; }
+    .footer-brand p { color: rgba(255,255,255,0.5); font-size: 0.85rem; line-height: 1.7; margin-top: 14px; }
+    .footer-col h4 { font-weight: 600; font-size: 0.88rem; margin-bottom: 16px; }
+    .footer-col a {
+      display: block; color: rgba(255,255,255,0.5);
+      text-decoration: none; font-size: 0.84rem;
+      margin-bottom: 10px; transition: color 0.2s;
+    }
+    .footer-col a:hover { color: white; }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 24px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .footer-bottom p { color: rgba(255,255,255,0.35); font-size: 0.8rem; }
+
+    /* MODAL */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(26,26,46,0.6); z-index: 999;
+      backdrop-filter: blur(4px);
+      align-items: center; justify-content: center;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal {
+      background: white; border-radius: 20px;
+      padding: 40px; max-width: 500px; width: 90%;
+      position: relative;
+      animation: slideUp 0.3s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .modal-close {
+      position: absolute; top: 16px; right: 16px;
+      background: var(--bg); border: none; border-radius: 8px;
+      width: 32px; height: 32px; cursor: pointer;
+      font-size: 1rem; display: flex; align-items: center; justify-content: center;
+    }
+    .modal h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.5rem; margin-bottom: 8px;
+    }
+    .modal p { color: var(--muted); font-size: 0.88rem; margin-bottom: 24px; }
+    .upload-zone {
+      border: 2px dashed var(--border); border-radius: 14px;
+      padding: 40px; text-align: center; cursor: pointer;
+      transition: all 0.2s; margin-bottom: 20px;
+    }
+    .upload-zone:hover { border-color: var(--accent2); background: #f0f8ff; }
+    .upload-zone .upload-icon { font-size: 2.5rem; margin-bottom: 12px; }
+    .upload-zone p { color: var(--muted); font-size: 0.88rem; }
+    .upload-zone strong { color: var(--accent2); }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; padding: 60px 6vw; }
+      .hero-visual { display: none; }
+      .stats { flex-wrap: wrap; gap: 24px; }
+      .students-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      nav { padding: 0 4vw; }
+      .nav-links { display: none; }
+    }
+    @media (max-width: 600px) {
+      .footer-grid { grid-template-columns: 1fr; }
+      .live-section { padding: 32px; }
+      .docs-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+    }
+
+    /* ANIMATIONS */
+    .fade-in {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+      <a style="text-decoration:none;display:flex;align-items:center;gap:10px;" href="#">
+    <svg width="38" height="38" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="mFront" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff6b7a"/>
+      <stop offset="40%" style="stop-color:#e63946"/>
+      <stop offset="100%" style="stop-color:#9b1d26"/>
+    </linearGradient>
+  </defs>
+  <rect width="44" height="44" rx="10" fill="#1a1a2e"/>
+  <text x="22" y="32" text-anchor="middle" fill="url(#mFront)" style="font-family:Georgia,serif;font-size:28px;font-weight:900;">M</text>
+</svg>
+    <span style="font-family:Georgia,serif;font-size:1.4rem;font-weight:700;color:#1a1a2e;letter-spacing:1px;">Missaoui</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#documents">Documents</a></li>
+    <li><a href="fichiers.html">Fichiers</a></li>
+    <li><a href="cours-en-ligne.html">Cours en ligne</a></li>
+    <li><a href="auth.html">Espace Élèves</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="nav-btn" onclick="document.getElementById('uploadModal').classList.add('show')">+ Publier</button>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div>
+    <div class="hero-badge">Plateforme pédagogique mathématiques</div>
+    <h1>Partagez, enseignez, <em>progressez</em> ensemble.</h1>
+    <p>Un espace numérique conçu pour les enseignants de maths. Partagez vos cours, exercices et corrections, et organisez vos cours en ligne facilement.</p>
+    <div class="hero-btns">
+      <a href="#documents" class="btn-primary">Voir les ressources</a>
+      <a href="auth.html" class="btn-secondary">Espace élèves →</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="visual-header">
+      <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+      <span class="visual-title">Mes Ressources</span>
+    </div>
+    <div class="visual-card">
+      <div class="visual-icon red">📄</div>
+      <div>
+        <div class="visual-card-title">Algèbre — Cours Terminale</div>
+        <div class="visual-card-sub">PDF · 14 pages · Partagé</div>
+      </div>
+    </div>
+    <div class="visual-card">
+      <div class="visual-icon blue">🎬</div>
+      <div>
+        <div class="visual-card-title">Dérivées — Vidéo explicative</div>
+        <div class="visual-card-sub">Vidéo · 22 min · 38 vues</div>
+      </div>
+    </div>
+    <div class="visual-card">
+      <div class="visual-icon green">✅</div>
+      <div>
+        <div class="visual-card-title">DS n°3 — Correction</div>
+        <div class="visual-card-sub">PDF · Correction complète</div>
+      </div>
+    </div>
+    <div class="visual-progress">
+      <div class="progress-label">
+        <span>Progression classe — 3ème A</span>
+        <span>72%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><div class="stat-num">∞</div><div class="stat-label">Ressources disponibles</div></div>
+  <div class="stat"><div class="stat-num">HD</div><div class="stat-label">Cours vidéo en ligne</div></div>
+  <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Gratuit pour vos élèves</div></div>
+  <div class="stat"><div class="stat-num">24/7</div><div class="stat-label">Accès permanent</div></div>
+</div>
+
+<!-- FONCTIONNALITÉS -->
+<section class="fade-in">
+  <div class="section-tag">Fonctionnalités</div>
+  <h2 class="section-title">Tout ce dont vous avez besoin</h2>
+  <p class="section-sub">Une plateforme complète pour accompagner vos élèves à tous les niveaux, du collège à l'université.</p>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">📁</div>
+      <div class="feature-title">Partage de documents</div>
+      <div class="feature-desc">Publiez vos cours, exercices, et examens en PDF. Organisation par niveau, chapitre et type.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎬</div>
+      <div class="feature-title">Vidéos pédagogiques</div>
+      <div class="feature-desc">Hébergez et partagez vos vidéos explicatives directement sur la plateforme, accessibles à tout moment.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">✅</div>
+      <div class="feature-title">Corrections détaillées</div>
+      <div class="feature-desc">Associez chaque exercice ou examen à sa correction complète. Vos élèves progressent à leur rythme.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎓</div>
+      <div class="feature-title">Cours en ligne</div>
+      <div class="feature-desc">Planifiez et animez vos séances de cours en direct avec vos élèves via la visioconférence intégrée.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">👥</div>
+      <div class="feature-title">Espace élèves</div>
+      <div class="feature-desc">Chaque élève dispose d'un espace personnel sécurisé pour accéder à ses ressources et suivre ses progrès.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <div class="feature-title">Suivi de progression</div>
+      <div class="feature-desc">Visualisez l'avancement de chaque élève et identifiez les points à renforcer en un coup d'œil.</div>
+    </div>
+  </div>
+</section>
+
+<!-- DOCUMENTS -->
+<section id="documents" style="padding-top: 0;" class="fade-in">
+  <div class="docs-section">
+    <div class="docs-header">
+      <h2 class="docs-title">📚 Bibliothèque de ressources</h2>
+      <div class="docs-search">
+        <input class="search-input" type="text" placeholder="🔍 Rechercher..."/>
+        <button class="filter-btn active" onclick="filterDocs('all', this)">Tout</button>
+        <button class="filter-btn" onclick="filterDocs('pdf', this)">PDF</button>
+        <button class="filter-btn" onclick="filterDocs('video', this)">Vidéos</button>
+        <button class="filter-btn" onclick="filterDocs('correction', this)">Corrections</button>
+      </div>
+    </div>
+    <div class="docs-grid" id="docsGrid">
+      <div class="doc-item" data-type="pdf">
+        <span class="doc-type pdf">PDF</span>
+        <div class="doc-name">Fonctions — Cours 1ère</div>
+        <div class="doc-meta">Niveau Lycée · 18 pages</div>
+        <div class="doc-action"><button class="btn-dl">⬇ Télécharger</button></div>
+      </div>
+      <div class="doc-item" data-type="video">
+        <span class="doc-type video">Vidéo</span>
+        <div class="doc-name">Trigonométrie — Explications</div>
+        <div class="doc-meta">Terminale · 28 min</div>
+        <div class="doc-action"><button class="btn-dl">▶ Regarder</button></div>
+      </div>
+      <div class="doc-item" data-type="correction">
+        <span class="doc-type correction">Correction</span>
+        <div class="doc-name">DS Géométrie n°2</div>
+        <div class="doc-meta">3ème · Correction complète</div>
+        <div class="doc-action"><button class="btn-dl">⬇ Télécharger</button></div>
+      </div>
+      <div class="doc-item" data-type="pdf">
+        <span class="doc-type pdf">PDF</span>
+        <div class="doc-name">Suites numériques — Exercices</div>
+        <div class="doc-meta">Terminale · 12 exercices</div>
+        <div class="doc-action"><button class="btn-dl">⬇ Télécharger</button></div>
+      </div>
+      <div class="doc-item" data-type="video">
+        <span class="doc-type video">Vidéo</span>
+        <div class="doc-name">Probabilités — Cours complet</div>
+        <div class="doc-meta">Seconde · 35 min</div>
+        <div class="doc-action"><button class="btn-dl">▶ Regarder</button></div>
+      </div>
+      <div class="doc-item" data-type="correction">
+        <span class="doc-type correction">Correction</span>
+        <div class="doc-name">Bac Blanc — Maths 2024</div>
+        <div class="doc-meta">Terminale · Correction détaillée</div>
+        <div class="doc-action"><button class="btn-dl">⬇ Télécharger</button></div>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top: 28px;">
+      <button class="btn-primary" onclick="document.getElementById('uploadModal').classList.add('show')">+ Ajouter un document</button>
+      <a href="https://drive.google.com/drive/folders/1csOLTvvfK-kUAe7RBFjiDmcp5Xuam5Ld" target="_blank" class="btn-secondary" style="margin-left:12px;text-decoration:none;display:inline-block;">📁 Voir tous les fichiers Drive</a>
+    </div>
+  </div>
+</section>
+
+<!-- COURS EN LIGNE -->
+<section id="cours-live" style="padding-top: 0;" class="fade-in">
+  <div class="live-section">
+    <div class="live-tag">En direct</div>
+    <h2>Cours en ligne interactifs</h2>
+    <p>Animez vos séances de cours en direct depuis votre navigateur. Tableau blanc, partage d'écran, et enregistrement automatique pour les absents.</p>
+    <div class="live-cards">
+      <div class="live-card">
+        <div class="live-card-icon">📹</div>
+        <div class="live-card-title">Visioconférence HD</div>
+        <div class="live-card-sub">Jusqu'à 50 élèves simultanément</div>
+      </div>
+      <div class="live-card">
+        <div class="live-card-icon">🖊️</div>
+        <div class="live-card-title">Tableau blanc interactif</div>
+        <div class="live-card-sub">Écrivez vos formules en temps réel</div>
+      </div>
+      <div class="live-card">
+        <div class="live-card-icon">🎙️</div>
+        <div class="live-card-title">Enregistrement auto</div>
+        <div class="live-card-sub">Replay disponible pour les élèves</div>
+      </div>
+      <div class="live-card">
+        <div class="live-card-icon">📅</div>
+        <div class="live-card-title">Planning des cours</div>
+        <div class="live-card-sub">Rappels automatiques par email</div>
+      </div>
+    </div>
+    <a href="cours-en-ligne.html" class="btn-white" style="text-decoration:none;display:inline-block;">Planifier un cours en ligne →</a>
+  </div>
+</section>
+
+<!-- ESPACE ELEVES -->
+<section id="eleves" class="fade-in">
+  <div class="students-grid">
+    <div class="login-card">
+      <h3>Connexion élève</h3>
+      <p>Entrez votre prénom, nom et le code donné par votre professeur.</p>
+      <div style="background:#f0f8ff;border:1px solid #c8e6f5;border-radius:12px;padding:24px;text-align:center;margin-bottom:20px;">
+        <div style="font-size:2.5rem;margin-bottom:8px;">🔑</div>
+        <div style="font-weight:700;font-size:1rem;margin-bottom:6px;">Espace élève sécurisé</div>
+        <div style="color:#6b6b7b;font-size:0.85rem;margin-bottom:20px;">Connectez-vous avec le code donné par votre professeur</div>
+        <a href="auth.html" style="display:inline-block;background:#1a1a2e;color:white;border-radius:10px;padding:13px 28px;font-weight:700;font-size:0.95rem;text-decoration:none;">Accéder à mon espace →</a>
+      </div>
+      <div style="text-align:center;font-size:0.82rem;color:#6b6b7b;">Code d'accès : <strong style="color:#457b9d;font-size:1.1rem;letter-spacing:3px;">MATH24</strong></div>
+    </div>
+    <div class="students-info">
+      <div class="section-tag">Espace élèves</div>
+      <h3>Un suivi personnalisé pour chaque élève</h3>
+      <p>Vos élèves accèdent à toutes vos ressources depuis leur espace dédié, disponible 24h/24 depuis n'importe quel appareil.</p>
+      <ul class="checklist">
+        <li>Accès à tous les cours et exercices partagés</li>
+        <li>Téléchargement des PDF et corrections</li>
+        <li>Participation aux cours en ligne en direct</li>
+        <li>Suivi de sa progression personnelle</li>
+        <li>Notifications des nouveaux documents</li>
+        <li>Accès aux replays des cours enregistrés</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="contact">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a class="nav-logo" href="#" style="color:white;">
+        <span style="background:linear-gradient(135deg,#e63946,#c1121f);color:white;border-radius:10px;width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:900;margin-right:10px;">M</span>
+        Missaoui
+      </a>
+      <p>La plateforme pédagogique dédiée aux enseignants de mathématiques. Partagez, enseignez et progressez ensemble.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Ressources</h4>
+      <a href="#documents">Cours & PDF</a>
+      <a href="#documents">Vidéos</a>
+      <a href="#documents">Corrections</a>
+      <a href="#documents">Exercices</a>
+    </div>
+    <div class="footer-col">
+      <h4>Plateforme</h4>
+      <a href="cours-en-ligne.html">Cours en ligne</a>
+      <a href="auth.html">Espace élèves</a>
+      <a href="#">Tableau de bord</a>
+      <a href="#">Planning</a>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <a href="#">contact@mathspace.fr</a>
+      <a href="mailto:contact@mathspace.fr">Aide & Support</a>
+      <a href="#">Mentions légales</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Missaoui — Tous droits réservés</p>
+    <p>Fait avec ❤️ pour les enseignants</p>
+  </div>
+</footer>
+
+<!-- UPLOAD MODAL -->
+<div class="modal-overlay" id="uploadModal" onclick="if(event.target===this)this.classList.remove('show')">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('uploadModal').classList.remove('show')">✕</button>
+    <h3>Publier un document</h3>
+    <p>Partagez un cours, exercice, vidéo ou correction avec vos élèves.</p>
+    <div class="upload-zone" onclick="window.open('https://drive.google.com/drive/folders/1csOLTvvfK-kUAe7RBFjiDmcp5Xuam5Ld','_blank')" style="cursor:pointer;">
+      <div class="upload-icon">📁</div>
+      <p><strong>Cliquez pour ouvrir Google Drive</strong></p>
+      <p style="font-size:0.82rem;margin-top:6px;color:#457b9d;">Uploadez vos fichiers directement sur Google Drive</p>
+      <p style="font-size:0.75rem;margin-top:6px;">PDF, MP4, Word, Images — Illimité</p>
+    </div>
+    <div style="background:#f0f8ff;border:1px solid #c8e6f5;border-radius:10px;padding:12px;margin-bottom:16px;font-size:0.82rem;color:#457b9d;">
+      💡 Uploadez vos fichiers sur Google Drive puis copiez le lien de partage pour vos élèves
+    </div>
+    <div class="form-group">
+      <label class="form-label">Titre du document</label>
+      <input class="form-input" type="text" placeholder="Ex: Cours Algèbre — Terminale"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Niveau</label>
+      <select class="form-input">
+        <option>Collège — 6ème</option>
+        <option>Collège — 5ème</option>
+        <option>Collège — 4ème</option>
+        <option>Collège — 3ème</option>
+        <option>Lycée — Seconde</option>
+        <option>Lycée — Première</option>
+        <option>Lycée — Terminale</option>
+        <option>Université</option>
+      </select>
+    </div>
+    <button class="btn-form">Publier →</button>
+  </div>
+</div>
+
+<script>
+  // Filter docs
+  function filterDocs(type, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.doc-item').forEach(item => {
+      if (type === 'all' || item.dataset.type === type) {
+        item.style.display = '';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  }
+
+  // Scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Search
+  document.querySelector('.search-input').addEventListener('input', function() {
+    const q = this.value.toLowerCase();
+    document.querySelectorAll('.doc-item').forEach(item => {
+      const name = item.querySelector('.doc-name').textContent.toLowerCase();
+      item.style.display = name.includes(q) ? '' : 'none';
+    });
+  });
+</script>
+
+</body>
+</html>
