@@ -5,9 +5,7 @@ html, body {
   overflow-x: hidden;
 }
 
-* {
-  box-sizing: border-box;
-}
+
 
 :root {
   --dark: #19182b;
