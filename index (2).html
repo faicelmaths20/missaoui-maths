@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Missaoui Maths – Cours & Ressources</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d0f14;
+  --bg2: #13161d;
+  --border: rgba(255,255,255,0.07);
+  --text: #e8e4dc;
+  --muted: rgba(232,228,220,0.45);
+  --gold: #c9a84c;
+  --gold-dim: rgba(201,168,76,0.15);
+  --red: #c0392b;
+  --green: #27ae60;
+  --blue: #2980b9;
+  --purple: #8e44ad;
+  --teal: #1abc9c;
+  --orange: #e67e22;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── BACKGROUND GRID ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(201,168,76,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,168,76,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── NAV ── */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(13,15,20,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0.85rem 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.nav-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.nav-logo span { color: var(--text); font-weight: 400; font-style: italic; }
+.nav-links {
+  display: flex;
+  gap: 0.2rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.nav-link {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 0.35rem 0.65rem;
+  border-radius: 4px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.nav-link:hover { color: var(--gold); background: var(--gold-dim); }
+
+/* ── HERO ── */
+.hero {
+  position: relative;
+  z-index: 1;
+  padding: 4rem 1.4rem 3.5rem;
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: 1px solid rgba(201,168,76,0.3);
+  padding: 0.3rem 0.9rem;
+  border-radius: 20px;
+  margin-bottom: 1.6rem;
+  animation: fadeUp 0.6s ease both;
+}
+.hero-eyebrow::before { content: '◆'; font-size: 0.5rem; }
+
+.hero h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.8rem, 9vw, 5.5rem);
+  font-weight: 700;
+  line-height: 1.0;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.5rem;
+  animation: fadeUp 0.6s 0.1s ease both;
+}
+.hero h1 em {
+  font-style: italic;
+  color: var(--gold);
+}
+.hero-sub {
+  font-size: clamp(0.9rem, 2.5vw, 1.05rem);
+  color: var(--muted);
+  max-width: 520px;
+  margin: 0 auto 2rem;
+  line-height: 1.7;
+  animation: fadeUp 0.6s 0.2s ease both;
+}
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+  animation: fadeUp 0.6s 0.3s ease both;
+}
+.badge {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.28rem 0.75rem;
+  border-radius: 20px;
+  border: 1px solid;
+}
+.badge-gold { color: var(--gold); border-color: rgba(201,168,76,0.4); background: rgba(201,168,76,0.08); }
+.badge-muted { color: var(--muted); border-color: var(--border); }
+
+.hero-stats {
+  display: flex;
+  gap: 0.8rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  animation: fadeUp 0.6s 0.35s ease both;
+}
+.stat-pill {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.7rem 1.2rem;
+  text-align: center;
+  min-width: 90px;
+}
+.stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1;
+}
+.stat-lbl {
+  font-size: 0.68rem;
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.06em;
+  margin-top: 0.2rem;
+}
+
+/* ── SECTION WRAPPER ── */
+.section {
+  position: relative;
+  z-index: 1;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 1.2rem 4rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 700;
+  color: var(--text);
+}
+.section-title em { font-style: italic; color: var(--gold); }
+.section-count {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+}
+
+/* ── LEVEL TABS ── */
+.level-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1.8rem;
+}
+.level-tab {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.38rem 0.9rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.18s;
+  -webkit-tap-highlight-color: transparent;
+}
+.level-tab:hover { border-color: var(--gold); color: var(--gold); }
+.level-tab.active { background: var(--gold); color: var(--bg); border-color: var(--gold); font-weight: 600; }
+
+/* ── COURS GRID ── */
+.cours-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.cours-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.2rem;
+  cursor: pointer;
+  transition: all 0.22s;
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+  display: block;
+  animation: fadeUp 0.5s ease both;
+}
+.cours-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  border-radius: 12px 12px 0 0;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+.cours-card:hover { border-color: rgba(201,168,76,0.3); transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,0.35); }
+.cours-card:hover::before { opacity: 1; }
+
+.card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 0.9rem;
+}
+.card-icon {
+  width: 38px; height: 38px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.15rem;
+  flex-shrink: 0;
+}
+.card-level {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.22rem 0.6rem;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+.card-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.12rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.3rem;
+  line-height: 1.25;
+}
+.card-desc {
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.55;
+  margin-bottom: 0.9rem;
+}
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+.card-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.18rem 0.5rem;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.05);
+  color: var(--muted);
+}
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+.card-status {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  display: flex; align-items: center; gap: 0.35rem;
+}
+.dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+.dot-green { background: var(--green); box-shadow: 0 0 6px var(--green); }
+.dot-gold  { background: var(--gold);  box-shadow: 0 0 6px var(--gold); }
+.dot-muted { background: #555; }
+.card-arrow {
+  color: var(--muted);
+  font-size: 0.85rem;
+  transition: transform 0.2s, color 0.2s;
+}
+.cours-card:hover .card-arrow { color: var(--gold); transform: translateX(4px); }
+
+/* Color themes per subject */
+.theme-algebre  ::before, .cours-card.theme-algebre::before  { background: linear-gradient(90deg, var(--red), #e74c3c); }
+.cours-card.theme-algebre .card-icon { background: rgba(192,57,43,0.15); }
+
+.cours-card.theme-geo::before    { background: linear-gradient(90deg, var(--blue), #3498db); }
+.cours-card.theme-geo .card-icon { background: rgba(41,128,185,0.15); }
+
+.cours-card.theme-stat::before   { background: linear-gradient(90deg, var(--green), #2ecc71); }
+.cours-card.theme-stat .card-icon { background: rgba(39,174,96,0.15); }
+
+.cours-card.theme-proba::before  { background: linear-gradient(90deg, var(--purple), #9b59b6); }
+.cours-card.theme-proba .card-icon { background: rgba(142,68,173,0.15); }
+
+.cours-card.theme-fonc::before   { background: linear-gradient(90deg, var(--teal), #16a085); }
+.cours-card.theme-fonc .card-icon { background: rgba(26,188,156,0.15); }
+
+.cours-card.theme-trigo::before  { background: linear-gradient(90deg, var(--orange), #f39c12); }
+.cours-card.theme-trigo .card-icon { background: rgba(230,126,34,0.15); }
+
+/* ── HIDDEN cards ── */
+.cours-card.hidden { display: none; }
+
+/* ── SUBJECT LEGEND ── */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 2rem;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.67rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.legend-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+}
+
+/* ── DIVIDER ── */
+.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 0.5rem 0 3rem;
+}
+
+/* ── CODE ACCES ── */
+.access-box {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.4rem 1.2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4rem;
+}
+.access-left { flex: 1; min-width: 200px; }
+.access-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.3rem;
+}
+.access-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+}
+.access-desc { font-size: 0.83rem; color: var(--muted); }
+.access-code {
+  font-family: 'DM Mono', monospace;
+  font-size: 1.6rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  color: var(--gold);
+  background: rgba(201,168,76,0.1);
+  border: 1px solid rgba(201,168,76,0.25);
+  border-radius: 8px;
+  padding: 0.6rem 1.4rem;
+  text-align: center;
+}
+
+/* ── FOOTER ── */
+footer {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid var(--border);
+  padding: 1.5rem 1.4rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+.footer-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--gold);
+}
+.footer-info { font-size: 0.78rem; color: var(--muted); }
+.footer-right {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-align: right;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(16px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* ── MOBILE ── */
+@media (max-width:520px) {
+  .nav-links { display:none; }
+  .cours-grid { grid-template-columns: 1fr; }
+  .hero { padding: 2.5rem 1.2rem 2rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Missaoui <span>Maths</span></div>
+  <div class="nav-links">
+    <a class="nav-link" href="#cours">Cours</a>
+    <a class="nav-link" href="#acces">Code élèves</a>
+    <a class="nav-link" href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Professeur Agrégé de Mathématiques</div>
+  <h1>Faicel<br><em>Missaoui</em></h1>
+  <p class="hero-sub">Cours, méthodes et exercices corrigés — du collège à la prépa. Tous les contenus sont rédigés avec rigueur et pédagogie.</p>
+  <div class="hero-badges">
+    <span class="badge badge-gold">Professeur Agrégé</span>
+    <span class="badge badge-muted">6ème → Prépa</span>
+    <span class="badge badge-muted">Cours + Exercices</span>
+    <span class="badge badge-muted">Ressources libres</span>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-pill"><div class="stat-num">8</div><div class="stat-lbl">Niveaux</div></div>
+    <div class="stat-pill"><div class="stat-num">6</div><div class="stat-lbl">Thèmes</div></div>
+    <div class="stat-pill"><div class="stat-num">∞</div><div class="stat-lbl">Révisions</div></div>
+  </div>
+</div>
+
+<!-- LEGEND -->
+<div class="section">
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>Algèbre</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div>Géométrie</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Statistiques</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--purple)"></div>Probabilités</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--teal)"></div>Fonctions</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div>Trigonométrie</div>
+  </div>
+
+  <!-- COURS -->
+  <div id="cours" class="section-header">
+    <div class="section-title">Tous les <em>cours</em></div>
+    <div class="section-count" id="cours-count">— cours</div>
+  </div>
+
+  <!-- LEVEL TABS -->
+  <div class="level-tabs">
+    <button class="level-tab active" onclick="filterLevel('all', this)">Tous</button>
+    <button class="level-tab" onclick="filterLevel('6eme', this)">6ème</button>
+    <button class="level-tab" onclick="filterLevel('5eme', this)">5ème</button>
+    <button class="level-tab" onclick="filterLevel('4eme', this)">4ème</button>
+    <button class="level-tab" onclick="filterLevel('3eme', this)">3ème</button>
+    <button class="level-tab" onclick="filterLevel('2nde', this)">2nde</button>
+    <button class="level-tab" onclick="filterLevel('1ere', this)">1ère</button>
+    <button class="level-tab" onclick="filterLevel('terminale', this)">Terminale</button>
+    <button class="level-tab" onclick="filterLevel('prepa', this)">Prépa</button>
+  </div>
+
+  <!-- GRID -->
+  <div class="cours-grid" id="cours-grid">
+
+    <!-- 6ÈME -->
+    <a href="#" class="cours-card theme-algebre" data-level="6eme" style="animation-delay:0.05s">
+      <div class="card-top">
+        <div class="card-icon">🔢</div>
+        <span class="card-level">6ème</span>
+      </div>
+      <div class="card-title">Calcul & Opérations</div>
+      <div class="card-desc">Priorité des opérations, fractions, nombres décimaux et entiers relatifs.</div>
+      <div class="card-tags"><span class="card-tag">Algèbre</span><span class="card-tag">Fractions</span></div>
+      <div class="card-footer">
+        <span class="card-status"><span class="dot dot-green"></span>Disponible</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <a href="#" class="cours-card theme-geo" data-level="6eme" style="animation-delay:0.1s">
+      <div class="card-top">
+        <div class="card-icon">📐</div>
+        <span class="card-level">6ème</span>
+      </div>
+      <div class="card-title">Géométrie de base</div>
+      <div class="card-desc">Droites, angles, polygones, périmètres et aires des figures usuelles.</div>
+      <div class="card-tags"><span class="card-tag">Géométrie</span><span class="card-tag">Aires</span></div>
+      <div class="card-footer">
+        <span class="card-status"><span class="dot dot-green"></span>Disponible</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- 5ÈME -->
+    <a href="#" class="cours-card theme-algebre" data-level="5eme" style="animation-delay:0.05s">
+      <div class="card-top">
+        <div class="card-icon">➗</div>
+        <span class="card-level">5ème</span>
+      </div>
+      <div class="card-title">Fractions & Proportionnalité</div>
+      <div class="card-desc">Opérations sur les fractions, tableaux de proportionnalité et pourcentages.</div>
+      <div class="card-tags"><span class="card-tag">Algèbre</span><span class="card-tag">Proportions</span></div>
+      <div class="card-footer">
+        <span class="card-status"><span class="dot dot-green"></span>Disponible</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <a href="#" class="cours-card theme-geo" data-level="5eme" style="animation-delay:0.1s">
+      <div class="card-top">
+        <div class="card-icon">🔺</div>
+        <span class="card-level">5ème</span>
+      </div>
+      <div class="card-title">Triangles & Théorème de Pythagore</div>
+      <div class="card-desc">Propriétés des triangles, inégalité triangulaire et premier contact avec Pythagore.</div>
+      <div class="card-tags"><span class="card-tag">Géométrie</span></div>
+      <div class="card-footer">
+        <span class="card-status"><span class="dot dot-green"></span>Disponible</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- 4ÈME -->
+    <a href="#" class="cours-card theme-algebre" data-level="4eme" style="animation-delay:0.05s">
+      <div class="card-top">
+        <div class="card-icon">🧮</div>
+        <span class="card-level">4ème</span>
+      </div>
+      <div class="card-title">Calcul littéral & Équations</div>
+      <div class="card-desc">Développement, factorisation, équations du 1er degré et problèmes.</div>
+      <div class="card-tags"><span class="card-tag">Algèbre</span><span class="card-tag">Équations</span></div>
+      <div class="card-footer">
+        <span class="card-status"><span class="dot dot-green"></span>Disponible</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <a href="#" class="cours-card theme-proba" data-level="4eme" style="animation-delay:0.1s">
+      <div class="card-top">
+        <div class="card-icon">🎲</div>
+        <span class="card-level">4ème</span>
+      </div>
+      <div class="card-title">Introduction aux Probabilités</div>
+      <div class="card-desc">Expérience aléatoire, événements, calcul de probabilités simples.</div>
+      <div class="card-tags"><span class="card-tag">Probabilités</span></div>
+      <div class="card-footer">
+        <span class="card-status"><span class="dot dot-green"></span>Disponible</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- 3ÈME -->
+    <a href="cours-statistiques-missaoui.html" class="cours-card theme-stat" data-level="3eme" style="animation-delay:0.05s">
+      <div class="card-top">
+        <div class="card-icon">📊</div>
+        <span class="card-level">3ème</span>
+      </div>
+      <div class="card-title">Statistiques</div>
+      <div class="card-desc">Moyenne, médiane, étendue, fréquences et histogrammes. Avec quiz interactif.</div>
+      <div class="card-tags"><span class="card-tag">Statistiques</span><span class="card-tag">Quiz inclus</span></div>
+      <div class="card-footer">
+        <span class="card-status"><span class="dot dot-green"></span>Disponible</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <a href="#" class="cours-card theme-algebre" data-level="3eme" style="animation-delay:0.1s">
+      <div class="card-top">
+        <div class="card-icon">📈</div>
+        <span class="card-level">3ème</span>
+      </div>
+      <div class="card-title">Équations & Inéquations</div>
+      <div class="card-desc">Résolution d'équations et inéquations du 1er degré, systèmes d'équations.</div>
+      <div class="card-tags"><span class="card-tag">Algèbre</span></div>
+      <div class="card-footer">
+        <span class="card-status"><span class="dot dot-gold"></span>Bientôt</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <a href="#" class="cours-card theme-trigo" data-level="3eme" style="animation-delay:0.15s">
+      <div class="card-top">
+        <div class="card-icon">📐</div>
+        <span class="card-level">3ème</span>
+      </div>
+      <div class="card-title">Trigonométrie – Introduction</div>
+      <div class="card-desc">Sinus, cosinus, tangente dans le triangle rectangle. Calculs d'angles et de longueurs.</div>
+      <div class="card-tags"><span class="card-tag">Trigonométrie</span></div>
+      <div class="card-footer">
+        <span class="card-status"><span class="dot dot-gold"></span>Bientôt</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- 2NDE -->
+    <a href="#" class="cours-card theme-fonc" data-level="2nde" style="animation-delay:0.05s">
+      <div class="card-top">
+        <div class="card-icon">📉</div>
+        <span class="card-level">2nde</span>
+      </div>
+      <div class="card-title">Fonctions – Généralités</div>
+      <div class="card-desc">Notion de fonction, représentation graphique, variations, extremums.</div>
+      <div class="card-tags"><span class="card-tag">Fonctions</span></div>
+      <div class="card-footer">
+        <span class="card-status"><span class="dot dot-gold"></span>Bientôt</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <a href="#" class="cours-card theme-stat" data-level="2nde" style="animation-delay:0.1s">
+      <div class="card-top">
+        <div class="card-icon">📊</div>
+        <span class="card-level">2nde</span>
+      </div>
+      <div class="card-title">Statistiques & Probabilités</div>
+      <div class="card-desc">Indicateurs de position et dispersion, loi des grands nombres, simulations.</div>
+      <div class="card-tags"><span class="card-tag">Statistiques</span><span class="card-tag">Probabilités</span></div>
+      <div class="card-footer">
+        <span class="card-status"><span class="dot dot-gold"></span>Bientôt</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- 1ÈRE -->
+    <a href="#" class="cours-card theme-fonc" data-level="1ere" style="animation-delay:0.05s">
+      <div class="card-top">
+        <div class="card-icon">∫</div>
+        <span class="card-level">1ère</span>
+      </div>
+      <div class="card-title">Dérivation</div>
+      <div class="card-desc">Nombre dérivé, fonction dérivée, tableau de variations, tangente à une courbe.</div>
+      <div class="card-tags"><span class="card-tag">Fonctions</span><span class="card-tag">Dérivées</span></div>
+      <div class="card-footer">
+        <span class="card-status"><span class="dot dot-gold"></span>Bientôt</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <a href="#" class="cours-card theme-trigo" data-level="1ere" style="animation-delay:0.1s">
+      <div class="card-top">
+        <div class="card-icon">🔄</div>
+        <span class="card-level">1ère</span>
+      </div>
+      <div class="card-title">Trigonométrie avancée</div>
+      <div class="card-desc">Cercle trigonométrique, radians, formules d'addition, équations trigonométriques.</div>
+      <div class="card-tags"><span class="card-tag">Trigonométrie</span></div>
+      <div class="card-footer">
+        <span class="card-status"><span class="dot dot-gold"></span>Bientôt</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- TERMINALE -->
+    <a href="#" class="cours-card theme-fonc" data-level="terminale" style="animation-delay:0.05s">
+      <div class="card-top">
+        <div class="card-icon">∫</div>
+        <span class="card-level">Terminale</span>
+      </div>
+      <div class="card-title">Intégration</div>
+      <div class="card-desc">Intégrale d'une fonction, primitives, calcul d'aires sous une courbe.</div>
+      <div class="card-tags"><span class="card-tag">Fonctions</span><span class="card-tag">Intégrales</span></div>
+      <div class="card-footer">
+        <span class="card-status"><span class="dot dot-gold"></span>Bientôt</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <a href="#" class="cours-card theme-proba" data-level="terminale" style="animation-delay:0.1s">
+      <div class="card-top">
+        <div class="card-icon">🎯</div>
+        <span class="card-level">Terminale</span>
+      </div>
+      <div class="card-title">Lois de probabilités</div>
+      <div class="card-desc">Loi binomiale, loi normale, espérance, variance et intervalles de fluctuation.</div>
+      <div class="card-tags"><span class="card-tag">Probabilités</span></div>
+      <div class="card-footer">
+        <span class="card-status"><span class="dot dot-gold"></span>Bientôt</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- PRÉPA -->
+    <a href="#" class="cours-card theme-algebre" data-level="prepa" style="animation-delay:0.05s">
+      <div class="card-top">
+        <div class="card-icon">Σ</div>
+        <span class="card-level">Prépa</span>
+      </div>
+      <div class="card-title">Algèbre linéaire</div>
+      <div class="card-desc">Espaces vectoriels, applications linéaires, matrices, déterminants et systèmes.</div>
+      <div class="card-tags"><span class="card-tag">Algèbre</span><span class="card-tag">Matrices</span></div>
+      <div class="card-footer">
+        <span class="card-status"><span class="dot dot-gold"></span>Bientôt</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <a href="#" class="cours-card theme-fonc" data-level="prepa" style="animation-delay:0.1s">
+      <div class="card-top">
+        <div class="card-icon">∂</div>
+        <span class="card-level">Prépa</span>
+      </div>
+      <div class="card-title">Analyse – Suites & Séries</div>
+      <div class="card-desc">Suites numériques, convergence, séries entières, développements limités.</div>
+      <div class="card-tags"><span class="card-tag">Fonctions</span><span class="card-tag">Analyse</span></div>
+      <div class="card-footer">
+        <span class="card-status"><span class="dot dot-gold"></span>Bientôt</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <a href="#" class="cours-card theme-proba" data-level="prepa" style="animation-delay:0.15s">
+      <div class="card-top">
+        <div class="card-icon">🧮</div>
+        <span class="card-level">Prépa</span>
+      </div>
+      <div class="card-title">Probabilités avancées</div>
+      <div class="card-desc">Variables aléatoires, lois continues, théorème central limite, convergences.</div>
+      <div class="card-tags"><span class="card-tag">Probabilités</span></div>
+      <div class="card-footer">
+        <span class="card-status"><span class="dot dot-gold"></span>Bientôt</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+  </div><!-- /grid -->
+
+  <hr class="divider">
+
+  <!-- CODE ACCÈS -->
+  <div id="acces" class="access-box">
+    <div class="access-left">
+      <div class="access-label">Espace élèves</div>
+      <div class="access-title">Accès aux ressources</div>
+      <div class="access-desc">Communiquez ce code à vos élèves pour accéder aux ressources complémentaires et exercices supplémentaires.</div>
+    </div>
+    <div class="access-code">MATH27</div>
+  </div>
+
+</div><!-- /section -->
+
+<!-- FOOTER -->
+<footer id="contact">
+  <div>
+    <div class="footer-name">Faicel Missaoui</div>
+    <div class="footer-info">Professeur Agrégé de Mathématiques · 6ème → Prépa</div>
+  </div>
+  <div class="footer-right">
+    faicelmaths20.github.io<br>
+    /missaoui-maths
+  </div>
+</footer>
+
+<script>
+// Filter by level
+function filterLevel(level, btn) {
+  document.querySelectorAll('.level-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  const cards = document.querySelectorAll('.cours-card');
+  let visible = 0;
+  cards.forEach((card, i) => {
+    const match = level === 'all' || card.dataset.level === level;
+    card.classList.toggle('hidden', !match);
+    if (match) { card.style.animationDelay = (visible * 0.06) + 's'; visible++; }
+  });
+  document.getElementById('cours-count').textContent = visible + ' cours';
+}
+
+// Init count
+document.addEventListener('DOMContentLoaded', () => {
+  const total = document.querySelectorAll('.cours-card').length;
+  document.getElementById('cours-count').textContent = total + ' cours';
+});
+</script>
+</body>
+</html>
