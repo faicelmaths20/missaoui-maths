@@ -1,0 +1,47 @@
+FIREBASE À CONFIGURER
+
+1) Firebase Console > Authentication > Sign-in method
+Active Email/Password.
+
+2) Firestore Database > Rules
+Remplace prof@missaoui-maths.com par ton email professeur exact.
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function isAdmin() { return signedIn() && request.auth.token.email in ['prof@missaoui-maths.com']; }
+
+    match /users/{userId} {
+      allow read, write: if signedIn() && request.auth.uid == userId;
+      allow read: if isAdmin();
+
+      match /progress/{chapterId} {
+        allow read, write: if signedIn() && request.auth.uid == userId;
+        allow read: if isAdmin();
+      }
+    }
+
+    match /resources/{docId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+  }
+}
+
+3) Storage > Rules
+Remplace prof@missaoui-maths.com par ton email professeur exact.
+
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isAdmin() { return request.auth != null && request.auth.token.email in ['prof@missaoui-maths.com']; }
+    match /resources/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+}
+
+4) Dans professeur.html
+Remplace aussi prof@missaoui-maths.com par ton email professeur exact.
