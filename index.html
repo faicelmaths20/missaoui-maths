@@ -6,7 +6,14 @@
   <title>Missaoui Maths | Plateforme pédagogique</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
+ <script>
+let nom = localStorage.getItem("eleve_nom");
+if(nom){
+  document.getElementById("eleve").innerText = "👨‍🎓 Élève : " + nom;
+}
+</script> 
 <body>
+  <div id="eleve" style="font-weight:bold;"></div>
   <header class="topbar">
     <a class="brand" href="index.html"><span class="brand-icon">M</span><span>Missaoui Maths</span></a>
     <nav class="nav">
