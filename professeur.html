@@ -79,107 +79,45 @@ button{
 </div>
 
 </div>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 
-<script type="module">
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
-import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-/* 🔴 TON CONFIG */
+<script>
 const firebaseConfig = {
-  apiKey: "AIzaSyBx8_xMkIgAc2CDNSGjoPn7zxCkImvZKcs",
+  apiKey: "AIzaSyBx8_xMKIgAc2CDNSGjoPn7zxCkImvZKcs",
   authDomain: "missaouimaths.firebaseapp.com",
   projectId: "missaouimaths",
   storageBucket: "missaouimaths.firebasestorage.app",
   messagingSenderId: "781971966091",
-  appId: "1:781971966091:web:d5522f8d70b008a844ac8e",
-  measurementId: "G-J6DQCZX727"
+  appId: "1:781971966091:web:d5522f8d70b008a844ac8e"
 };
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const storage = getStorage(app);
-const db = getFirestore(app);
 
-/* EMAIL LOGIN */
-window.login = function(){
-  let email = document.getElementById("email").value;
-  let password = document.getElementById("password").value;
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
 
-  signInWithEmailAndPassword(auth,email,password)
-  .then(()=>alert("Connecté ✅"))
-  .catch(e=>alert(e.message));
+function login(){
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  auth.signInWithEmailAndPassword(email, password)
+    .then(()=>alert("Connecté ✅"))
+    .catch(e=>alert(e.message));
 }
 
-/* GOOGLE LOGIN */
-const provider = new GoogleAuthProvider();
+function loginGoogle(){
+  const provider = new firebase.auth.GoogleAuthProvider();
 
-window.loginGoogle = function(){
-  signInWithPopup(auth, provider)
-  .then(res=>{
-    if(res.user.email==="missaoui.faicel@gmail.com"){
-      alert("Google OK ✅");
-    }else{
-      alert("Accès refusé ❌");
-      signOut(auth);
-    }
-  })
-  .catch(e=>alert(e.message));
+  auth.signInWithPopup(provider)
+    .then(result=>{
+      if(result.user.email==="missaoui.faicel@gmail.com"){
+        alert("Connexion OK ✅");
+      } else {
+        alert("Accès refusé ❌");
+        auth.signOut();
+      }
+    })
+    .catch(e=>alert(e.message));
 }
-
-/* LOGOUT */
-window.logout = function(){
-  signOut(auth);
-}
-
-/* AUTH STATE */
-onAuthStateChanged(auth,user=>{
-  if(user){
-    document.getElementById("loginBox").classList.add("hidden");
-    document.getElementById("dashboard").classList.remove("hidden");
-    loadFiles();
-  }else{
-    document.getElementById("loginBox").classList.remove("hidden");
-    document.getElementById("dashboard").classList.add("hidden");
-  }
-});
-
-/* UPLOAD */
-window.upload = async function(){
-  let file = document.getElementById("file").files[0];
-  let titre = document.getElementById("titre").value;
-
-  let storageRef = ref(storage,"fichiers/"+file.name);
-
-  await uploadBytes(storageRef,file);
-  let url = await getDownloadURL(storageRef);
-
-  await addDoc(collection(db,"fichiers"),{
-    titre:titre,
-    url:url
-  });
-
-  alert("Upload OK");
-  loadFiles();
-}
-
-/* LOAD FILES */
-async function loadFiles(){
-  let div=document.getElementById("files");
-  div.innerHTML="";
-
-  let snap=await getDocs(collection(db,"fichiers"));
-
-  snap.forEach(doc=>{
-    let d=doc.data();
-    div.innerHTML+=`<div class="file">
-      <b>${d.titre}</b><br>
-      <a href="${d.url}" target="_blank">ouvrir</a>
-    </div>`;
-  });
-}
-
 </script>
 
 </body>
