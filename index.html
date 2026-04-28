@@ -6,12 +6,7 @@
   <title>Missaoui Maths | Plateforme pédagogique</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
- <script>
-let nom = localStorage.getItem("eleve_nom");
-if(nom){
-  document.getElementById("eleve").innerText = "👨‍🎓 Élève : " + nom;
-}
-</script> 
+ 
 <body>
   <div id="eleve" style="font-weight:bold;"></div>
   <header class="topbar">
@@ -113,5 +108,11 @@ if(score && total){
     "📊 Progression statistiques : " + pct + "%";
 }
 </script>
+<script>
+let nom = localStorage.getItem("eleve_nom");
+if(nom && document.getElementById("eleve")){
+  document.getElementById("eleve").innerText = "👨‍🎓 Élève : " + nom;
+}
+</script>          
 </body>
 </html>
