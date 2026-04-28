@@ -37,7 +37,16 @@
           <a class="resource-card" href="cours-statistiques-missaoui.html"><span class="res-icon pink">📄</span><div><strong>Statistiques — 3ème</strong><small>Cours interactif · Quiz · Score</small></div></a>
           <a class="resource-card" href="fichiers/cours-statistiques.pdf" download><span class="res-icon blue">⬇️</span><div><strong>Télécharger le cours</strong><small>PDF · à placer dans /fichiers</small></div></a>
           <a class="resource-card" href="fichiers/exercices-statistiques.pdf" download><span class="res-icon green">✅</span><div><strong>Exercices statistiques</strong><small>PDF · exercices corrigés</small></div></a>
-          <div class="progress-box"><div class="progress-top"><span>Progression classe — 3ème A</span><span>72%</span></div><div class="bar"><span></span></div></div>
+          <div class="progress-box"><div id="progression" style="
+background:white;
+padding:12px;
+border-radius:10px;
+margin-top:10px;
+font-weight:bold;
+text-align:center;
+">
+📊 Progression statistiques : 0%
+</div><div class="progress-top"><span>Progression classe — 3ème A</span><span>72%</span></div><div class="bar"><span></span></div></div>
         </div>
       </div>
     </section>
@@ -82,5 +91,15 @@
 
   <footer>© 2026 Missaoui Maths — Professeur agrégé de mathématiques</footer>
   <script src="js/main.js"></script>
+  <script>
+let score = localStorage.getItem('statistiques_score');
+let total = localStorage.getItem('statistiques_total');
+
+if(score && total){
+  let pct = Math.round((score / total) * 100);
+  document.getElementById('progression').innerText =
+    "📊 Progression statistiques : " + pct + "%";
+}
+</script>
 </body>
 </html>
