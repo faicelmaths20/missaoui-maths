@@ -78,9 +78,10 @@ body{
 .hero{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:50px;
+  gap:35px;
   align-items:center;
-  padding:90px 7%;
+  padding:35px 7%;
+  min-height:calc(100vh - 90px);
 }
 
 .badge{
@@ -94,9 +95,9 @@ body{
 }
 
 .hero h1{
-  font-size:70px;
+  font-size:56px;
   line-height:.95;
-  margin:0 0 25px;
+  margin:0 0 18px;
 }
 
 .hero h1 em{
