@@ -266,7 +266,9 @@ footer { background:white; border-top:1px solid #e2e8f0; padding:1.2rem 1.5rem; 
 }
 @media(max-width:540px) { .nav-links { display:none; } }
 </style>
-</head>
+<style>
+@keyframes slideIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+</style></head>
 <body>
 
 <!-- NAV -->
@@ -627,7 +629,7 @@ function updateProgress(){
   document.getElementById("progress-text").textContent=answered+" / "+questions.length;
 }
 
-function showScore(){
+function showScore(){saveScore(score, questions.length, "Statistiques");
   const el=document.getElementById("quiz-score"); el.classList.add("show");
   document.getElementById("score-num").textContent=score+"/"+questions.length;
   const msgs=[[0,3,"Continue à réviser le cours, tu vas y arriver ! 💪"],[3,5,"Pas mal ! Relis les parties que tu n'as pas encore maîtrisées. 📖"],[5,7,"Bien joué ! Encore un peu de travail et tu seras au top. 👍"],[7,8,"Excellent ! Tu maîtrises presque tout. 🌟"],[8,9,"Parfait ! Félicitations, tu as tout bon ! 🏆"]];
@@ -638,6 +640,46 @@ function showScore(){
 
 function restartQuiz(){ buildQuiz(); document.getElementById("quiz-section").scrollIntoView({behavior:"smooth"}); }
 buildQuiz();
+
+// ── Sauvegarde du score dans l'espace élève ──
+function saveScore(score, total, titre) {
+  try {
+    const userStr = localStorage.getItem("mm_user");
+    if (!userStr) return;
+    const user = JSON.parse(userStr);
+    if (user.role !== "eleve") return;
+    const nom = user.nom;
+    const key = "mm_scores_" + nom;
+    const niveau = user.niveau;
+    let scores = [];
+    try { scores = JSON.parse(localStorage.getItem(key) || "[]"); } catch(e){}
+    const url = window.location.pathname.split("/").pop();
+    // Remove old entry for this url
+    scores = scores.filter(s => s.url !== url);
+    const pct = Math.round((score/total)*100);
+    const today = new Date();
+    const date = today.getDate().toString().padStart(2,"0")+"/"+(today.getMonth()+1).toString().padStart(2,"0")+"/"+today.getFullYear();
+    scores.push({titre, url, score, total, pct, date, niveau});
+    localStorage.setItem(key, JSON.stringify(scores));
+    // Also save user data with niveau
+    localStorage.setItem("mm_user_"+nom, JSON.stringify({nom, niveau, role:"eleve"}));
+    // Show toast
+    showSaveToast(pct);
+  } catch(e) { console.log("Score save error:", e); }
+}
+
+function showSaveToast(pct) {
+  const existing = document.getElementById("mm-toast");
+  if(existing) existing.remove();
+  const toast = document.createElement("div");
+  toast.id = "mm-toast";
+  toast.style.cssText = "position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;background:"+
+    (pct>=70?"#059669":pct>=40?"#d97706":"#dc2626")+
+    ";color:white;padding:0.75rem 1.2rem;border-radius:14px;font-family:'Nunito',sans-serif;font-size:0.88rem;font-weight:800;box-shadow:0 8px 24px rgba(0,0,0,0.2);animation:slideIn 0.3s ease;display:flex;align-items:center;gap:0.5rem;";
+  toast.innerHTML = (pct>=70?"🏆":"📊")+" Score sauvegardé : "+pct+"% &nbsp;<a href='eleve.html' style='color:rgba(255,255,255,0.85);font-size:0.78rem;text-decoration:underline;'>Voir ma progression →</a>";
+  document.body.appendChild(toast);
+  setTimeout(()=>{toast.style.opacity="0";toast.style.transition="opacity 0.5s";setTimeout(()=>toast.remove(),500);}, 4000);
+}
 </script>
 </body>
 </html>

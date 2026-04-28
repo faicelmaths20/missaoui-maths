@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Espace Professeur – Missaoui Maths</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f0f4ff;--text:#1e293b;--muted:#64748b;--c1:#0f766e;--c2:#14b8a6;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+.blob-wrap{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:0.12;}
+.b1{width:400px;height:400px;background:radial-gradient(circle,#0f766e,#14b8a6);top:-80px;left:-60px;}
+.b2{width:300px;height:300px;background:radial-gradient(circle,#047857,#10b981);bottom:60px;right:-40px;}
+nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,0.93);backdrop-filter:blur(20px);border-bottom:1px solid #e2e8f0;padding:0.75rem 1.4rem;display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{display:flex;align-items:center;gap:0.55rem;text-decoration:none;}
+.nav-icon{width:34px;height:34px;background:linear-gradient(135deg,#0f766e,#14b8a6);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem;color:white;}
+.nav-brand{font-family:'Nunito',sans-serif;font-weight:900;font-size:0.9rem;background:linear-gradient(135deg,#0f766e,#14b8a6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.nav-link{font-size:0.78rem;font-weight:700;color:var(--muted);text-decoration:none;padding:0.35rem 0.8rem;border-radius:8px;background:#f1f5f9;}
+/* LOGIN PROF */
+.login-wrap{position:relative;z-index:1;min-height:calc(100vh - 60px);display:flex;align-items:center;justify-content:center;padding:2rem;}
+.login-card{background:white;border-radius:24px;padding:2.5rem 2rem;max-width:380px;width:100%;box-shadow:0 20px 60px rgba(15,118,110,0.12);}
+.login-icon{width:64px;height:64px;background:linear-gradient(135deg,#0f766e,#14b8a6);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 1.2rem;box-shadow:0 8px 24px rgba(15,118,110,0.3);}
+.login-title{font-family:'Nunito',sans-serif;font-size:1.5rem;font-weight:900;text-align:center;margin-bottom:0.3rem;}
+.login-title span{background:linear-gradient(135deg,#0f766e,#14b8a6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.login-sub{text-align:center;color:var(--muted);font-size:0.83rem;margin-bottom:1.6rem;}
+.form-label{display:block;font-size:0.8rem;font-weight:700;margin-bottom:0.4rem;}
+.form-input{width:100%;padding:0.75rem 1rem;border:1.5px solid #e2e8f0;border-radius:12px;font-family:'Outfit',sans-serif;font-size:0.92rem;background:#fafafa;outline:none;transition:all 0.2s;margin-bottom:1rem;}
+.form-input:focus{border-color:#0f766e;background:white;box-shadow:0 0 0 3px rgba(15,118,110,0.1);}
+.btn-login{width:100%;padding:0.85rem;background:linear-gradient(135deg,#0f766e,#14b8a6);color:white;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:all 0.2s;box-shadow:0 6px 20px rgba(15,118,110,0.35);}
+.btn-login:hover{transform:translateY(-2px);}
+.btn-login:disabled{opacity:0.6;cursor:not-allowed;transform:none;}
+.error-msg{background:#fef2f2;border:1px solid #fecaca;color:#dc2626;padding:0.6rem 0.9rem;border-radius:10px;font-size:0.82rem;margin-top:0.7rem;display:none;}
+.error-msg.show{display:block;}
+/* DASHBOARD PROF */
+.dashboard{display:none;position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:1.5rem 1.2rem 4rem;}
+.dash-header{background:linear-gradient(135deg,#0f766e,#14b8a6);border-radius:20px;padding:1.5rem;color:white;margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+.dash-title{font-family:'Nunito',sans-serif;font-size:1.3rem;font-weight:900;}
+.dash-sub{font-size:0.82rem;opacity:0.8;margin-top:0.2rem;}
+.global-stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:0.8rem;margin-bottom:1.5rem;}
+.gstat{background:white;border-radius:16px;padding:1.1rem;text-align:center;box-shadow:0 4px 16px rgba(0,0,0,0.06);}
+.gstat-num{font-family:'Nunito',sans-serif;font-size:2rem;font-weight:900;background:linear-gradient(135deg,#0f766e,#14b8a6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.gstat-label{font-size:0.74rem;color:var(--muted);margin-top:0.2rem;}
+.btn-logout{font-size:0.78rem;font-weight:700;color:white;background:rgba(255,255,255,0.2);border:none;border-radius:8px;padding:0.4rem 0.9rem;cursor:pointer;}
+.btn-refresh{font-size:0.78rem;font-weight:700;color:#0f766e;background:white;border:none;border-radius:8px;padding:0.4rem 0.9rem;cursor:pointer;margin-right:0.4rem;}
+.section-title{font-family:'Nunito',sans-serif;font-size:1.1rem;font-weight:900;margin-bottom:1rem;}
+/* FILTRES */
+.filters{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1rem;}
+.filter-btn{font-size:0.76rem;font-weight:700;padding:0.35rem 0.85rem;border-radius:20px;border:1.5px solid #e2e8f0;background:white;color:var(--muted);cursor:pointer;transition:all 0.2s;}
+.filter-btn.active{background:linear-gradient(135deg,#0f766e,#14b8a6);color:white;border-color:transparent;}
+/* TABLE ÉLÈVES */
+.eleve-table-wrap{background:white;border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.07);margin-bottom:1.5rem;}
+.eleve-table{width:100%;border-collapse:collapse;}
+.eleve-table th{background:#f8fafc;padding:0.8rem 1rem;text-align:left;font-family:'JetBrains Mono',monospace;font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);border-bottom:1px solid #f1f5f9;}
+.eleve-table td{padding:0.85rem 1rem;border-bottom:1px solid #f8fafc;font-size:0.88rem;vertical-align:middle;}
+.eleve-table tr:last-child td{border-bottom:none;}
+.eleve-table tr:hover td{background:#f8fafc;}
+.niveau-badge{font-size:0.7rem;font-weight:700;padding:0.18rem 0.55rem;border-radius:20px;display:inline-block;}
+.score-bar-wrap{width:80px;height:6px;background:#f1f5f9;border-radius:6px;overflow:hidden;display:inline-block;vertical-align:middle;margin-right:0.4rem;}
+.score-bar-fill{height:100%;border-radius:6px;}
+.loading-spinner{text-align:center;padding:3rem;color:var(--muted);font-size:0.9rem;}
+/* CHAPITRES LES + DIFFICILES */
+.diff-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:0.8rem;margin-bottom:1.5rem;}
+.diff-card{background:white;border-radius:14px;padding:1rem;box-shadow:0 4px 16px rgba(0,0,0,0.06);border-left:4px solid #ef4444;}
+.diff-card.medium{border-left-color:#f59e0b;}
+.diff-card.good{border-left-color:#10b981;}
+.diff-card-title{font-family:'Nunito',sans-serif;font-size:0.86rem;font-weight:800;margin-bottom:0.3rem;}
+.diff-card-score{font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:700;}
+.diff-card-sub{font-size:0.72rem;color:var(--muted);margin-top:0.15rem;}
+.loading{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 0.8s linear infinite;vertical-align:middle;margin-right:0.4rem;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.empty{text-align:center;padding:2rem;color:var(--muted);font-size:0.88rem;}
+@media(max-width:600px){.eleve-table th:nth-child(4),.eleve-table td:nth-child(4){display:none;}.nav-brand{display:none;}}
+</style>
+</head>
+<body>
+<div class="blob-wrap"><div class="blob b1"></div><div class="blob b2"></div></div>
+<nav>
+  <a class="nav-logo" href="index.html"><div class="nav-icon">∑</div><span class="nav-brand">Missaoui Maths</span></a>
+  <a class="nav-link" href="index.html">← Accueil</a>
+</nav>
+
+<!-- LOGIN PROF -->
+<div class="login-wrap" id="login-wrap">
+  <div class="login-card">
+    <div class="login-icon">👨‍🏫</div>
+    <div class="login-title">Espace <span>Professeur</span></div>
+    <div class="login-sub">Accès réservé à M. Missaoui</div>
+    <label class="form-label">🔑 Mot de passe professeur</label>
+    <input type="password" class="form-input" id="input-mdp" placeholder="••••••••••" onkeydown="if(event.key==='Enter')doProfLogin()">
+    <div class="error-msg" id="error-msg">❌ Mot de passe incorrect.</div>
+    <button class="btn-login" id="btn-login" onclick="doProfLogin()">Accéder au tableau de bord →</button>
+  </div>
+</div>
+
+<!-- DASHBOARD PROF -->
+<div class="dashboard" id="dashboard">
+  <div class="dash-header">
+    <div>
+      <div class="dash-title">👨‍🏫 Tableau de bord – M. Missaoui</div>
+      <div class="dash-sub">Vue globale de tous les élèves connectés</div>
+    </div>
+    <div>
+      <button class="btn-refresh" onclick="loadData()">🔄 Actualiser</button>
+      <button class="btn-logout" onclick="doProfLogout()">Déconnexion</button>
+    </div>
+  </div>
+
+  <div class="global-stats" id="global-stats">
+    <div class="gstat"><div class="gstat-num" id="gs-eleves">—</div><div class="gstat-label">Élèves inscrits</div></div>
+    <div class="gstat"><div class="gstat-num" id="gs-quiz">—</div><div class="gstat-label">Quiz complétés</div></div>
+    <div class="gstat"><div class="gstat-num" id="gs-avg">—</div><div class="gstat-label">Score moyen</div></div>
+    <div class="gstat"><div class="gstat-num" id="gs-actifs">—</div><div class="gstat-label">Actifs (7j)</div></div>
+  </div>
+
+  <div class="section-title">⚠️ Chapitres les plus difficiles</div>
+  <div class="diff-grid" id="diff-grid"><div class="loading-spinner">Chargement...</div></div>
+
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.8rem;margin-bottom:0.8rem;">
+    <div class="section-title" style="margin:0;">👥 Liste des élèves</div>
+    <div class="filters" id="niveau-filters">
+      <button class="filter-btn active" onclick="filterNiveau('tous',this)">Tous</button>
+      <button class="filter-btn" onclick="filterNiveau('6eme',this)">6ème</button>
+      <button class="filter-btn" onclick="filterNiveau('5eme',this)">5ème</button>
+      <button class="filter-btn" onclick="filterNiveau('4eme',this)">4ème</button>
+      <button class="filter-btn" onclick="filterNiveau('3eme',this)">3ème</button>
+      <button class="filter-btn" onclick="filterNiveau('2nde',this)">2nde</button>
+      <button class="filter-btn" onclick="filterNiveau('1ere',this)">1ère</button>
+      <button class="filter-btn" onclick="filterNiveau('terminale',this)">Term.</button>
+    </div>
+  </div>
+  <div class="eleve-table-wrap">
+    <table class="eleve-table" id="eleve-table">
+      <thead><tr>
+        <th>Élève</th><th>Niveau</th><th>Quiz</th><th>Score moy.</th><th>Dernière activité</th>
+      </tr></thead>
+      <tbody id="eleve-tbody"><tr><td colspan="5" class="loading-spinner">Chargement des données...</td></tr></tbody>
+    </table>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-firestore.js";
+
+const app = initializeApp({
+  apiKey: "AIzaSyBx8_xMkIgAc2CDNSGjoPn7zxCklMvZKcs",
+  authDomain: "missaouimaths.firebaseapp.com",
+  projectId: "missaouimaths",
+  storageBucket: "missaouimaths.firebasestorage.app",
+  messagingSenderId: "781971966091",
+  appId: "1:781971966091:web:d5522f8d70b008a844ac8e"
+});
+const db = getFirestore(app);
+
+const MDP = "MATHPROF27";
+const NIVEAUX = {"6eme":"6ème","5eme":"5ème","4eme":"4ème","3eme":"3ème","2nde":"2nde","1ere":"1ère","terminale":"Terminale"};
+const COLORS = {"6eme":"#1d4ed8","5eme":"#0f766e","4eme":"#6d28d9","3eme":"#b45309","2nde":"#be123c","1ere":"#047857","terminale":"#7c3aed"};
+const CHAP_LABELS = {
+  "6e-ch1":"Nombres entiers","6e-ch2":"Fractions","6e-ch3":"Calcul","6e-ch4":"Proportionnalité","6e-ch5":"Géométrie plane","6e-ch6":"Polygones","6e-ch7":"Grandeurs","6e-ch8":"Statistiques",
+  "5e-ch1":"Fractions","5e-ch2":"Relatifs","5e-ch3":"Proportionnalité","5e-ch4":"Pythagore","5e-ch5":"Triangles","5e-ch6":"Aires & Volumes","5e-ch7":"Symétrie","5e-ch8":"Stats & Proba",
+  "3eme-ch7":"Statistiques 3ème","3eme-ch1":"Calcul algébrique","3eme-ch5":"Trigonométrie","1ere-ch2":"Dérivation","terminale-ch2":"Intégration"
+};
+
+let allEleves = [];
+let currentFilter = 'tous';
+
+window.doProfLogin = function() {
+  const mdp = document.getElementById('input-mdp').value;
+  const err = document.getElementById('error-msg');
+  const btn = document.getElementById('btn-login');
+  err.classList.remove('show');
+  if (mdp !== MDP) { err.classList.add('show'); return; }
+  btn.disabled=true; btn.innerHTML='<span class="loading"></span>Chargement...';
+  sessionStorage.setItem('mm_prof','1');
+  document.getElementById('login-wrap').style.display='none';
+  document.getElementById('dashboard').style.display='block';
+  loadData();
+};
+
+window.doProfLogout = function() {
+  sessionStorage.removeItem('mm_prof');
+  document.getElementById('dashboard').style.display='none';
+  document.getElementById('login-wrap').style.display='flex';
+  document.getElementById('input-mdp').value='';
+  const btn=document.getElementById('btn-login');
+  btn.disabled=false; btn.innerHTML='Accéder au tableau de bord →';
+};
+
+window.filterNiveau = function(niveau, el) {
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  currentFilter = niveau;
+  renderTable(allEleves);
+};
+
+window.loadData = async function() {
+  document.getElementById('eleve-tbody').innerHTML='<tr><td colspan="5" class="loading-spinner">🔄 Chargement...</td></tr>';
+  document.getElementById('diff-grid').innerHTML='<div class="loading-spinner">Chargement...</div>';
+  try {
+    const snap = await getDocs(collection(db,"eleves"));
+    allEleves = snap.docs.map(d=>d.data());
+    renderGlobalStats(allEleves);
+    renderTable(allEleves);
+    renderDifficult(allEleves);
+  } catch(e) {
+    console.error(e);
+    document.getElementById('eleve-tbody').innerHTML='<tr><td colspan="5" class="empty">❌ Erreur de chargement. Vérifie ta connexion.</td></tr>';
+  }
+};
+
+function renderGlobalStats(eleves) {
+  document.getElementById('gs-eleves').textContent = eleves.length;
+  const totalQuiz = eleves.reduce((s,e)=>s+(e.quizResults||[]).length,0);
+  document.getElementById('gs-quiz').textContent = totalQuiz;
+  const scores = eleves.flatMap(e=>(e.quizResults||[]).map(r=>r.pct));
+  document.getElementById('gs-avg').textContent = scores.length ? Math.round(scores.reduce((a,b)=>a+b,0)/scores.length)+'%' : '—';
+  const sept = new Date(); sept.setDate(sept.getDate()-7);
+  const actifs = eleves.filter(e=>e.lastSeen && new Date(e.lastSeen)>sept).length;
+  document.getElementById('gs-actifs').textContent = actifs;
+}
+
+function renderTable(eleves) {
+  const filtered = currentFilter==='tous' ? eleves : eleves.filter(e=>e.niveau===currentFilter);
+  filtered.sort((a,b)=>(b.lastSeen||'').localeCompare(a.lastSeen||''));
+  const tbody = document.getElementById('eleve-tbody');
+  if (!filtered.length) { tbody.innerHTML='<tr><td colspan="5" class="empty">Aucun élève pour ce niveau.</td></tr>'; return; }
+  tbody.innerHTML = filtered.map(e=>{
+    const results = e.quizResults||[];
+    const avg = results.length ? Math.round(results.reduce((s,r)=>s+r.pct,0)/results.length) : null;
+    const col = COLORS[e.niveau]||'#6366f1';
+    const avgColor = avg===null?'#94a3b8':avg>=80?'#10b981':avg>=50?'#f59e0b':'#ef4444';
+    const lastSeen = e.lastSeen ? new Date(e.lastSeen).toLocaleDateString('fr-FR') : '—';
+    return `<tr>
+      <td><strong>${e.nom||'—'}</strong></td>
+      <td><span class="niveau-badge" style="background:${col}22;color:${col};">${NIVEAUX[e.niveau]||e.niveau||'—'}</span></td>
+      <td><strong>${results.length}</strong></td>
+      <td>${avg!==null?`<span class="score-bar-wrap"><span class="score-bar-fill" style="width:${avg}%;background:${avgColor};"></span></span><strong style="color:${avgColor}">${avg}%</strong>`:'<span style="color:#94a3b8">—</span>'}</td>
+      <td style="color:var(--muted);font-size:0.82rem;">${lastSeen}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderDifficult(eleves) {
+  const chapStats = {};
+  eleves.forEach(e=>{
+    (e.quizResults||[]).forEach(r=>{
+      if(!chapStats[r.chapitre]) chapStats[r.chapitre]={scores:[],label:CHAP_LABELS[r.chapitre]||r.chapitre};
+      chapStats[r.chapitre].scores.push(r.pct);
+    });
+  });
+  if (!Object.keys(chapStats).length) {
+    document.getElementById('diff-grid').innerHTML='<div class="empty">Aucun quiz complété pour l\'instant.</div>';
+    return;
+  }
+  const sorted = Object.entries(chapStats)
+    .map(([ch,{scores,label}])=>({ch,label,avg:Math.round(scores.reduce((a,b)=>a+b,0)/scores.length),nb:scores.length}))
+    .sort((a,b)=>a.avg-b.avg)
+    .slice(0,6);
+  document.getElementById('diff-grid').innerHTML = sorted.map(({label,avg,nb})=>{
+    const cls = avg<50?'':''.concat(avg<70?'medium':'good');
+    const col = avg<50?'#ef4444':avg<70?'#f59e0b':'#10b981';
+    return `<div class="diff-card ${cls}">
+      <div class="diff-card-title">${label}</div>
+      <div class="diff-card-score" style="color:${col}">${avg}%</div>
+      <div class="diff-card-sub">${nb} tentative(s)</div>
+    </div>`;
+  }).join('');
+}
+
+// Auto-login si déjà connecté
+if (sessionStorage.getItem('mm_prof')==='1') {
+  document.getElementById('login-wrap').style.display='none';
+  document.getElementById('dashboard').style.display='block';
+  loadData();
+}
+</script>
+</body>
+</html>
