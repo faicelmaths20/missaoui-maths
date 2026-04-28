@@ -608,22 +608,28 @@ function updateProgress() {
   document.getElementById('progress-fill').style.width = pct + '%';
   document.getElementById('progress-text').textContent = answered + ' / ' + questions.length;
 }
-
 function showScore() {
   const el = document.getElementById('quiz-score');
   el.classList.add('show');
+
   document.getElementById('score-num').textContent = score + '/' + questions.length;
+
+  // sauvegarde
+  localStorage.setItem('statistiques_score', score);
+  localStorage.setItem('statistiques_total', questions.length);
+
   const msgs = [
-    [0,3,"Continue à réviser le cours, tu vas y arriver ! 💪"],
-    [3,5,"Pas mal ! Relis les parties que tu n'as pas encore maîtrisées. 📖"],
-    [5,7,"Bien joué ! Encore un peu de travail et tu seras au top. 👍"],
-    [7,8,"Excellent ! Tu maîtrises presque tout. 🌟"],
-    [8,9,"Parfait ! Félicitations, tu as tout bon ! 🏆"]
+    [0,3,"Continue à réviser 💪"],
+    [3,5,"Pas mal 👍"],
+    [5,7,"Bien joué 🔥"],
+    [7,8,"Excellent 🌟"],
+    [8,9,"Parfait 🏆"]
   ];
+
   const m = msgs.find(([lo,hi]) => score >= lo && score < hi);
   document.getElementById('score-msg').textContent = m ? m[2] : '';
-  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
+
 
 function restartQuiz() { buildQuiz(); document.getElementById('quiz-section').scrollIntoView({ behavior:'smooth' }); }
 
