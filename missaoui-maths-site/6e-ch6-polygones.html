@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Polygones & Cercle – 6ème – Missaoui Maths</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Outfit:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f0f4ff;--text:#1e293b;--muted:#64748b;--c1:#1d4ed8;--c2:#3b82f6;}
+*{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.75;font-size:16px;}
+.blob-wrap{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.blob{position:absolute;border-radius:50%;filter:blur(100px);opacity:0.12;}
+.b1{width:400px;height:400px;background:radial-gradient(circle,#3b82f6,#1d4ed8);top:-80px;left:-60px;}
+.b2{width:280px;height:280px;background:radial-gradient(circle,#1d4ed8,#3b82f6);bottom:100px;right:-40px;}
+nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,0.93);backdrop-filter:blur(20px);border-bottom:1px solid #e2e8f0;padding:0.75rem 1.4rem;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 16px rgba(59,130,246,0.07);}
+.nav-logo{display:flex;align-items:center;gap:0.55rem;text-decoration:none;}
+.nav-icon{width:34px;height:34px;background:linear-gradient(135deg,#1d4ed8,#3b82f6);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem;color:white;box-shadow:0 3px 10px rgba(59,130,246,0.35);}
+.nav-brand{font-family:'Nunito',sans-serif;font-weight:900;font-size:0.9rem;background:linear-gradient(135deg,#1d4ed8,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.nav-links{display:flex;gap:0.25rem;}
+.nav-link{font-size:0.76rem;font-weight:600;color:var(--muted);text-decoration:none;padding:0.32rem 0.75rem;border-radius:7px;transition:all 0.2s;}
+.nav-link:hover{background:rgba(59,130,246,0.1);color:#1d4ed8;}
+.breadcrumb{max-width:820px;margin:1rem auto 0;padding:0 1.2rem;display:flex;align-items:center;gap:0.35rem;font-size:0.74rem;color:var(--muted);flex-wrap:wrap;}
+.breadcrumb a{color:#1d4ed8;text-decoration:none;}
+.page-header{max-width:820px;margin:0 auto;padding:2rem 1.2rem 1.5rem;position:relative;z-index:1;}
+.ph-badge{display:inline-flex;align-items:center;gap:0.4rem;background:linear-gradient(135deg,#1d4ed8,#3b82f6);color:white;font-size:0.75rem;font-weight:700;padding:0.38rem 1rem;border-radius:28px;margin-bottom:0.8rem;box-shadow:0 4px 14px rgba(59,130,246,0.3);}
+.ph-title{font-family:'Nunito',sans-serif;font-size:clamp(1.7rem,6vw,2.8rem);font-weight:900;line-height:1.1;margin-bottom:0.4rem;}
+.ph-title span{background:linear-gradient(135deg,#1d4ed8,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.ph-desc{color:var(--muted);font-size:0.88rem;margin-bottom:1rem;}
+.ph-pills{display:flex;flex-wrap:wrap;gap:0.4rem;}
+.ph-pill{background:white;border-radius:18px;padding:0.3rem 0.8rem;font-size:0.72rem;font-weight:600;color:var(--muted);box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+.course-body{max-width:820px;margin:0 auto;padding:1.5rem 1.2rem 5rem;position:relative;z-index:1;}
+.sec-h2{font-family:'Nunito',sans-serif;font-size:1.3rem;font-weight:900;color:var(--text);margin:2.2rem 0 1rem;display:flex;align-items:center;gap:0.6rem;}
+.sec-dot{width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,#1d4ed8,#3b82f6);flex-shrink:0;box-shadow:0 0 8px rgba(59,130,246,0.5);}
+/* BOXES */
+.box{border-radius:14px;padding:1rem 1.2rem;margin:0.9rem 0;}
+.box-label{font-family:'JetBrains Mono',monospace;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:0.5rem;}
+.box-content{font-size:0.93rem;line-height:1.7;}
+.box-def{background:#eff6ff;border:1.5px solid #bfdbfe;}
+.box-def .box-label{color:#1d4ed8;}
+.box-prop{background:#f0fdf4;border:1.5px solid #bbf7d0;}
+.box-prop .box-label{color:#15803d;}
+.box-method{background:#faf5ff;border:1.5px solid #e9d5ff;}
+.box-method .box-label{color:#7c3aed;}
+.box-exemple{background:#fff7ed;border:1.5px solid #fed7aa;}
+.box-exemple .box-label{color:#c2410c;}
+.box-corr{background:#f0fdf4;border:1.5px solid #86efac;}
+.box-corr .box-label{color:#15803d;}
+.remark{background:#fffbeb;border-left:4px solid #f59e0b;padding:0.75rem 1rem;border-radius:0 10px 10px 0;font-size:0.88rem;color:#555;margin:0.8rem 0;}
+/* FORMULA */
+.formula{background:white;border:2px solid #e9d5ff;border-radius:12px;padding:0.8rem 1.2rem;margin:0.8rem 0;text-align:center;font-size:1rem;font-family:'JetBrains Mono',monospace;color:#1d4ed8;box-shadow:0 4px 16px rgba(59,130,246,0.1);}
+/* TABLE */
+.table-wrap{overflow-x:auto;margin:0.8rem 0;}
+table{border-collapse:collapse;width:100%;font-size:0.86rem;white-space:nowrap;}
+th{background:#1d4ed8;color:white;padding:0.42rem 0.75rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:0.72rem;}
+td{border:1px solid #e2e8f0;padding:0.38rem 0.75rem;text-align:center;background:white;}
+tr:nth-child(even) td{background:#f8fafc;}
+.td-hl{background:#fef9e0!important;color:#15803d;font-weight:700;}
+/* EXERCICES */
+.exercice-block{background:white;border-radius:16px;padding:1.3rem;box-shadow:0 6px 24px rgba(0,0,0,0.07);margin:1.5rem 0;}
+.exo-title{font-family:'Nunito',sans-serif;font-size:1.05rem;font-weight:900;margin-bottom:1rem;color:#1d4ed8;}
+.exo-item{border:1px solid #e2e8f0;border-radius:10px;padding:0.9rem 1rem;margin-bottom:0.8rem;}
+.exo-num{font-family:'JetBrains Mono',monospace;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#1d4ed8;margin-bottom:0.4rem;}
+.exo-enonce{font-size:0.9rem;margin-bottom:0.7rem;line-height:1.6;}
+.show-corr-btn{font-size:0.76rem;font-weight:700;color:#1d4ed8;background:rgba(59,130,246,0.1);border:none;border-radius:7px;padding:0.35rem 0.9rem;cursor:pointer;transition:background 0.2s;}
+.show-corr-btn:hover{background:rgba(59,130,246,0.2);}
+.exo-corr{margin-top:0.7rem;padding:0.7rem 0.9rem;background:#f0fdf4;border-radius:8px;font-size:0.88rem;border-left:3px solid #10b981;line-height:1.6;}
+.hidden-corr{display:none;}
+/* QUIZ */
+.quiz-block{background:linear-gradient(135deg,#1d4ed8,#3b82f6);border-radius:20px;padding:1.5rem 1.2rem;margin:1.5rem 0;}
+.quiz-title{font-family:'Nunito',sans-serif;font-size:1.1rem;font-weight:900;color:white;margin-bottom:1.2rem;text-align:center;}
+.qcard{background:white;border-radius:14px;padding:1.1rem;margin-bottom:1rem;box-shadow:0 4px 20px rgba(0,0,0,0.15);}
+.qnum{font-family:'JetBrains Mono',monospace;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#1d4ed8;margin-bottom:0.35rem;}
+.qtext{font-size:0.93rem;font-weight:600;margin-bottom:0.8rem;line-height:1.4;}
+.qopts{display:flex;flex-direction:column;gap:0.4rem;margin-bottom:0.7rem;}
+.qopt{padding:0.5rem 0.8rem;border:1.5px solid #e2e8f0;border-radius:9px;font-size:0.88rem;cursor:pointer;transition:all 0.15s;background:#fafafa;-webkit-tap-highlight-color:transparent;}
+.qopt:hover{border-color:#1d4ed8;background:rgba(59,130,246,0.06);}
+.qopt.correct{border-color:#10b981;background:#f0fdf4;color:#15803d;font-weight:700;}
+.qopt.wrong{border-color:#ef4444;background:#fef2f2;color:#dc2626;}
+.qexpl{padding:0.65rem 0.85rem;background:#eff6ff;border-radius:8px;font-size:0.84rem;border-left:3px solid #1d4ed8;line-height:1.55;}
+footer{background:white;border-top:1px solid #e2e8f0;padding:1.2rem 1.5rem;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1rem;position:relative;z-index:1;}
+.fl{display:flex;align-items:center;gap:0.55rem;}
+.fi{width:30px;height:30px;background:linear-gradient(135deg,#1d4ed8,#3b82f6);border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-size:0.85rem;}
+.fn{font-family:'Nunito',sans-serif;font-weight:900;font-size:0.85rem;background:linear-gradient(135deg,#1d4ed8,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.fs{font-size:0.66rem;color:var(--muted);}
+.fr-foot{font-size:0.66rem;color:var(--muted);text-align:right;}
+p{margin:0.4rem 0;}
+ul,ol{padding-left:1.3rem;}
+li{margin:0.18rem 0;font-size:0.92rem;}
+strong{color:var(--text);}
+@media(max-width:540px){.nav-links{display:none;}}
+</style>
+
+<style>
+.ch-nav-wrap{background:white;border-top:1px solid #f1f5f9;border-bottom:1px solid #f1f5f9;padding:0.75rem 1.4rem;position:relative;z-index:10;}
+.ch-nav{max-width:820px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:0.8rem;}
+.ch-nav-btn{font-size:0.78rem;font-weight:700;padding:0.4rem 0.9rem;border-radius:20px;text-decoration:none;transition:all 0.2s;white-space:nowrap;}
+.ch-prev{background:var(--bg,#f0f4ff);color:var(--c1,#1d4ed8);border:1.5px solid currentColor;}
+.ch-next{background:var(--c1,#1d4ed8);color:white;box-shadow:0 3px 10px rgba(0,0,0,0.15);}
+.ch-prev:hover,.ch-next:hover{transform:translateY(-2px);}
+.ch-disabled{font-size:0.78rem;font-weight:600;color:#cbd5e1;cursor:default;padding:0.4rem 0.9rem;}
+.ch-nav-center{display:flex;flex-direction:column;align-items:center;gap:0.3rem;flex:1;}
+.ch-level-link{font-family:'JetBrains Mono',monospace;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--c1,#1d4ed8);text-decoration:none;opacity:0.7;}
+.ch-dots{display:flex;gap:0.3rem;align-items:center;}
+.ch-dot{width:8px;height:8px;border-radius:50%;background:#e2e8f0;transition:all 0.2s;display:block;}
+.ch-dot:hover{background:#94a3b8;transform:scale(1.3);}
+.ch-dot-active{background:var(--c1,#1d4ed8)!important;box-shadow:0 0 6px currentColor;}
+.ch-pos{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:#94a3b8;}
+@media(max-width:440px){.ch-dots{display:none;}.ch-nav{gap:0.4rem;}}
+</style>
+
+<style>
+.key-points{background:linear-gradient(135deg,#0f172a,#1e293b);border-radius:20px;padding:1.5rem;margin:2rem 0;color:white;}
+.key-title{font-family:'Nunito',sans-serif;font-size:1.1rem;font-weight:900;margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem;}
+.key-list{list-style:none;display:flex;flex-direction:column;gap:0.6rem;}
+.key-list li{display:flex;align-items:flex-start;gap:0.6rem;font-size:0.88rem;line-height:1.55;color:#e2e8f0;}
+.key-list li::before{content:'✓';color:#10b981;font-weight:900;flex-shrink:0;margin-top:0.05rem;}
+</style>
+</head>
+<body>
+<div class="blob-wrap"><div class="blob b1"></div><div class="blob b2"></div></div>
+<nav>
+  <a class="nav-logo" href="index.html"><div class="nav-icon">∑</div><span class="nav-brand">Missaoui Maths</span></a>
+  <div class="nav-links">
+    <a class="nav-link" href="6eme.html">← 6ème</a>
+    <a class="nav-link" href="francais.html">Niveaux</a>
+    <a class="nav-link" href="index.html">Accueil</a>
+  </div>
+</nav>
+<div class="ch-nav-wrap">
+  <div class="ch-nav">
+    <a href="6e-ch5-geometrie-plane.html" class="ch-nav-btn ch-prev">← Ch.5</a>
+    <div class="ch-nav-center">
+      <a href="6eme.html" class="ch-level-link">6ème</a>
+      <div class="ch-dots"><a href="6e-ch1-nombres-entiers.html" class="ch-dot" title="Chapitre 1"></a><a href="6e-ch2-fractions.html" class="ch-dot" title="Chapitre 2"></a><a href="6e-ch3-calcul.html" class="ch-dot" title="Chapitre 3"></a><a href="6e-ch4-proportionnalite.html" class="ch-dot" title="Chapitre 4"></a><a href="6e-ch5-geometrie-plane.html" class="ch-dot" title="Chapitre 5"></a><a href="6e-ch6-polygones.html" class="ch-dot ch-dot-active" title="Chapitre 6"></a><a href="6e-ch7-grandeurs.html" class="ch-dot" title="Chapitre 7"></a><a href="6e-ch8-statistiques.html" class="ch-dot" title="Chapitre 8"></a></div>
+      <div class="ch-pos">Ch. 6/8</div>
+    </div>
+    <a href="6e-ch7-grandeurs.html" class="ch-nav-btn ch-next">Ch.7 →</a>
+  </div>
+</div>
+<div class="breadcrumb">
+  <a href="index.html">Accueil</a><span>›</span>
+  <a href="francais.html">Système Français</a><span>›</span>
+  <a href="6eme.html">6ème</a><span>›</span>
+  <span>Polygones & Cercle</span>
+</div>
+<div class="page-header">
+  <div class="ph-badge">📖 6ème · Chapitre 6</div>
+  <h1 class="ph-title"><span>Polygones & Cercle</span></h1>
+  <p class="ph-desc">Cours complet · Exemples résolus · Exercices corrigés · Quiz interactif</p>
+  <div class="ph-pills">
+    <div class="ph-pill">📖 Cours complet</div>
+    <div class="ph-pill">✏️ Exemples détaillés</div>
+    <div class="ph-pill">📝 Exercices corrigés</div>
+    <div class="ph-pill">🧠 Quiz interactif</div>
+  </div>
+</div>
+<div class="course-body">
+<h2 class="sec-h2"><span class="sec-dot"></span>1. Les triangles</h2><div class="box box-def"><div class="box-label">📌 Définition</div><div class="box-content">Un <strong>triangle</strong> est un polygone à 3 côtés et 3 angles.<br>La somme des angles d'un triangle est toujours <strong>180°</strong>.</div></div><div class="box box-prop"><div class="box-label">📐 Propriété</div><div class="box-content"><strong>Types de triangles :</strong><br>• <strong>Équilatéral</strong> : 3 côtés égaux, 3 angles de 60°<br>• <strong>Isocèle</strong> : 2 côtés égaux, 2 angles à la base égaux<br>• <strong>Rectangle</strong> : un angle droit (90°)<br>• <strong>Quelconque</strong> : aucune propriété particulière</div></div><h2 class="sec-h2"><span class="sec-dot"></span>2. Les quadrilatères</h2><div class="box box-prop"><div class="box-label">📐 Propriété</div><div class="box-content"><strong>Quadrilatères particuliers :</strong><br>• <strong>Carré</strong> : 4 côtés égaux, 4 angles droits<br>• <strong>Rectangle</strong> : 4 angles droits, côtés opposés égaux<br>• <strong>Losange</strong> : 4 côtés égaux, diagonales perpendiculaires<br>• <strong>Parallélogramme</strong> : côtés opposés parallèles et égaux<br>• <strong>Trapèze</strong> : exactement une paire de côtés parallèles</div></div><h2 class="sec-h2"><span class="sec-dot"></span>3. Le cercle</h2><div class="box box-def"><div class="box-label">📌 Définition</div><div class="box-content">Un <strong>cercle</strong> de centre O et de rayon r est l'ensemble des points situés à la distance r du point O.<br>• <strong>Rayon</strong> : segment reliant le centre à un point du cercle<br>• <strong>Diamètre</strong> : segment passant par le centre, d = 2r<br>• <strong>Corde</strong> : segment reliant deux points du cercle</div></div><div class="box box-prop"><div class="box-label">📐 Propriété</div><div class="box-content"><strong>Périmètre du cercle :</strong> C = 2πr = πd<br><strong>Aire du disque :</strong> A = πr²<br>(avec π ≈ 3,14 ou 3,1416)</div></div><div class="box box-exemple"><div class="box-label">✏️ Exemple</div><div class="box-content">Un cercle de rayon r = 5 cm :<br>• Périmètre = 2 × π × 5 ≈ 2 × 3,14 × 5 = <strong>31,4 cm</strong><br>• Aire = π × 5² ≈ 3,14 × 25 = <strong>78,5 cm²</strong></div></div><div class="exercice-block"><div class="exo-title">📝 Exercices d'application</div><div class="exo-item"><div class="exo-num">Exercice 1</div><div class="exo-enonce">Les angles d'un triangle valent 40° et 75°. Trouver le 3ème angle.</div><button class="show-corr-btn" onclick="toggleCorr(this)">Voir la correction</button><div class="exo-corr hidden-corr">Somme = 180° → 3ème angle = 180 – 40 – 75 = <strong>65°</strong></div></div><div class="exo-item"><div class="exo-num">Exercice 2</div><div class="exo-enonce">Calculer le périmètre et l'aire d'un cercle de rayon 8 cm (π ≈ 3,14).</div><button class="show-corr-btn" onclick="toggleCorr(this)">Voir la correction</button><div class="exo-corr hidden-corr">P = 2 × 3,14 × 8 = <strong>50,24 cm</strong><br>A = 3,14 × 64 = <strong>200,96 cm²</strong></div></div></div><div class="quiz-block"><div class="quiz-title">🧠 Quiz – Teste tes connaissances</div><div class="qscore-wrap" id="qscore-6e-ch6-polygones.html"></div><div class="qcard" id="qcard-6e-ch6-polygones.html-0">
+  <div class="qnum">Question 1/3</div>
+  <div class="qtext">La somme des angles d'un triangle est :</div>
+  <div class="qopts"><div class="qopt" id="qopt-6e-ch6-polygones.html-0-0" onclick="pickQ('6e-ch6-polygones.html',0,0,1)">A. 90°</div><div class="qopt" id="qopt-6e-ch6-polygones.html-0-1" onclick="pickQ('6e-ch6-polygones.html',0,1,1)">B. 180°</div><div class="qopt" id="qopt-6e-ch6-polygones.html-0-2" onclick="pickQ('6e-ch6-polygones.html',0,2,1)">C. 270°</div><div class="qopt" id="qopt-6e-ch6-polygones.html-0-3" onclick="pickQ('6e-ch6-polygones.html',0,3,1)">D. 360°</div></div>
+  <div class="qexpl hidden-corr" id="qexpl-6e-ch6-polygones.html-0">La somme des angles d'un triangle est toujours <strong>180°</strong>.</div>
+</div><div class="qcard" id="qcard-6e-ch6-polygones.html-1">
+  <div class="qnum">Question 2/3</div>
+  <div class="qtext">Un triangle isocèle a :</div>
+  <div class="qopts"><div class="qopt" id="qopt-6e-ch6-polygones.html-1-0" onclick="pickQ('6e-ch6-polygones.html',1,0,1)">A. 3 côtés égaux</div><div class="qopt" id="qopt-6e-ch6-polygones.html-1-1" onclick="pickQ('6e-ch6-polygones.html',1,1,1)">B. 2 côtés égaux</div><div class="qopt" id="qopt-6e-ch6-polygones.html-1-2" onclick="pickQ('6e-ch6-polygones.html',1,2,1)">C. 1 angle droit</div><div class="qopt" id="qopt-6e-ch6-polygones.html-1-3" onclick="pickQ('6e-ch6-polygones.html',1,3,1)">D. aucune propriété</div></div>
+  <div class="qexpl hidden-corr" id="qexpl-6e-ch6-polygones.html-1">Un triangle isocèle a <strong>2 côtés égaux</strong> (et donc 2 angles à la base égaux).</div>
+</div><div class="qcard" id="qcard-6e-ch6-polygones.html-2">
+  <div class="qnum">Question 3/3</div>
+  <div class="qtext">L'aire d'un disque de rayon 3 cm (π ≈ 3,14) est :</div>
+  <div class="qopts"><div class="qopt" id="qopt-6e-ch6-polygones.html-2-0" onclick="pickQ('6e-ch6-polygones.html',2,0,2)">A. 9,42 cm²</div><div class="qopt" id="qopt-6e-ch6-polygones.html-2-1" onclick="pickQ('6e-ch6-polygones.html',2,1,2)">B. 18,84 cm²</div><div class="qopt" id="qopt-6e-ch6-polygones.html-2-2" onclick="pickQ('6e-ch6-polygones.html',2,2,2)">C. 28,26 cm²</div><div class="qopt" id="qopt-6e-ch6-polygones.html-2-3" onclick="pickQ('6e-ch6-polygones.html',2,3,2)">D. 6,28 cm²</div></div>
+  <div class="qexpl hidden-corr" id="qexpl-6e-ch6-polygones.html-2">A = π × r² = 3,14 × 9 = <strong>28,26 cm²</strong>.</div>
+</div></div>
+<div class="key-points"><div class="key-title">🔑 Points clés à retenir</div><ul class="key-list"><li>Somme des angles d'un triangle = 180°</li><li>Périmètre cercle = 2πr | Aire disque = πr²</li><li>Types de triangles : équilatéral (3 côtés égaux), isocèle (2 égaux), rectangle (1 angle droit)</li></ul></div>
+</div>
+<footer>
+  <div class="fl"><div class="fi">∑</div><div><div class="fn">Faicel Missaoui</div><div class="fs">Professeur Agrégé de Mathématiques</div></div></div>
+  <div class="fr-foot">faicelmaths20.github.io/missaoui-maths<br>© 2026</div>
+</footer>
+<script>
+var quizState_6e_ch6_polygones.html = {};
+function pickQ(fname, qi, chosen, correct) {
+  var key = fname+'-'+qi;
+  if(quizState_6e_ch6_polygones.html[key]) return;
+  quizState_6e_ch6_polygones.html[key] = true;
+  var opts = document.querySelectorAll('[id^="qopt-'+fname+'-'+qi+'-"]');
+  opts.forEach(function(el,j){
+    if(j===correct) el.classList.add('correct');
+    else if(j===chosen) el.classList.add('wrong');
+  });
+  var expl = document.getElementById('qexpl-'+fname+'-'+qi);
+  if(expl) expl.classList.remove('hidden-corr');
+}
+function toggleCorr(btn){
+  var corr = btn.nextElementSibling;
+  var hidden = corr.classList.toggle('hidden-corr');
+  btn.textContent = hidden ? 'Voir la correction' : 'Masquer la correction';
+}
+</script>
+</body>
+</html>

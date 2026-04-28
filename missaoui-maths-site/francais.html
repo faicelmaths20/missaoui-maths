@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Système Français – Missaoui Maths</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Outfit:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f0f4ff;--white:#fff;--text:#1e293b;--muted:#64748b;--blue:#3b82f6;--blue-d:#1d4ed8;--indigo:#6366f1;--violet:#8b5cf6;--pink:#ec4899;--green:#10b981;--orange:#f59e0b;--red:#ef4444;--teal:#14b8a6;}
+*{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;}
+.blob-wrap{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:0.15;animation:blobF 9s ease-in-out infinite;}
+.b1{width:450px;height:450px;background:radial-gradient(circle,#3b82f6,#6366f1);top:-100px;left:-80px;}
+.b2{width:350px;height:350px;background:radial-gradient(circle,#ec4899,#8b5cf6);bottom:100px;right:-60px;animation-delay:4s;}
+@keyframes blobF{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
+
+nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,0.92);backdrop-filter:blur(20px);border-bottom:1px solid #e2e8f0;padding:0.8rem 1.5rem;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 20px rgba(99,102,241,0.07);}
+.nav-logo{display:flex;align-items:center;gap:0.6rem;text-decoration:none;}
+.nav-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--blue),var(--violet));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:white;box-shadow:0 4px 12px rgba(99,102,241,0.3);}
+.nav-brand{font-family:'Nunito',sans-serif;font-weight:900;font-size:0.95rem;background:linear-gradient(135deg,var(--blue-d),var(--violet));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.nav-back{font-size:0.8rem;font-weight:600;color:var(--indigo);text-decoration:none;display:flex;align-items:center;gap:0.3rem;padding:0.38rem 0.85rem;border-radius:8px;background:rgba(99,102,241,0.08);transition:background 0.2s;}
+.nav-back:hover{background:rgba(99,102,241,0.15);}
+
+.page-hero{position:relative;z-index:1;padding:3rem 1.4rem 2.5rem;text-align:center;max-width:780px;margin:0 auto;}
+.hero-flag{font-size:3.5rem;margin-bottom:0.8rem;animation:flagIn 0.6s cubic-bezier(0.34,1.56,0.64,1) both;}
+@keyframes flagIn{from{opacity:0;transform:scale(0.5)}to{opacity:1;transform:scale(1)}}
+.hero-badge{display:inline-flex;align-items:center;gap:0.4rem;background:linear-gradient(135deg,var(--blue),var(--indigo));color:white;font-size:0.78rem;font-weight:700;padding:0.38rem 1rem;border-radius:30px;margin-bottom:0.8rem;box-shadow:0 4px 14px rgba(59,130,246,0.3);}
+.page-hero h1{font-family:'Nunito',sans-serif;font-size:clamp(1.8rem,6vw,3rem);font-weight:900;line-height:1.1;margin-bottom:0.5rem;}
+.page-hero h1 span{background:linear-gradient(135deg,var(--blue),var(--indigo));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.page-hero p{color:var(--muted);font-size:0.92rem;max-width:480px;margin:0 auto;}
+
+/* NIVEAU GRID 3D */
+.section{max-width:980px;margin:0 auto;padding:1rem 1.4rem 5rem;position:relative;z-index:1;}
+.sec-title{font-family:'Nunito',sans-serif;font-size:1.4rem;font-weight:900;text-align:center;margin-bottom:2rem;}
+.sec-title span{background:linear-gradient(135deg,var(--blue),var(--violet));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+
+.niveau-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.3rem;}
+
+.niv-btn{position:relative;border:none;cursor:pointer;border-radius:22px;padding:0;background:none;text-decoration:none;display:block;-webkit-tap-highlight-color:transparent;transition:transform 0.2s,filter 0.2s;}
+.niv-btn:hover{transform:translateY(-9px) scale(1.02);filter:brightness(1.04);}
+.niv-btn:active{transform:translateY(-3px);}
+.niv-inner{border-radius:22px;padding:1.8rem 1.3rem;text-align:center;position:relative;overflow:hidden;}
+.niv-inner::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,0.2) 0%,transparent 55%);border-radius:22px;pointer-events:none;}
+
+.n-6{.niv-inner{background:linear-gradient(145deg,#1d4ed8,#3b82f6,#38bdf8);box-shadow:0 10px 0 #1e3a8a,0 14px 36px rgba(59,130,246,0.4);}}
+.n-5{.niv-inner{background:linear-gradient(145deg,#0f766e,#14b8a6,#2dd4bf);box-shadow:0 10px 0 #0d5c56,0 14px 36px rgba(20,184,166,0.4);}}
+.n-4{.niv-inner{background:linear-gradient(145deg,#6d28d9,#8b5cf6,#a78bfa);box-shadow:0 10px 0 #5b21b6,0 14px 36px rgba(139,92,246,0.4);}}
+.n-3{.niv-inner{background:linear-gradient(145deg,#b45309,#f59e0b,#fcd34d);box-shadow:0 10px 0 #92400e,0 14px 36px rgba(245,158,11,0.4);}}
+.n-2{.niv-inner{background:linear-gradient(145deg,#be123c,#e11d48,#fb7185);box-shadow:0 10px 0 #9f1239,0 14px 36px rgba(225,29,72,0.4);}}
+.n-1{.niv-inner{background:linear-gradient(145deg,#047857,#10b981,#6ee7b7);box-shadow:0 10px 0 #065f46,0 14px 36px rgba(16,185,129,0.4);}}
+.n-t{.niv-inner{background:linear-gradient(145deg,#7c3aed,#6366f1,#818cf8);box-shadow:0 10px 0 #5b21b6,0 14px 36px rgba(99,102,241,0.4);}}
+
+/* fallback for browsers that don't support nesting */
+.n-6 .niv-inner{background:linear-gradient(145deg,#1d4ed8,#3b82f6,#38bdf8);box-shadow:0 10px 0 #1e3a8a,0 14px 36px rgba(59,130,246,0.4);}
+.n-5 .niv-inner{background:linear-gradient(145deg,#0f766e,#14b8a6,#2dd4bf);box-shadow:0 10px 0 #0d5c56,0 14px 36px rgba(20,184,166,0.4);}
+.n-4 .niv-inner{background:linear-gradient(145deg,#6d28d9,#8b5cf6,#a78bfa);box-shadow:0 10px 0 #5b21b6,0 14px 36px rgba(139,92,246,0.4);}
+.n-3 .niv-inner{background:linear-gradient(145deg,#b45309,#f59e0b,#fcd34d);box-shadow:0 10px 0 #92400e,0 14px 36px rgba(245,158,11,0.4);}
+.n-2 .niv-inner{background:linear-gradient(145deg,#be123c,#e11d48,#fb7185);box-shadow:0 10px 0 #9f1239,0 14px 36px rgba(225,29,72,0.4);}
+.n-1 .niv-inner{background:linear-gradient(145deg,#047857,#10b981,#6ee7b7);box-shadow:0 10px 0 #065f46,0 14px 36px rgba(16,185,129,0.4);}
+.n-t .niv-inner{background:linear-gradient(145deg,#7c3aed,#6366f1,#818cf8);box-shadow:0 10px 0 #5b21b6,0 14px 36px rgba(99,102,241,0.4);}
+
+.niv-emoji{font-size:2.4rem;margin-bottom:0.6rem;display:block;filter:drop-shadow(0 3px 8px rgba(0,0,0,0.2));}
+.niv-name{font-family:'Nunito',sans-serif;font-size:1.6rem;font-weight:900;color:white;margin-bottom:0.2rem;text-shadow:0 2px 6px rgba(0,0,0,0.2);}
+.niv-cycle{font-size:0.75rem;color:rgba(255,255,255,0.8);font-weight:600;margin-bottom:0.9rem;}
+.niv-chapcount{display:inline-flex;align-items:center;gap:0.3rem;background:rgba(255,255,255,0.22);color:white;font-size:0.72rem;font-weight:700;padding:0.28rem 0.8rem;border-radius:20px;margin-bottom:0.9rem;backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.25);}
+.niv-themes{display:flex;flex-wrap:wrap;gap:0.3rem;justify-content:center;margin-bottom:1rem;}
+.niv-theme{background:rgba(255,255,255,0.18);color:white;font-size:0.65rem;font-weight:700;padding:0.2rem 0.6rem;border-radius:14px;border:1px solid rgba(255,255,255,0.25);}
+.niv-cta{display:inline-flex;align-items:center;gap:0.4rem;background:rgba(255,255,255,0.28);color:white;font-size:0.8rem;font-weight:800;padding:0.5rem 1.2rem;border-radius:28px;border:1px solid rgba(255,255,255,0.4);backdrop-filter:blur(8px);transition:background 0.2s;}
+.niv-btn:hover .niv-cta{background:rgba(255,255,255,0.4);}
+
+footer{background:white;border-top:1px solid #e2e8f0;padding:1.3rem 2rem;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1rem;position:relative;z-index:1;}
+.footer-left{display:flex;align-items:center;gap:0.6rem;}
+.footer-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--blue),var(--violet));border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-size:0.95rem;}
+.footer-name{font-family:'Nunito',sans-serif;font-weight:900;font-size:0.88rem;background:linear-gradient(135deg,var(--blue-d),var(--violet));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.footer-sub{font-size:0.68rem;color:var(--muted);}
+.footer-right{font-size:0.68rem;color:var(--muted);text-align:right;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.anim{animation:fadeUp 0.5s ease both;}
+@media(max-width:500px){.niveau-grid{grid-template-columns:1fr 1fr;gap:0.9rem;}.niv-name{font-size:1.3rem;}.niv-emoji{font-size:2rem;}}
+</style>
+</head>
+<body>
+<div class="blob-wrap"><div class="blob b1"></div><div class="blob b2"></div></div>
+
+<nav>
+  <a class="nav-logo" href="index.html">
+    <div class="nav-icon">∑</div>
+    <span class="nav-brand">Missaoui Maths</span>
+  </a>
+  <a class="nav-back" href="index.html">← Accueil</a>
+</nav>
+
+<div class="page-hero">
+  <div class="hero-flag">🇫🇷</div>
+  <div class="hero-badge">📚 Programme officiel Éduscol</div>
+  <h1>Système <span>Français</span></h1>
+  <p>Tous les niveaux du collège au lycée — conforme aux programmes de l'Éducation Nationale</p>
+</div>
+
+<div class="section">
+  <div class="sec-title">Choisis ton <span>niveau</span></div>
+  <div class="niveau-grid">
+
+    <a href="6eme.html" class="niv-btn n-6 anim" style="animation-delay:0.05s">
+      <div class="niv-inner">
+        <span class="niv-emoji">🔢</span>
+        <div class="niv-name">6ème</div>
+        <div class="niv-cycle">Collège · Cycle 3</div>
+        <div class="niv-chapcount">📖 8 chapitres</div>
+        <div class="niv-themes">
+          <span class="niv-theme">Nombres</span>
+          <span class="niv-theme">Géométrie</span>
+          <span class="niv-theme">Grandeurs</span>
+        </div>
+        <span class="niv-cta">Voir les cours →</span>
+      </div>
+    </a>
+
+    <a href="5eme.html" class="niv-btn n-5 anim" style="animation-delay:0.1s">
+      <div class="niv-inner">
+        <span class="niv-emoji">📐</span>
+        <div class="niv-name">5ème</div>
+        <div class="niv-cycle">Collège · Cycle 4</div>
+        <div class="niv-chapcount">📖 8 chapitres</div>
+        <div class="niv-themes">
+          <span class="niv-theme">Fractions</span>
+          <span class="niv-theme">Géométrie</span>
+          <span class="niv-theme">Proportions</span>
+        </div>
+        <span class="niv-cta">Voir les cours →</span>
+      </div>
+    </a>
+
+    <a href="4eme.html" class="niv-btn n-4 anim" style="animation-delay:0.15s">
+      <div class="niv-inner">
+        <span class="niv-emoji">🧮</span>
+        <div class="niv-name">4ème</div>
+        <div class="niv-cycle">Collège · Cycle 4</div>
+        <div class="niv-chapcount">📖 9 chapitres</div>
+        <div class="niv-themes">
+          <span class="niv-theme">Algèbre</span>
+          <span class="niv-theme">Géométrie</span>
+          <span class="niv-theme">Probabilités</span>
+        </div>
+        <span class="niv-cta">Voir les cours →</span>
+      </div>
+    </a>
+
+    <a href="3eme.html" class="niv-btn n-3 anim" style="animation-delay:0.2s">
+      <div class="niv-inner">
+        <span class="niv-emoji">🎯</span>
+        <div class="niv-name">3ème</div>
+        <div class="niv-cycle">Collège · Brevet</div>
+        <div class="niv-chapcount">📖 10 chapitres</div>
+        <div class="niv-themes">
+          <span class="niv-theme">Équations</span>
+          <span class="niv-theme">Fonctions</span>
+          <span class="niv-theme">Statistiques</span>
+        </div>
+        <span class="niv-cta">Voir les cours →</span>
+      </div>
+    </a>
+
+    <a href="2nde.html" class="niv-btn n-2 anim" style="animation-delay:0.25s">
+      <div class="niv-inner">
+        <span class="niv-emoji">📊</span>
+        <div class="niv-name">2nde</div>
+        <div class="niv-cycle">Lycée · Cycle Terminal</div>
+        <div class="niv-chapcount">📖 9 chapitres</div>
+        <div class="niv-themes">
+          <span class="niv-theme">Fonctions</span>
+          <span class="niv-theme">Géométrie</span>
+          <span class="niv-theme">Stats & Probas</span>
+        </div>
+        <span class="niv-cta">Voir les cours →</span>
+      </div>
+    </a>
+
+    <a href="1ere.html" class="niv-btn n-1 anim" style="animation-delay:0.3s">
+      <div class="niv-inner">
+        <span class="niv-emoji">∫</span>
+        <div class="niv-name">1ère</div>
+        <div class="niv-cycle">Lycée · Spécialité Maths</div>
+        <div class="niv-chapcount">📖 10 chapitres</div>
+        <div class="niv-themes">
+          <span class="niv-theme">Dérivation</span>
+          <span class="niv-theme">Trigonométrie</span>
+          <span class="niv-theme">Suites</span>
+        </div>
+        <span class="niv-cta">Voir les cours →</span>
+      </div>
+    </a>
+
+    <a href="terminale.html" class="niv-btn n-t anim" style="animation-delay:0.35s">
+      <div class="niv-inner">
+        <span class="niv-emoji">🏆</span>
+        <div class="niv-name">Terminale</div>
+        <div class="niv-cycle">Lycée · Bac</div>
+        <div class="niv-chapcount">📖 10 chapitres</div>
+        <div class="niv-themes">
+          <span class="niv-theme">Intégration</span>
+          <span class="niv-theme">Complexes</span>
+          <span class="niv-theme">Probabilités</span>
+        </div>
+        <span class="niv-cta">Voir les cours →</span>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<footer>
+  <div class="footer-left">
+    <div class="footer-icon">∑</div>
+    <div><div class="footer-name">Faicel Missaoui</div><div class="footer-sub">Professeur Agrégé de Mathématiques</div></div>
+  </div>
+  <div class="footer-right">faicelmaths20.github.io/missaoui-maths<br>© 2026</div>
+</footer>
+</body>
+</html>
