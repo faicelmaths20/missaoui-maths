@@ -1,11 +1,249 @@
-<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Espace professeur</title><link rel="stylesheet" href="css/style.css"></head><body><header class="topbar"><a class="brand" href="index.html"><span class="brand-icon">M</span><span>Missaoui Maths</span></a><nav class="nav"><a href="index.html">Accueil</a><a href="eleve.html">Élèves</a></nav></header>
-<div id="auth-view" class="auth-wrap"><div class="auth-card"><h1>👨‍🏫 Espace professeur</h1><p class="small">Connexion email/mot de passe. Le dépôt utilise Firebase Storage.</p><label>Email professeur</label><input id="email" type="email"><label>Mot de passe</label><input id="password" type="password"><button class="btn-3d btn-red" id="loginBtn">Connexion professeur</button><div id="msg" class="notice" style="display:none"></div></div></div>
-<div id="dash-view" class="dash" style="display:none"><div class="dash-head"><div><h1>📊 Tableau de bord professeur</h1><p>Suivi des élèves et dépôt de ressources.</p></div><button class="btn-3d" id="logoutBtn">Déconnexion</button></div><div class="stat-grid"><div class="stat"><b id="nb-eleves">0</b><br><span>Élèves</span></div><div class="stat"><b id="avg-score">0%</b><br><span>Moyenne classe</span></div><div class="stat"><b id="nb-files">0</b><br><span>Ressources</span></div></div><div class="chart"><h2>📈 Graphique classe</h2><div class="chart-bars" id="class-chart"></div></div><div class="card"><h2>📤 Déposer un fichier</h2><label>Titre</label><input id="file-title" placeholder="Ex : Carte mentale statistiques"><label>Type</label><select id="file-type"><option value="cours">Cours</option><option value="exercice">Exercices</option><option value="correction">Correction</option><option value="carte">Carte mentale</option><option value="video">Vidéo</option></select><label>Fichier</label><input id="file-input" type="file"><button class="btn-3d btn-red" id="uploadBtn">Téléverser</button><div id="upload-msg" class="notice" style="display:none"></div></div><div class="chart"><h2>📁 Ressources déposées</h2><div id="resources" class="file-list"></div></div><div class="chart"><h2>👥 Élèves</h2><div id="students" class="file-list"></div></div></div>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Espace professeur</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Georgia,serif;
+  background:#f7f6f1;
+  color:#19182b;
+}
+.container{
+  max-width:850px;
+  margin:50px auto;
+  padding:25px;
+}
+.card{
+  background:white;
+  padding:30px;
+  border-radius:24px;
+  box-shadow:0 25px 60px rgba(0,0,0,.12);
+  margin-bottom:25px;
+}
+h1,h2{margin-top:0}
+input,select,button{
+  width:100%;
+  padding:14px;
+  margin:10px 0;
+  border-radius:12px;
+  border:1px solid #ddd;
+  font-size:16px;
+}
+button{
+  background:#ef3b4d;
+  color:white;
+  font-weight:bold;
+  border:none;
+  cursor:pointer;
+  box-shadow:0 7px 0 #9f1f2d;
+}
+button:active{
+  transform:translateY(5px);
+  box-shadow:0 2px 0 #9f1f2d;
+}
+.hidden{display:none}
+.file-item{
+  background:#f7f6f1;
+  padding:15px;
+  border-radius:14px;
+  margin:10px 0;
+}
+a{color:#ef3b4d;font-weight:bold}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="card" id="loginBox">
+    <h1>👨‍🏫 Espace professeur</h1>
+    <p>Connexion sécurisée avec email et mot de passe Firebase.</p>
+
+    <input type="email" id="email" placeholder="Email professeur">
+    <input type="password" id="password" placeholder="Mot de passe">
+
+    <button onclick="loginProf()">Connexion professeur</button>
+  </div>
+
+  <div class="card hidden" id="dashboard">
+    <h1>📚 Tableau professeur</h1>
+    <p id="profEmail"></p>
+
+    <button onclick="logoutProf()">Déconnexion</button>
+  </div>
+
+  <div class="card hidden" id="uploadBox">
+    <h2>📁 Déposer un fichier</h2>
+
+    <select id="typeFichier">
+      <option value="cours">Cours</option>
+      <option value="exercices">Exercices</option>
+      <option value="correction">Correction</option>
+      <option value="carte-mentale">Carte mentale</option>
+      <option value="video">Vidéo</option>
+    </select>
+
+    <input type="text" id="titreFichier" placeholder="Titre du fichier">
+    <input type="file" id="fileInput">
+
+    <button onclick="uploadFile()">Téléverser</button>
+
+    <p id="uploadStatus"></p>
+  </div>
+
+  <div class="card hidden" id="filesBox">
+    <h2>📥 Fichiers disponibles</h2>
+    <div id="filesList">Chargement...</div>
+  </div>
+
+</div>
+
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";import { getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-auth.js";import { getFirestore,collection,getDocs,addDoc,query,orderBy,serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-firestore.js";import { getStorage,ref,uploadBytes,getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-storage.js";import { firebaseConfig } from "./js/firebase-config.js";const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app),storage=getStorage(app);const ADMIN_EMAILS=["prof@missaoui-maths.com"];function msg(id,t,e=false){const x=document.getElementById(id);x.style.display="block";x.className="notice "+(e?"error":"ok");x.textContent=t;}
-loginBtn.onclick=async()=>{try{await signInWithEmailAndPassword(auth,email.value.trim(),password.value)}catch(e){msg("msg",e.message,true)}};logoutBtn.onclick=()=>signOut(auth);
-onAuthStateChanged(auth,async user=>{const ok=user&&ADMIN_EMAILS.includes(user.email);document.getElementById("auth-view").style.display=ok?"none":"flex";document.getElementById("dash-view").style.display=ok?"block":"none";if(user&&!ok){msg("msg","Email non autorisé comme professeur. Remplace prof@missaoui-maths.com dans professeur.html par ton email.",true);await signOut(auth)}if(ok)loadAll();});
-async function loadAll(){const usersSnap=await getDocs(collection(db,"users"));let scores=[];students.innerHTML="";for(const u of usersSnap.docs){const data=u.data();const p=await getDocs(collection(db,"users",u.id,"progress"));let best=0;p.forEach(x=>best=Math.max(best,x.data().bestPercent||0));if(best)scores.push(best);let div=document.createElement("div");div.className="file-item";div.innerHTML=`<strong>${data.name||data.email}</strong><span>${best}%</span>`;students.appendChild(div);}document.getElementById("nb-eleves").textContent=usersSnap.size;document.getElementById("avg-score").textContent=scores.length?Math.round(scores.reduce((a,b)=>a+b,0)/scores.length)+"%":"0%";const chart=document.getElementById("class-chart");chart.innerHTML="";(scores.length?scores:[0]).forEach(s=>{let b=document.createElement("div");b.className="chart-bar";b.style.height=Math.max(4,s)+"%";b.textContent=s+"%";chart.appendChild(b)});await loadResources();}
-uploadBtn.onclick=async()=>{try{const file=document.getElementById("file-input").files[0];if(!file)return msg("upload-msg","Choisis un fichier.",true);const title=document.getElementById("file-title").value||file.name,type=document.getElementById("file-type").value,path=`resources/${Date.now()}-${file.name}`;const sr=ref(storage,path);await uploadBytes(sr,file);const url=await getDownloadURL(sr);await addDoc(collection(db,"resources"),{title,type,url,path,createdAt:serverTimestamp(),owner:auth.currentUser.email});msg("upload-msg","Fichier téléversé avec succès.");await loadResources();}catch(e){msg("upload-msg",e.message,true)}};
-async function loadResources(){const snap=await getDocs(query(collection(db,"resources"),orderBy("createdAt","desc")));document.getElementById("nb-files").textContent=snap.size;resources.innerHTML="";snap.forEach(d=>{const r=d.data();let div=document.createElement("div");div.className="file-item";div.innerHTML=`<strong>${r.title}</strong><a class="btn-3d" href="${r.url}" target="_blank">Ouvrir</a>`;resources.appendChild(div);});}
-</script></body></html>
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { 
+  getAuth, 
+  signInWithEmailAndPassword, 
+  signOut, 
+  onAuthStateChanged 
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import { 
+  getStorage, 
+  ref, 
+  uploadBytes, 
+  getDownloadURL 
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+import { 
+  getFirestore, 
+  collection, 
+  addDoc, 
+  getDocs, 
+  serverTimestamp 
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+/* 🔴 REMPLACE ICI PAR TA CONFIG FIREBASE */
+const firebaseConfig = {
+  apiKey: "TA_CLE_API",
+  authDomain: "missaouimaths.firebaseapp.com",
+  projectId: "missaouimaths",
+  storageBucket: "missaouimaths.appspot.com",
+  messagingSenderId: "TON_NUMERO",
+  appId: "TON_APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const storage = getStorage(app);
+const db = getFirestore(app);
+
+/* Connexion professeur */
+window.loginProf = async function(){
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  try{
+    await signInWithEmailAndPassword(auth, email, password);
+    alert("Connexion réussie ✅");
+  }catch(error){
+    alert("Erreur connexion : " + error.message);
+  }
+}
+
+/* Déconnexion */
+window.logoutProf = async function(){
+  await signOut(auth);
+}
+
+/* Vérifier connexion */
+onAuthStateChanged(auth, user => {
+  if(user){
+    document.getElementById("loginBox").classList.add("hidden");
+    document.getElementById("dashboard").classList.remove("hidden");
+    document.getElementById("uploadBox").classList.remove("hidden");
+    document.getElementById("filesBox").classList.remove("hidden");
+    document.getElementById("profEmail").innerText = "Connecté : " + user.email;
+    loadFiles();
+  }else{
+    document.getElementById("loginBox").classList.remove("hidden");
+    document.getElementById("dashboard").classList.add("hidden");
+    document.getElementById("uploadBox").classList.add("hidden");
+    document.getElementById("filesBox").classList.add("hidden");
+  }
+});
+
+/* Upload fichier */
+window.uploadFile = async function(){
+  const file = document.getElementById("fileInput").files[0];
+  const titre = document.getElementById("titreFichier").value;
+  const type = document.getElementById("typeFichier").value;
+  const status = document.getElementById("uploadStatus");
+
+  if(!file || !titre){
+    alert("Ajoute un titre et un fichier.");
+    return;
+  }
+
+  try{
+    status.innerText = "Téléversement en cours...";
+
+    const chemin = "fichiers/" + type + "/" + Date.now() + "-" + file.name;
+    const storageRef = ref(storage, chemin);
+
+    await uploadBytes(storageRef, file);
+    const url = await getDownloadURL(storageRef);
+
+    await addDoc(collection(db, "fichiers"), {
+      titre: titre,
+      type: type,
+      nom: file.name,
+      url: url,
+      date: serverTimestamp()
+    });
+
+    status.innerText = "Fichier ajouté avec succès ✅";
+    document.getElementById("titreFichier").value = "";
+    document.getElementById("fileInput").value = "";
+
+    loadFiles();
+
+  }catch(error){
+    status.innerText = "Erreur : " + error.message;
+  }
+}
+
+/* Afficher fichiers */
+async function loadFiles(){
+  const list = document.getElementById("filesList");
+  list.innerHTML = "";
+
+  const querySnapshot = await getDocs(collection(db, "fichiers"));
+
+  if(querySnapshot.empty){
+    list.innerHTML = "Aucun fichier pour le moment.";
+    return;
+  }
+
+  querySnapshot.forEach(doc => {
+    const f = doc.data();
+
+    const div = document.createElement("div");
+    div.className = "file-item";
+    div.innerHTML = `
+      <strong>${f.titre}</strong><br>
+      Type : ${f.type}<br>
+      <a href="${f.url}" target="_blank">Télécharger / ouvrir</a>
+    `;
+
+    list.appendChild(div);
+  });
+}
+</script>
+
+</body>
+</html>
