@@ -13,8 +13,8 @@ body{
 }
 
 .container{
-  max-width:800px;
-  margin:40px auto;
+  max-width:700px;
+  margin:60px auto;
 }
 
 .card{
@@ -22,7 +22,6 @@ body{
   padding:30px;
   border-radius:20px;
   box-shadow:0 20px 50px rgba(0,0,0,.15);
-  margin-bottom:20px;
 }
 
 input,button{
@@ -30,6 +29,7 @@ input,button{
   padding:12px;
   margin:10px 0;
   border-radius:10px;
+  font-size:16px;
 }
 
 button{
@@ -40,8 +40,13 @@ button{
   cursor:pointer;
 }
 
-.hidden{display:none}
-.file{padding:10px;background:#eee;margin:10px 0;border-radius:10px}
+.google{
+  background:#4285F4;
+}
+
+.hidden{
+  display:none;
+}
 </style>
 
 </head>
@@ -53,32 +58,23 @@ button{
 <div class="card" id="loginBox">
 <h2>👨‍🏫 Espace professeur</h2>
 
-<input id="email" placeholder="Email">
+<input id="email" placeholder="Email professeur">
 <input id="password" type="password" placeholder="Mot de passe">
 
 <button onclick="login()">Connexion</button>
 
-<button onclick="loginGoogle()" style="background:#4285F4">
-🔵 Google
-</button>
+<button class="google" onclick="loginGoogle()">Se connecter avec Google</button>
 
 </div>
 
 <div class="card hidden" id="dashboard">
-<h2>📚 Dashboard</h2>
-
+<h2>📚 Connecté</h2>
 <button onclick="logout()">Déconnexion</button>
-
-<input id="titre" placeholder="Titre fichier">
-<input type="file" id="file">
-
-<button onclick="upload()">Uploader</button>
-
-<div id="files"></div>
-
 </div>
 
 </div>
+
+<!-- 🔥 FIREBASE VERSION COMPAT (IMPORTANT) -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 
@@ -95,29 +91,49 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 
+/* LOGIN EMAIL */
 function login(){
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  auth.signInWithEmailAndPassword(email, password)
-    .then(()=>alert("Connecté ✅"))
+  auth.signInWithEmailAndPassword(email,password)
+    .then(()=>{
+      alert("Connexion réussie ✅");
+    })
     .catch(e=>alert(e.message));
 }
 
+/* LOGIN GOOGLE */
 function loginGoogle(){
   const provider = new firebase.auth.GoogleAuthProvider();
 
   auth.signInWithPopup(provider)
     .then(result=>{
-      if(result.user.email==="missaoui.faicel@gmail.com"){
-        alert("Connexion OK ✅");
-      } else {
+      if(result.user.email === "missaoui.faicel@gmail.com"){
+        alert("Connexion Google OK ✅");
+      }else{
         alert("Accès refusé ❌");
         auth.signOut();
       }
     })
     .catch(e=>alert(e.message));
 }
+
+/* LOGOUT */
+function logout(){
+  auth.signOut();
+}
+
+/* ÉTAT UTILISATEUR */
+auth.onAuthStateChanged(user=>{
+  if(user){
+    document.getElementById("loginBox").classList.add("hidden");
+    document.getElementById("dashboard").classList.remove("hidden");
+  }else{
+    document.getElementById("loginBox").classList.remove("hidden");
+    document.getElementById("dashboard").classList.add("hidden");
+  }
+});
 </script>
 
 </body>
