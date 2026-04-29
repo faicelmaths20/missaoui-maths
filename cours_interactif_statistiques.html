@@ -1,0 +1,2169 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Statistiques Doubles — Cours Interactif</title>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #1A3A5C;
+    --primary-light: #2C5282;
+    --accent: #E8612C;
+    --accent-light: #F6AD55;
+    --muted: #5B7B9A;
+    --light: #EEF3F8;
+    --cream: #F5F0E8;
+    --success: #2E7D5E;
+    --success-light: #C6F6D5;
+    --warning: #D69E2E;
+    --error: #C53030;
+    --highlight: #FFF3CD;
+    --bg: #FAFAF7;
+    --text: #1A202C;
+    --border: #E2E8F0;
+    --shadow: 0 4px 14px rgba(26, 58, 92, 0.08);
+    --shadow-lg: 0 10px 30px rgba(26, 58, 92, 0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 0;
+  }
+
+  /* ── Header ── */
+  header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: white;
+    padding: 3rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(232, 97, 44, 0.15) 0%, transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(91, 123, 154, 0.2) 0%, transparent 40%);
+  }
+  .header-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+  .header-badge {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 50px;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    backdrop-filter: blur(10px);
+  }
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+  }
+  .subtitle {
+    font-size: 1.1rem;
+    opacity: 0.85;
+    margin-bottom: 2rem;
+  }
+  .author-tag {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.2);
+  }
+  .author-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+  .author-info { line-height: 1.3; }
+  .author-info strong { display: block; font-size: 1rem; }
+  .author-info span { font-size: 0.85rem; opacity: 0.75; }
+
+  /* ── Main container ── */
+  .container {
+    max-width: 1100px;
+    margin: -2rem auto 4rem;
+    padding: 0 2rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ── Progress bar ── */
+  .progress-wrap {
+    background: white;
+    border-radius: 12px;
+    padding: 1.2rem 1.5rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+    border: 1px solid var(--border);
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.6rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .progress-label span:last-child { color: var(--accent); }
+  .progress-bar {
+    height: 8px;
+    background: var(--light);
+    border-radius: 50px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent) 0%, var(--accent-light) 100%);
+    border-radius: 50px;
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+
+  /* ── TOC ── */
+  .toc {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 2.5rem;
+    border: 1px solid var(--border);
+  }
+  .toc h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .toc-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 0.5rem;
+  }
+  .toc-list a {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.7rem 1rem;
+    color: var(--text);
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.2s;
+    font-size: 0.95rem;
+  }
+  .toc-list a:hover {
+    background: var(--light);
+    color: var(--primary);
+    transform: translateX(4px);
+  }
+  .toc-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* ── Sections ── */
+  section {
+    background: white;
+    border-radius: 16px;
+    padding: 2.5rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+    border: 1px solid var(--border);
+    scroll-margin-top: 2rem;
+  }
+  h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 3px solid var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  h2::before {
+    content: counter(section);
+    counter-increment: section;
+    background: var(--accent);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+  }
+  body { counter-reset: section; }
+
+  h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    color: var(--primary);
+    margin: 1.5rem 0 1rem;
+    font-weight: 600;
+  }
+  h4 {
+    font-size: 1.1rem;
+    color: var(--primary);
+    margin: 1.2rem 0 0.7rem;
+    font-weight: 600;
+  }
+  p { margin-bottom: 1rem; }
+  strong { color: var(--primary); font-weight: 600; }
+
+  /* ── Boxes ── */
+  .definition-box, .property-box, .theorem-box, .example-box, .remark-box {
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .definition-box {
+    background: var(--light);
+    border-left: 5px solid var(--primary);
+  }
+  .property-box {
+    background: var(--cream);
+    border-left: 5px solid var(--muted);
+  }
+  .theorem-box {
+    background: var(--highlight);
+    border-left: 5px solid var(--accent);
+  }
+  .example-box {
+    background: #F0FFF4;
+    border-left: 5px solid var(--success);
+  }
+  .remark-box {
+    background: #FFFAF0;
+    border-left: 5px solid var(--warning);
+  }
+  .box-label {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: white;
+    margin-bottom: 0.8rem;
+  }
+  .definition-box .box-label { background: var(--primary); }
+  .property-box .box-label { background: var(--muted); }
+  .theorem-box .box-label { background: var(--accent); }
+  .example-box .box-label { background: var(--success); }
+  .remark-box .box-label { background: var(--warning); }
+
+  /* ── Reveal toggle (hidden answers) ── */
+  .reveal-block {
+    margin: 1.2rem 0;
+    border: 2px dashed var(--muted);
+    border-radius: 10px;
+    overflow: hidden;
+    background: white;
+    transition: all 0.3s;
+  }
+  .reveal-block.revealed {
+    border-style: solid;
+    border-color: var(--success);
+  }
+  .reveal-toggle {
+    width: 100%;
+    padding: 1rem 1.3rem;
+    background: var(--light);
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--primary);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s;
+  }
+  .reveal-toggle:hover { background: var(--cream); }
+  .reveal-block.revealed .reveal-toggle {
+    background: var(--success-light);
+    color: var(--success);
+  }
+  .reveal-icon {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s;
+    font-size: 0.9rem;
+  }
+  .reveal-block.revealed .reveal-icon {
+    background: var(--success);
+    transform: rotate(180deg);
+  }
+  .reveal-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease, padding 0.3s;
+    padding: 0 1.3rem;
+  }
+  .reveal-block.revealed .reveal-content {
+    max-height: 3000px;
+    padding: 1.3rem;
+  }
+
+  /* ── Tables ── */
+  .table-wrap { overflow-x: auto; margin: 1rem 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  }
+  th, td {
+    padding: 0.7rem 1rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.95rem;
+  }
+  th {
+    background: var(--primary);
+    color: white;
+    font-weight: 600;
+  }
+  tr:nth-child(even) td { background: var(--light); }
+  tr:last-child td { border-bottom: none; }
+
+  /* ── Quiz ── */
+  .quiz-container {
+    background: linear-gradient(135deg, #FFF8F0 0%, #FFF3DC 100%);
+    border-radius: 14px;
+    padding: 2rem;
+    margin: 2rem 0;
+    border: 2px solid var(--accent-light);
+    box-shadow: var(--shadow);
+  }
+  .quiz-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1.2rem;
+  }
+  .quiz-icon {
+    width: 44px; height: 44px;
+    background: var(--accent);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.4rem;
+    font-weight: 700;
+  }
+  .quiz-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    color: var(--primary);
+    font-weight: 700;
+  }
+  .quiz-question {
+    font-weight: 500;
+    margin-bottom: 1rem;
+    font-size: 1.05rem;
+  }
+  .quiz-options {
+    display: grid;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+  }
+  .quiz-option {
+    padding: 0.9rem 1.2rem;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    font-size: 0.95rem;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  .quiz-option:hover:not(.answered) {
+    border-color: var(--accent);
+    background: var(--cream);
+    transform: translateX(4px);
+  }
+  .quiz-option .opt-letter {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--light);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+  .quiz-option.correct {
+    background: var(--success-light);
+    border-color: var(--success);
+    color: var(--success);
+  }
+  .quiz-option.correct .opt-letter {
+    background: var(--success);
+    color: white;
+  }
+  .quiz-option.incorrect {
+    background: #FED7D7;
+    border-color: var(--error);
+    color: var(--error);
+  }
+  .quiz-option.incorrect .opt-letter {
+    background: var(--error);
+    color: white;
+  }
+  .quiz-option.answered { cursor: default; }
+  .quiz-feedback {
+    margin-top: 1rem;
+    padding: 1rem 1.2rem;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    display: none;
+  }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correct {
+    background: var(--success-light);
+    color: var(--success);
+    border-left: 4px solid var(--success);
+  }
+  .quiz-feedback.incorrect {
+    background: #FED7D7;
+    color: var(--error);
+    border-left: 4px solid var(--error);
+  }
+
+  /* ── Calculator widget ── */
+  .calc-widget {
+    background: linear-gradient(135deg, #1A3A5C 0%, #2C5282 100%);
+    color: white;
+    border-radius: 14px;
+    padding: 2rem;
+    margin: 2rem 0;
+    box-shadow: var(--shadow-lg);
+  }
+  .calc-widget h4 {
+    color: white;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .calc-input-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .calc-input-row label {
+    display: block;
+    font-size: 0.85rem;
+    opacity: 0.85;
+    margin-bottom: 0.3rem;
+  }
+  .calc-input-row input {
+    width: 100%;
+    padding: 0.7rem 1rem;
+    border: 1px solid rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.95rem;
+  }
+  .calc-input-row input:focus {
+    outline: none;
+    border-color: var(--accent-light);
+    background: rgba(255,255,255,0.15);
+  }
+  .calc-btn {
+    width: 100%;
+    padding: 0.9rem;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-family: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.2s;
+    margin-top: 0.5rem;
+  }
+  .calc-btn:hover { background: var(--accent-light); transform: translateY(-2px); }
+  .calc-result {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: rgba(255,255,255,0.1);
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+    line-height: 1.8;
+    display: none;
+  }
+  .calc-result.show { display: block; }
+  .calc-result strong { color: var(--accent-light); }
+
+  /* ── Chart ── */
+  .chart-wrap {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    text-align: center;
+  }
+  .chart-wrap canvas { max-width: 100%; }
+
+  /* ── Mini info cards ── */
+  .info-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  .info-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.2rem;
+    text-align: center;
+    transition: all 0.2s;
+  }
+  .info-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+  }
+  .info-card-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+  .info-card-label {
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── Footer ── */
+  footer {
+    background: var(--primary);
+    color: white;
+    text-align: center;
+    padding: 2.5rem 2rem;
+    margin-top: 4rem;
+  }
+  footer p { margin: 0.3rem 0; opacity: 0.9; }
+  footer .signature {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    color: var(--accent-light);
+    margin-bottom: 0.5rem;
+  }
+
+  /* ── Lists ── */
+  ul, ol { padding-left: 1.5rem; margin: 0.7rem 0; }
+  li { margin-bottom: 0.5rem; }
+
+  /* ── Final score modal ── */
+  .score-banner {
+    background: linear-gradient(135deg, var(--success) 0%, #38B2AC 100%);
+    color: white;
+    border-radius: 14px;
+    padding: 2rem;
+    text-align: center;
+    margin: 2rem 0;
+    display: none;
+  }
+  .score-banner.show { display: block; animation: pop 0.5s; }
+  @keyframes pop {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .score-banner h3 {
+    color: white;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  .score-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 4rem;
+    font-weight: 700;
+    margin: 1rem 0;
+  }
+
+  /* ── Calculator keys ── */
+  kbd {
+    display: inline-block;
+    padding: 2px 7px;
+    background: linear-gradient(180deg, #FFFFFF 0%, #E2E8F0 100%);
+    border: 1px solid #94A3B8;
+    border-bottom-width: 2px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--primary);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.1);
+    margin: 0 1px;
+    white-space: nowrap;
+  }
+
+  /* ── Big author block ── */
+  .big-author-block {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+  }
+  .big-author-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    background: linear-gradient(135deg, #FFFFFF 0%, #FFD89C 50%, #E8612C 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.8rem;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.1);
+    animation: fadeInDown 0.9s ease-out;
+  }
+  .big-author-divider {
+    width: 80px;
+    height: 3px;
+    background: var(--accent);
+    margin: 0 auto 0.8rem;
+    border-radius: 2px;
+  }
+  .big-author-role {
+    font-size: 1.05rem;
+    color: rgba(255,255,255,0.85);
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Author watermark ── */
+  .author-watermark {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--primary);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    box-shadow: var(--shadow-lg);
+    z-index: 100;
+    opacity: 0.9;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .author-watermark:hover { opacity: 1; transform: translateY(-2px); }
+  .author-watermark .wm-avatar {
+    width: 24px; height: 24px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    font-weight: 700;
+  }
+
+  @media (max-width: 768px) {
+    section { padding: 1.5rem; }
+    .calc-input-row { grid-template-columns: 1fr; }
+    h2 { font-size: 1.5rem; }
+    h1 { font-size: 2rem; }
+    .author-watermark { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="author-watermark">
+  <div class="wm-avatar">FM</div>
+  <span>Faicel Missaoui</span>
+</div>
+
+<header>
+  <div class="header-content">
+    <div class="big-author-block">
+      <div class="big-author-name">Faicel Missaoui</div>
+      <div class="big-author-divider"></div>
+      <div class="big-author-role">Professeur Agrégé de Mathématiques</div>
+    </div>
+    <span class="header-badge">Terminale · Baccalauréat</span>
+    <h1>Statistiques Doubles</h1>
+    <p class="subtitle">Cours interactif complet — Mathématiques & Sciences Expérimentales</p>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- Progress -->
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span>📚 Progression du cours</span>
+      <span id="progressText">0%</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <!-- TOC -->
+  <nav class="toc">
+    <h3>📑 Table des matières</h3>
+    <ul class="toc-list">
+      <li><a href="#section1"><span class="toc-num">1</span>Rappels — Série simple</a></li>
+      <li><a href="#section2"><span class="toc-num">2</span>Nuage de points</a></li>
+      <li><a href="#section3"><span class="toc-num">3</span>Covariance & corrélation</a></li>
+      <li><a href="#section4"><span class="toc-num">4</span>Échantillon groupé</a></li>
+      <li><a href="#section5"><span class="toc-num">5</span>Droite de régression</a></li>
+      <li><a href="#section6"><span class="toc-num">6</span>Méthode de Mayer</a></li>
+      <li><a href="#section7"><span class="toc-num">7</span>Ajustement non affine</a></li>
+      <li><a href="#sectionBac"><span class="toc-num">★</span>Exercice Bac n°1</a></li>
+      <li><a href="#sectionBac2"><span class="toc-num">★</span>Exercice Bac n°2</a></li>
+      <li><a href="#sectionCalc"><span class="toc-num">🖩</span>Calculatrice</a></li>
+      <li><a href="#section8"><span class="toc-num">8</span>Quiz final</a></li>
+    </ul>
+  </nav>
+
+  <!-- ═══════════════ SECTION 1 ═══════════════ -->
+  <section id="section1">
+    <h2>Rappels sur la série statistique simple</h2>
+
+    <p>Une <strong>série statistique simple</strong> est la donnée d'une famille de couples \((n_i, x_i)\) où \(n_i\) est l'effectif du caractère \(x_i\). Lorsque \(x_i\) est un intervalle, on prend son centre \(c_i\).</p>
+
+    <div class="definition-box">
+      <span class="box-label">Définitions</span>
+      <p>Pour une série statistique simple \((n_i, x_i)\) de taille \(n\), on définit :</p>
+      <ul>
+        <li><strong>Moyenne arithmétique :</strong> \(\overline{X} = \dfrac{1}{n}\sum_{i=1}^{p} n_i x_i\)</li>
+        <li><strong>Variance :</strong> \(V_X = \dfrac{1}{n}\sum_{i=1}^{p} n_i(x_i-\overline{X})^2 = \dfrac{1}{n}\sum_{i=1}^{p} n_i x_i^2 - \overline{X}^2\)</li>
+        <li><strong>Écart-type :</strong> \(\sigma_X = \sqrt{V_X}\)</li>
+      </ul>
+    </div>
+
+    <div class="property-box">
+      <span class="box-label">Propriété</span>
+      <p>Pour tous réels \(a\) et \(b\) :</p>
+      <p style="text-align:center; font-size:1.1rem; margin:0.7rem 0;">
+        \(V(aX+b) = a^2 V_X \quad \Rightarrow \quad \sigma(aX+b) = |a|\,\sigma_X\)
+      </p>
+    </div>
+
+    <div class="example-box">
+      <span class="box-label">Exemple guidé</span>
+      <p>Le tableau ci-dessous donne la répartition des élèves d'une classe selon leurs notes au baccalauréat blanc (sur 20).</p>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Notes \((x_i)\)</th><td>[0,5[</td><td>[5,10[</td><td>[10,15[</td><td>[15,20]</td></tr>
+          <tr><th>Effectifs \((n_i)\)</th><td>3</td><td>13</td><td>9</td><td>1</td></tr>
+        </table>
+      </div>
+
+      <div class="reveal-block" data-track="ex1">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ Cliquer pour révéler le calcul de la moyenne \(\overline{X}\)</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>On a \(p = 4\) et \(n = \sum n_i = 26\).</p>
+          <div class="table-wrap">
+            <table>
+              <tr><th>\(c_i\)</th><td>2,5</td><td>7,5</td><td>12,5</td><td>17,5</td><td><strong>Total</strong></td></tr>
+              <tr><th>\(n_i\)</th><td>3</td><td>13</td><td>9</td><td>1</td><td><strong>26</strong></td></tr>
+              <tr><th>\(n_i c_i\)</th><td>7,5</td><td>97,5</td><td>112,5</td><td>17,5</td><td><strong>235</strong></td></tr>
+            </table>
+          </div>
+          <p>\(\overline{X} = \dfrac{1}{26}\sum n_i c_i = \dfrac{235}{26} \approx 9\)</p>
+        </div>
+      </div>
+
+      <div class="reveal-block" data-track="ex2">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ Cliquer pour révéler la variance et l'écart-type</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>\(V_X = \dfrac{2462{,}5}{26} - \left(\dfrac{235}{26}\right)^2 = \dfrac{8800}{676} \approx 13\)</p>
+          <p>\(\sigma_X = \sqrt{V_X} = \sqrt{13} \approx 3{,}6\)</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quiz Q1 -->
+    <div class="quiz-container">
+      <div class="quiz-header">
+        <div class="quiz-icon">?</div>
+        <div class="quiz-title">Quiz éclair n°1</div>
+      </div>
+      <p class="quiz-question">Si \(V_X = 16\) et \(Y = 3X - 2\), quelle est la valeur de \(\sigma_Y\) ?</p>
+      <div class="quiz-options" data-quiz="q1" data-correct="b">
+        <button class="quiz-option" data-opt="a"><span class="opt-letter">A</span>4</button>
+        <button class="quiz-option" data-opt="b"><span class="opt-letter">B</span>12</button>
+        <button class="quiz-option" data-opt="c"><span class="opt-letter">C</span>10</button>
+        <button class="quiz-option" data-opt="d"><span class="opt-letter">D</span>14</button>
+      </div>
+      <div class="quiz-feedback" id="fb-q1"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ SECTION 2 ═══════════════ -->
+  <section id="section2">
+    <h2>Nuage de points et point moyen</h2>
+
+    <div class="definition-box">
+      <span class="box-label">Définitions</span>
+      <ul>
+        <li>L'ensemble des couples \((x_i, y_i)\) constitue une <strong>série statistique double</strong>.</li>
+        <li>L'ensemble des points \(M_i(x_i, y_i)\) dans un repère orthogonal est appelé <strong>nuage de points</strong>.</li>
+        <li>Le point \(G(\overline{X}, \overline{Y})\) est appelé <strong>point moyen</strong> du nuage.</li>
+      </ul>
+    </div>
+
+    <div class="example-box">
+      <span class="box-label">Application — Énergie solaire</span>
+      <p>Le tableau suivant donne, pour une entreprise tunisienne, la capacité installée en énergie solaire \(x_i\) (en MW) et le coût d'exploitation \(y_i\) (en millions de DT) sur 5 années consécutives.</p>
+      <div class="table-wrap">
+        <table>
+          <tr><th>\(x_i\) (MW)</th><td>720</td><td>730</td><td>740</td><td>760</td><td>800</td></tr>
+          <tr><th>\(y_i\) (MDT)</th><td>6</td><td>6,5</td><td>7</td><td>7,5</td><td>8</td></tr>
+        </table>
+      </div>
+
+      <div class="info-cards">
+        <div class="info-card"><div class="info-card-value">750</div><div class="info-card-label">\(\overline{X}\)</div></div>
+        <div class="info-card"><div class="info-card-value">7</div><div class="info-card-label">\(\overline{Y}\)</div></div>
+        <div class="info-card"><div class="info-card-value">≈28,28</div><div class="info-card-label">\(\sigma_X\)</div></div>
+        <div class="info-card"><div class="info-card-value">≈0,71</div><div class="info-card-label">\(\sigma_Y\)</div></div>
+      </div>
+
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ Voir le détail des calculs</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>\(\overline{X} = \dfrac{3750}{5} = 750\) et \(\overline{Y} = \dfrac{35}{5} = 7\) donc \(G(750\,;\,7)\)</p>
+          <p>\(V_X = \dfrac{2816500}{5} - 750^2 = 800\) et \(V_Y = \dfrac{247{,}5}{5} - 7^2 = 0{,}5\)</p>
+          <p>\(\sigma_X = \sqrt{800} \approx 28{,}28\) et \(\sigma_Y = \sqrt{0{,}5} \approx 0{,}71\)</p>
+        </div>
+      </div>
+
+      <h4>📊 Nuage de points interactif</h4>
+      <div class="chart-wrap">
+        <canvas id="chartNuage" width="600" height="350"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ SECTION 3 ═══════════════ -->
+  <section id="section3">
+    <h2>Covariance et coefficient de corrélation</h2>
+
+    <div class="definition-box">
+      <span class="box-label">Définition — Covariance</span>
+      <p>On appelle <strong>covariance</strong> de \(X\) et \(Y\) le réel :</p>
+      <p style="text-align:center; font-size:1.05rem; margin:0.7rem 0;">
+        \(\operatorname{cov}(X,Y) = \dfrac{1}{n}\sum_{i=1}^{n}(x_i-\overline{X})(y_i-\overline{Y}) = \dfrac{1}{n}\sum_{i=1}^{n}x_i y_i - \overline{X}\,\overline{Y}\)
+      </p>
+    </div>
+
+    <div class="property-box">
+      <span class="box-label">Propriétés</span>
+      <ul>
+        <li>\(\operatorname{cov}(X,X) = V_X\) et \(\operatorname{cov}^2(X,Y) \leq V_X \cdot V_Y\)</li>
+        <li>Si \(\operatorname{cov}(X,Y) \neq 0\), \(X\) et \(Y\) sont <strong>corrélées</strong>.</li>
+        <li>\(\operatorname{cov}(\alpha X, \beta Y) = \alpha\beta \cdot \operatorname{cov}(X,Y)\)</li>
+        <li>Si \(\operatorname{cov}(X,Y) \geq 0\) : \(X\) et \(Y\) varient dans le <strong>même sens</strong>.</li>
+        <li>Si \(\operatorname{cov}(X,Y) \leq 0\) : \(X\) et \(Y\) varient en <strong>sens contraires</strong>.</li>
+      </ul>
+    </div>
+
+    <div class="definition-box">
+      <span class="box-label">Définition — Coefficient de corrélation</span>
+      <p style="text-align:center; font-size:1.2rem; margin:0.7rem 0;">
+        \(\boxed{r = \dfrac{\operatorname{cov}(X,Y)}{\sigma_X \cdot \sigma_Y}}\)
+      </p>
+      <p>Avec \(r \in [-1, 1]\) et \(r(X,Y) = r(Y,X)\).</p>
+    </div>
+
+    <div class="remark-box">
+      <span class="box-label">Remarques essentielles</span>
+      <ul>
+        <li>Si \(r = \pm 1\), il y a une <strong>dépendance affine totale</strong> entre \(X\) et \(Y\), c.-à-d. l'une des deux variables est une fonction affine de l'autre.</li>
+        <li>Si \(X\) et \(Y\) sont <strong>indépendantes</strong>, alors \(r = 0\). <em>(La réciproque est fausse : on dit que \(X\) et \(Y\) ne sont pas liées par une relation de type affine.)</em></li>
+      </ul>
+    </div>
+
+    <div class="remark-box">
+      <span class="box-label">Seuils de corrélation selon la section</span>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Section</th><th>Critère de corrélation forte</th></tr>
+          <tr><td>Math &amp; Sc. Exp.</td><td>\(|r| \in \left]\dfrac{\sqrt{3}}{2}\,;\,1\right[\) forte ; sinon faible</td></tr>
+          <tr><td>Tech. &amp; Info.</td><td>\(|r| \in [0{,}75\,;\,1[\) forte ; sinon faible</td></tr>
+          <tr><td>Économie-Gestion</td><td>\(|r| \in ]0\,;\,0{,}70]\) faible ; \(]0{,}70\,;\,0{,}95]\) forte ; \(]0{,}95\,;\,1[\) très forte</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Calculator -->
+    <div class="calc-widget">
+      <h4>🧮 Calculateur de coefficient de corrélation</h4>
+      <p style="font-size:0.9rem; opacity:0.9; margin-bottom:1rem;">Entrez vos valeurs (séparées par des virgules) :</p>
+      <div class="calc-input-row">
+        <div>
+          <label>Valeurs de X</label>
+          <input id="calcX" placeholder="720, 730, 740, 760, 800" value="720, 730, 740, 760, 800">
+        </div>
+        <div>
+          <label>Valeurs de Y</label>
+          <input id="calcY" placeholder="6, 6.5, 7, 7.5, 8" value="6, 6.5, 7, 7.5, 8">
+        </div>
+      </div>
+      <button class="calc-btn" onclick="calcCorrelation()">⚡ Calculer</button>
+      <div class="calc-result" id="calcResult"></div>
+    </div>
+
+    <!-- Quiz Q2 -->
+    <div class="quiz-container">
+      <div class="quiz-header">
+        <div class="quiz-icon">?</div>
+        <div class="quiz-title">Quiz éclair n°2</div>
+      </div>
+      <p class="quiz-question">Pour la série énergie solaire, on a \(\operatorname{cov}(X,Y) = 19\). Quelle est la valeur de \(r\) ?</p>
+      <div class="quiz-options" data-quiz="q2" data-correct="c">
+        <button class="quiz-option" data-opt="a"><span class="opt-letter">A</span>0,50</button>
+        <button class="quiz-option" data-opt="b"><span class="opt-letter">B</span>0,75</button>
+        <button class="quiz-option" data-opt="c"><span class="opt-letter">C</span>0,95</button>
+        <button class="quiz-option" data-opt="d"><span class="opt-letter">D</span>1,15</button>
+      </div>
+      <div class="quiz-feedback" id="fb-q2"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ SECTION 4 ═══════════════ -->
+  <section id="section4">
+    <h2>Cas d'un échantillon groupé</h2>
+
+    <div class="definition-box">
+      <span class="box-label">Définition</span>
+      <p>Soit \((X,Y)\) une série statistique double de taille \(n\) et \(n_{ij}\) la fréquence du couple \((x_i, y_j)\). Alors :</p>
+      <p style="text-align:center; margin:0.7rem 0;">
+        \(\operatorname{cov}(X,Y) = \dfrac{1}{n}\sum_{i=1}^{p}\sum_{j=1}^{q} n_{ij} x_i y_j - \overline{X}\,\overline{Y}\)
+      </p>
+    </div>
+
+    <div class="example-box">
+      <span class="box-label">Exemple — Employés par ancienneté et salaire</span>
+      <p>Distribution de 400 employés selon leur ancienneté \(X\) (années) et leur salaire mensuel \(Y\) (DT).</p>
+      <div class="table-wrap">
+        <table>
+          <tr><th>\(Y \backslash X\)</th><th>[20,30[</th><th>[30,40[</th><th>[40,50[</th><th>[50,60[</th><th>Total</th></tr>
+          <tr><th>[600,800[</th><td>30</td><td>40</td><td>40</td><td>20</td><td><strong>130</strong></td></tr>
+          <tr><th>[800,1000[</th><td>40</td><td>20</td><td>40</td><td>20</td><td><strong>120</strong></td></tr>
+          <tr><th>[1000,1200[</th><td>10</td><td>30</td><td>50</td><td>60</td><td><strong>150</strong></td></tr>
+          <tr><th>Total</th><td><strong>80</strong></td><td><strong>90</strong></td><td><strong>130</strong></td><td><strong>100</strong></td><td><strong>400</strong></td></tr>
+        </table>
+      </div>
+
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ Étape 1 — Étude de la variable \(X\)</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <div class="table-wrap">
+            <table>
+              <tr><th>\(c_i\)</th><td>25</td><td>35</td><td>45</td><td>55</td><td><strong>Total</strong></td></tr>
+              <tr><th>\(n_i\)</th><td>80</td><td>90</td><td>130</td><td>100</td><td><strong>400</strong></td></tr>
+              <tr><th>\(n_i c_i\)</th><td>2000</td><td>3150</td><td>5850</td><td>5500</td><td><strong>16500</strong></td></tr>
+              <tr><th>\(n_i c_i^2\)</th><td>50000</td><td>110250</td><td>263250</td><td>302500</td><td><strong>726000</strong></td></tr>
+            </table>
+          </div>
+          <p>\(\overline{X} = \dfrac{16500}{400} = 41{,}25\)</p>
+          <p>\(V_X = \dfrac{726000}{400} - 41{,}25^2 = 113{,}4375 \quad \Rightarrow \quad \sigma_X \approx 10{,}65\)</p>
+        </div>
+      </div>
+
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ Étape 2 — Étude de la variable \(Y\)</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>\(\overline{Y} = \dfrac{364000}{400} = 910\)</p>
+          <p>\(V_Y = \dfrac{342400000}{400} - 910^2 = 27900 \quad \Rightarrow \quad \sigma_Y \approx 167\)</p>
+        </div>
+      </div>
+
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ Étape 3 — Calcul de \(r\) et interprétation</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>\(\operatorname{cov}(X,Y) = \dfrac{15210000}{400} - 41{,}25 \times 910 = 487{,}5\)</p>
+          <p>\(r = \dfrac{487{,}5}{10{,}65 \times 167} \approx 0{,}27\)</p>
+          <p><strong>Interprétation :</strong> \(X\) et \(Y\) varient dans le même sens, mais avec une corrélation faible.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ SECTION 5 ═══════════════ -->
+  <section id="section5">
+    <h2>Droite de régression — Méthode des moindres carrés</h2>
+
+    <p>Un <strong>ajustement affine</strong> est justifié lorsque :</p>
+    <ul>
+      <li>\(|r| > 0{,}70\) (Économie-Gestion)</li>
+      <li>\(|r| \geq 0{,}75\) (Tech. & Info.)</li>
+      <li>\(|r| > \dfrac{\sqrt{3}}{2}\) (Math & Sc. Exp.)</li>
+    </ul>
+
+    <div class="theorem-box">
+      <span class="box-label">Théorème</span>
+      <p>Soit \((X,Y)\) une série double avec \(\sigma_X \neq 0\). La somme \(\sum (ax_i + b - y_i)^2\) est minimale pour :</p>
+      <p style="text-align:center; font-size:1.1rem; margin:0.7rem 0;">
+        \(\boxed{a = \dfrac{\operatorname{cov}(X,Y)}{V_X} = r\,\dfrac{\sigma_Y}{\sigma_X}} \quad \text{et} \quad \boxed{b = \overline{Y} - a\overline{X}}\)
+      </p>
+      <p>La droite \(\Delta : Y = aX + b\) passe par \(G(\overline{X}, \overline{Y})\). C'est la <strong>droite de régression de \(Y\) en \(X\)</strong>.</p>
+    </div>
+
+    <div class="remark-box">
+      <span class="box-label">À retenir</span>
+      <ul>
+        <li>\(\operatorname{cov}(X,Y)\), \(r\) et \(a\) sont de <strong>même signe</strong>.</li>
+        <li>Droite de régression de \(X\) en \(Y\) : \(\Delta' : X = a'Y + b'\) avec \(a' = \dfrac{\operatorname{cov}(X,Y)}{V_Y}\).</li>
+        <li>\(a \times a' = r^2\)</li>
+      </ul>
+    </div>
+
+    <div class="example-box">
+      <span class="box-label">Application — Suite énergie solaire</span>
+      <p>On a \(\overline{X}=750\), \(\overline{Y}=7\), \(\sigma_X=28{,}28\), \(\sigma_Y=0{,}71\), \(r=0{,}95\).</p>
+
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ Calcul de l'équation de la droite \(\Delta\)</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>\(a = r \cdot \dfrac{\sigma_Y}{\sigma_X} = 0{,}95 \times \dfrac{0{,}71}{28{,}28} \approx 0{,}024\)</p>
+          <p>\(b = \overline{Y} - a\overline{X} = 7 - 0{,}024 \times 750 = -11\)</p>
+          <p style="font-size:1.1rem; text-align:center;">\(\boxed{\Delta : Y = 0{,}024\,X - 11}\)</p>
+          <p><strong>Estimation :</strong> Pour \(X = 1000\) MW, \(Y = 0{,}024 \times 1000 - 11 = 13\) millions de DT.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quiz Q3 -->
+    <div class="quiz-container">
+      <div class="quiz-header">
+        <div class="quiz-icon">?</div>
+        <div class="quiz-title">Quiz éclair n°3</div>
+      </div>
+      <p class="quiz-question">Si la droite de régression de \(Y\) en \(X\) est \(Y = -5X + 20{,}75\) et \(\overline{X} = 2\), alors \(\overline{Y}\) vaut :</p>
+      <div class="quiz-options" data-quiz="q3" data-correct="b">
+        <button class="quiz-option" data-opt="a"><span class="opt-letter">A</span>1</button>
+        <button class="quiz-option" data-opt="b"><span class="opt-letter">B</span>10,75</button>
+        <button class="quiz-option" data-opt="c"><span class="opt-letter">C</span>30,75</button>
+        <button class="quiz-option" data-opt="d"><span class="opt-letter">D</span>20,75</button>
+      </div>
+      <div class="quiz-feedback" id="fb-q3"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ SECTION 6 ═══════════════ -->
+  <section id="section6">
+    <h2>Méthode de Mayer</h2>
+
+    <div class="definition-box">
+      <span class="box-label">Principe</span>
+      <p>On scinde le nuage en <strong>deux parties</strong> de tailles égales (à 1 près). On calcule les points moyens \(G_1\) et \(G_2\) de chaque partie. La droite \((G_1G_2)\) est la <strong>droite de Mayer</strong> et passe par le point moyen \(G\) du nuage global.</p>
+    </div>
+
+    <div class="example-box">
+      <span class="box-label">Exemple — Cours d'une action en bourse</span>
+      <p>Cours \(y_i\) (en DT) d'une action sur 15 jours consécutifs.</p>
+      <div class="table-wrap">
+        <table style="font-size:0.85rem;">
+          <tr><th>Jour</th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td></tr>
+          <tr><th>Cours</th><td>18,8</td><td>18,9</td><td>18,9</td><td>19,1</td><td>19,2</td><td>19</td><td>19,2</td><td>19,3</td><td>19,5</td><td>19,7</td><td>19,6</td><td>19,7</td><td>19,8</td><td>20</td><td>20,3</td></tr>
+        </table>
+      </div>
+
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ Calcul du point moyen global \(G\)</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>\(\overline{X} = \dfrac{120}{15} = 8\) et \(\overline{Y} = \dfrac{291}{15} = 19{,}4\)</p>
+          <p style="text-align:center;">\(\boxed{G(8\,;\,19{,}4)}\)</p>
+        </div>
+      </div>
+
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ Calcul de \(G_1\) (jours 1 à 8)</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>\(\overline{X_1} = \dfrac{36}{8} = 4{,}5\) et \(\overline{Y_1} = \dfrac{152{,}4}{8} = 19{,}05\)</p>
+          <p style="text-align:center;">\(\boxed{G_1(4{,}5\,;\,19{,}05)}\)</p>
+        </div>
+      </div>
+
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ Calcul de \(G_2\) (jours 9 à 15)</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>\(\overline{X_2} = \dfrac{84}{7} = 12\) et \(\overline{Y_2} = \dfrac{138{,}6}{7} = 19{,}8\)</p>
+          <p style="text-align:center;">\(\boxed{G_2(12\,;\,19{,}8)}\)</p>
+        </div>
+      </div>
+
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ Équation de la droite de Mayer</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>\(a = \dfrac{19{,}8 - 19{,}05}{12 - 4{,}5} = \dfrac{0{,}75}{7{,}5} = 0{,}1\)</p>
+          <p>\(b = 19{,}8 - 0{,}1 \times 12 = 18{,}6\)</p>
+          <p style="text-align:center; font-size:1.1rem;">\(\boxed{(G_1G_2) : y = 0{,}1\,x + 18{,}6}\)</p>
+          <p><strong>Vérification :</strong> Pour \(x = 8\), \(y = 0{,}1 \times 8 + 18{,}6 = 19{,}4 = \overline{Y}\) ✓</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ SECTION 7 ═══════════════ -->
+  <section id="section7">
+    <h2>Ajustement non affine — Exponentiel</h2>
+
+    <p>Lorsque le nuage n'est pas linéaire, on utilise un <strong>changement de variable</strong> pour se ramener à un cas affine.</p>
+
+    <div class="example-box">
+      <span class="box-label">Exemple — Élimination d'un médicament</span>
+      <p>Un médicament est injecté par voie intraveineuse. Le tableau donne la quantité \(q_i\) (mg) à l'instant \(t_i\) (heures).</p>
+      <div class="table-wrap">
+        <table>
+          <tr><th>\(t_i\) (h)</th><td>0</td><td>1</td><td>2</td><td>4</td><td>6</td><td>8</td></tr>
+          <tr><th>\(q_i\) (mg)</th><td>9,9</td><td>8</td><td>7,5</td><td>6</td><td>5,4</td><td>4,5</td></tr>
+        </table>
+      </div>
+
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ Méthode — changement de variable \(y = \ln(q)\)</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>On suppose un ajustement exponentiel \(q(t) = A e^{bt}\). En posant \(y = \ln(q)\), on a \(y = bt + \ln A\) (linéaire).</p>
+          <div class="table-wrap">
+            <table>
+              <tr><th>\(t_i\)</th><td>0</td><td>1</td><td>2</td><td>4</td><td>6</td><td>8</td></tr>
+              <tr><th>\(y_i = \ln(q_i)\)</th><td>2,29</td><td>2,08</td><td>2,01</td><td>1,79</td><td>1,69</td><td>1,50</td></tr>
+            </table>
+          </div>
+          <p>Régression de \(y\) en \(t\) : \(D : y = -0{,}09\,t + 2{,}22\)</p>
+          <p style="text-align:center; font-size:1.1rem;">\(\boxed{q(t) = 9{,}12\,e^{-0{,}09t}}\)</p>
+          <p><strong>Temps minimal pour \(q < 1\) mg :</strong></p>
+          <p>\(9{,}12\,e^{-0{,}09\,T_2} < 1 \Leftrightarrow T_2 > \dfrac{\ln(9{,}12)}{0{,}09} \approx 24{,}56\) heures.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ EXERCICE BAC CORRIGÉ ═══════════════ -->
+  <section id="sectionBac" style="background: linear-gradient(180deg, #FFFFFF 0%, #FFF8F0 100%); border: 2px solid var(--accent);">
+    <div style="display:flex; align-items:center; gap:1rem; margin-bottom:1.5rem;">
+      <div style="background:var(--accent); color:white; padding:0.5rem 1rem; border-radius:50px; font-weight:700; font-size:0.85rem; letter-spacing:0.1em;">★ EXERCICE BAC</div>
+      <div style="color:var(--muted); font-size:0.9rem;">Type Baccalauréat Tunisien — Section Mathématiques</div>
+    </div>
+    <h2 style="counter-increment:none;">Exercice corrigé n°1 — Production d'huile d'olive</h2>
+
+    <div style="background:white; border-left:5px solid var(--primary); padding:1.5rem; border-radius:10px; margin-bottom:1.5rem;">
+      <p><strong>Énoncé.</strong> Le tableau suivant donne la production tunisienne d'huile d'olive (en milliers de tonnes), notée \(y_i\), durant six années consécutives, où \(x_i\) désigne le rang de l'année.</p>
+      <div class="table-wrap" style="margin-top:1rem;">
+        <table>
+          <tr><th>Rang \(x_i\)</th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr>
+          <tr><th>Production \(y_i\)</th><td>120</td><td>145</td><td>178</td><td>215</td><td>262</td><td>320</td></tr>
+        </table>
+      </div>
+      <p style="margin-top:1rem;"><em>Tous les résultats numériques seront arrondis à \(10^{-2}\) près.</em></p>
+
+      <div style="background:var(--light); padding:1rem 1.3rem; border-radius:8px; margin-top:1rem;">
+        <p style="margin-bottom:0.5rem;"><strong>1)</strong> Déterminer les coordonnées du point moyen \(G\) du nuage.</p>
+        <p style="margin-bottom:0.5rem;"><strong>2) a)</strong> Calculer le coefficient de corrélation linéaire \(r\) entre \(X\) et \(Y\). <strong>b)</strong> Un ajustement affine est-il justifié ? Justifier.</p>
+        <p style="margin-bottom:0.5rem;"><strong>3)</strong> Déterminer une équation de la droite \(\Delta\) de régression de \(Y\) en \(X\) par la méthode des moindres carrés.</p>
+        <p style="margin-bottom:0.5rem;"><strong>4)</strong> Pour améliorer le modèle, on pose \(z_i = \ln(y_i)\). <strong>a)</strong> Compléter le tableau de \((x_i, z_i)\). <strong>b)</strong> Déterminer une équation de la droite \(D\) de régression de \(Z\) en \(X\). <strong>c)</strong> En déduire que \(y \approx 98\,e^{0{,}20\,x}\).</p>
+        <p><strong>5)</strong> Selon ce dernier modèle, déterminer le rang minimal de l'année à partir duquel la production dépassera 500 milliers de tonnes.</p>
+      </div>
+    </div>
+
+    <h3 style="color:var(--accent);">📝 Corrigé détaillé</h3>
+
+    <!-- Question 1 -->
+    <div class="example-box">
+      <span class="box-label">Question 1 — Point moyen G</span>
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ Voir la solution</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>\(\overline{X} = \dfrac{1}{6}\sum_{i=1}^{6} x_i = \dfrac{1+2+3+4+5+6}{6} = \dfrac{21}{6} = 3{,}5\)</p>
+          <p>\(\overline{Y} = \dfrac{1}{6}\sum_{i=1}^{6} y_i = \dfrac{120+145+178+215+262+320}{6} = \dfrac{1240}{6} \approx 206{,}67\)</p>
+          <p style="text-align:center; font-size:1.1rem;">\(\boxed{G(3{,}5\,;\,206{,}67)}\)</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Question 2 -->
+    <div class="example-box">
+      <span class="box-label">Question 2 — Coefficient de corrélation</span>
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ a) Calcul de \(r\)</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>Calculs préliminaires :</p>
+          <div class="table-wrap">
+            <table style="font-size:0.9rem;">
+              <tr><th>\(x_i\)</th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td><strong>Σ</strong></td></tr>
+              <tr><th>\(y_i\)</th><td>120</td><td>145</td><td>178</td><td>215</td><td>262</td><td>320</td><td><strong>1240</strong></td></tr>
+              <tr><th>\(x_i^2\)</th><td>1</td><td>4</td><td>9</td><td>16</td><td>25</td><td>36</td><td><strong>91</strong></td></tr>
+              <tr><th>\(y_i^2\)</th><td>14400</td><td>21025</td><td>31684</td><td>46225</td><td>68644</td><td>102400</td><td><strong>284378</strong></td></tr>
+              <tr><th>\(x_i y_i\)</th><td>120</td><td>290</td><td>534</td><td>860</td><td>1310</td><td>1920</td><td><strong>5034</strong></td></tr>
+            </table>
+          </div>
+          <p>\(V(X) = \dfrac{91}{6} - 3{,}5^2 = \dfrac{35}{12} \approx 2{,}92 \quad\Rightarrow\quad \sigma_X \approx 1{,}71\)</p>
+          <p>\(V(Y) = \dfrac{284378}{6} - \left(\dfrac{1240}{6}\right)^2 \approx 4685{,}22 \quad\Rightarrow\quad \sigma_Y \approx 68{,}45\)</p>
+          <p>\(\operatorname{cov}(X,Y) = \dfrac{5034}{6} - \dfrac{21}{6} \times \dfrac{1240}{6} = 839 - \dfrac{26040}{36} \approx 115{,}67\)</p>
+          <p>\(r = \dfrac{\operatorname{cov}(X,Y)}{\sigma_X \cdot \sigma_Y} = \dfrac{115{,}67}{1{,}71 \times 68{,}45} \approx 0{,}99\)</p>
+          <p style="text-align:center; font-size:1.1rem;">\(\boxed{r \approx 0{,}99}\)</p>
+        </div>
+      </div>
+
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ b) L'ajustement affine est-il justifié ?</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>Pour la section Math &amp; Sc.Exp., un ajustement affine est justifié si \(|r| > \dfrac{\sqrt{3}}{2}\).</p>
+          <p>Or \(\dfrac{\sqrt{3}}{2} \approx 0{,}87\) et \(r \approx 0{,}99 > 0{,}87\).</p>
+          <p style="text-align:center;"><strong>✓ Donc l'ajustement affine est justifié.</strong></p>
+          <p><em>Remarque :</em> bien que \(r\) soit très proche de 1, le nuage présente une légère courbure (croissance qui s'accélère), ce qui justifie d'essayer un ajustement exponentiel à la question 4.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Question 3 -->
+    <div class="example-box">
+      <span class="box-label">Question 3 — Droite de régression Δ</span>
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ Équation de Δ : Y = aX + b</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>\(a = \dfrac{\operatorname{cov}(X,Y)}{V(X)} = \dfrac{115{,}67}{2{,}92} \approx 39{,}66\)</p>
+          <p>\(b = \overline{Y} - a\overline{X} = 206{,}67 - 39{,}66 \times 3{,}5 \approx 67{,}87\)</p>
+          <p style="text-align:center; font-size:1.15rem;">\(\boxed{\Delta : Y = 39{,}66\,X + 67{,}87}\)</p>
+          <p><strong>Vérification :</strong> \(\Delta\) passe par \(G(3{,}5\,;\,206{,}67)\) ✓</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Question 4 -->
+    <div class="example-box">
+      <span class="box-label">Question 4 — Ajustement exponentiel \(z = \ln(y)\)</span>
+
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ a) Tableau \((x_i, z_i)\)</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <div class="table-wrap">
+            <table>
+              <tr><th>\(x_i\)</th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr>
+              <tr><th>\(y_i\)</th><td>120</td><td>145</td><td>178</td><td>215</td><td>262</td><td>320</td></tr>
+              <tr><th>\(z_i = \ln(y_i)\)</th><td>4,79</td><td>4,98</td><td>5,18</td><td>5,37</td><td>5,57</td><td>5,77</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ b) Droite D : Z = a'X + b'</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>\(\overline{Z} = \dfrac{4{,}79+4{,}98+5{,}18+5{,}37+5{,}57+5{,}77}{6} \approx 5{,}28\)</p>
+          <p>\(\sum x_i z_i = 1 \times 4{,}79 + 2 \times 4{,}98 + 3 \times 5{,}18 + 4 \times 5{,}37 + 5 \times 5{,}57 + 6 \times 5{,}77 \approx 114{,}24\)</p>
+          <p>\(\operatorname{cov}(X,Z) = \dfrac{114{,}24}{6} - 3{,}5 \times 5{,}28 \approx 19{,}04 - 18{,}48 \approx 0{,}57\)</p>
+          <p>\(a' = \dfrac{\operatorname{cov}(X,Z)}{V(X)} = \dfrac{0{,}57}{2{,}92} \approx 0{,}20\)</p>
+          <p>\(b' = \overline{Z} - a'\overline{X} = 5{,}28 - 0{,}20 \times 3{,}5 \approx 4{,}58\)</p>
+          <p style="text-align:center; font-size:1.15rem;">\(\boxed{D : Z = 0{,}20\,X + 4{,}58}\)</p>
+          <p><em>Calcul du coefficient de corrélation : \(r(X,Z) \approx 1{,}00\) — corrélation quasi parfaite, l'ajustement exponentiel est excellent.</em></p>
+        </div>
+      </div>
+
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ c) Déduction de \(y \approx 98\,e^{0{,}20\,x}\)</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>On a \(z = \ln(y) = 0{,}20\,x + 4{,}58\), donc :</p>
+          <p>\(y = e^{0{,}20\,x + 4{,}58} = e^{4{,}58} \cdot e^{0{,}20\,x}\)</p>
+          <p>Or \(e^{4{,}58} \approx 97{,}51 \approx 98\), donc :</p>
+          <p style="text-align:center; font-size:1.2rem;">\(\boxed{y \approx 98\,e^{0{,}20\,x}}\)</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Question 5 -->
+    <div class="example-box">
+      <span class="box-label">Question 5 — Rang minimal pour dépasser 500</span>
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ Solution</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>On cherche le plus petit entier \(x\) tel que \(y > 500\) :</p>
+          <p>\(98\,e^{0{,}20\,x} > 500 \Leftrightarrow e^{0{,}20\,x} > \dfrac{500}{98} \Leftrightarrow 0{,}20\,x > \ln\!\left(\dfrac{500}{98}\right)\)</p>
+          <p>\(x > \dfrac{\ln(500/98)}{0{,}20} = \dfrac{\ln(5{,}10)}{0{,}20} \approx \dfrac{1{,}629}{0{,}20} \approx 8{,}15\)</p>
+          <p>Le plus petit entier \(x\) vérifiant cette inégalité est \(x = 9\).</p>
+          <p style="text-align:center; font-size:1.1rem;">\(\boxed{x_{\min} = 9}\)</p>
+          <p><strong>Vérification :</strong> \(y(8) = 98\,e^{0{,}20 \times 8} \approx 98 \times 4{,}95 \approx 485\) (insuffisant)</p>
+          <p>\(y(9) = 98\,e^{0{,}20 \times 9} \approx 98 \times 6{,}05 \approx 593\) ✓ (dépasse 500)</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bilan pédagogique -->
+    <div style="background: linear-gradient(135deg, #1A3A5C 0%, #2C5282 100%); color:white; padding:1.5rem; border-radius:12px; margin-top:2rem;">
+      <h4 style="color:white; margin-top:0;">🎯 Points-clés pédagogiques de cet exercice</h4>
+      <ul style="color:rgba(255,255,255,0.95); margin:0;">
+        <li>Maîtrise des deux types d'ajustement : <strong>affine</strong> et <strong>non affine</strong> (exponentiel par changement de variable).</li>
+        <li>Utilisation du seuil <strong>√3/2</strong> spécifique à la section Math &amp; Sc.Exp.</li>
+        <li>Interprétation des résultats : un \(r\) très proche de 1 ne veut pas dire que l'ajustement affine est <em>optimal</em>, surtout si le nuage révèle une courbure.</li>
+        <li>Utilisation de la régression pour faire de la <strong>prévision</strong> et résoudre une inéquation exponentielle.</li>
+        <li>Type de questions très fréquent au bac tunisien : extrapolation + comparaison de modèles.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ═══════════════ EXERCICE BAC n°2 ═══════════════ -->
+  <section id="sectionBac2" style="background: linear-gradient(180deg, #FFFFFF 0%, #F0FFF4 100%); border: 2px solid var(--success);">
+    <div style="display:flex; align-items:center; gap:1rem; margin-bottom:1.5rem;">
+      <div style="background:var(--success); color:white; padding:0.5rem 1rem; border-radius:50px; font-weight:700; font-size:0.85rem; letter-spacing:0.1em;">★ EXERCICE BAC — APPROFONDISSEMENT</div>
+      <div style="color:var(--muted); font-size:0.9rem;">Niveau exigeant — Sections Mathématiques</div>
+    </div>
+    <h2 style="counter-increment:none;">Exercice corrigé n°2 — Plateforme de streaming</h2>
+
+    <div style="background:white; border-left:5px solid var(--primary); padding:1.5rem; border-radius:10px; margin-bottom:1.5rem;">
+      <p><strong>Énoncé.</strong> Le tableau ci-dessous donne le nombre \(y_i\) d'abonnés (en milliers) à une nouvelle plateforme de streaming durant les sept premiers mois suivant son lancement, où \(x_i\) désigne le rang du mois.</p>
+      <div class="table-wrap" style="margin-top:1rem;">
+        <table>
+          <tr><th>Mois \(x_i\)</th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td></tr>
+          <tr><th>Abonnés \(y_i\)</th><td>50</td><td>65</td><td>88</td><td>120</td><td>162</td><td>220</td><td>300</td></tr>
+        </table>
+      </div>
+      <p style="margin-top:1rem;"><em>Tous les résultats numériques seront arrondis à \(10^{-2}\) près.</em></p>
+
+      <div style="background:var(--light); padding:1rem 1.3rem; border-radius:8px; margin-top:1rem;">
+        <p style="margin-bottom:0.5rem;"><strong>1)</strong> Calculer les coordonnées du point moyen \(G\) du nuage.</p>
+        <p style="margin-bottom:0.5rem;"><strong>2) a)</strong> Calculer \(V(X)\), \(V(Y)\), \(\operatorname{cov}(X,Y)\) et le coefficient de corrélation linéaire \(r\). <strong>b)</strong> Un ajustement affine est-il justifié pour la section Math &amp; Sc. Exp. ? <strong>c)</strong> Donner l'équation de la droite \(\Delta\) de régression de \(Y\) en \(X\).</p>
+        <p style="margin-bottom:0.5rem;"><strong>3)</strong> On pose \(z_i = \ln(y_i)\). <strong>a)</strong> Établir le tableau de \((x_i, z_i)\). <strong>b)</strong> Calculer le coefficient de corrélation linéaire \(r'\) entre \(X\) et \(Z\). <strong>c)</strong> Comparer \(r\) et \(r'\) et conclure quel modèle est le plus pertinent. <strong>d)</strong> Donner l'équation de la droite \(D\) de régression de \(Z\) en \(X\).</p>
+        <p style="margin-bottom:0.5rem;"><strong>4)</strong> En déduire que la relation entre \(y\) et \(x\) peut s'écrire \(y \approx 36\,e^{0{,}30\,x}\).</p>
+        <p style="margin-bottom:0.5rem;"><strong>5)</strong> Selon ce modèle exponentiel, à partir de quel mois la plateforme dépassera-t-elle 1 million d'abonnés (soit \(y > 1000\) milliers) ?</p>
+        <p><strong>6)</strong> Comparer les estimations donnée par les deux modèles (affine et exponentiel) pour le mois de rang 9. Lequel paraît le plus réaliste ?</p>
+      </div>
+    </div>
+
+    <h3 style="color:var(--success);">📝 Corrigé détaillé</h3>
+
+    <!-- Question 1 -->
+    <div class="example-box">
+      <span class="box-label">Question 1 — Point moyen G</span>
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ Solution</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>\(\overline{X} = \dfrac{1+2+3+4+5+6+7}{7} = \dfrac{28}{7} = 4\)</p>
+          <p>\(\overline{Y} = \dfrac{50+65+88+120+162+220+300}{7} = \dfrac{1005}{7} \approx 143{,}57\)</p>
+          <p style="text-align:center; font-size:1.1rem;">\(\boxed{G(4\,;\,143{,}57)}\)</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Question 2 -->
+    <div class="example-box">
+      <span class="box-label">Question 2 — Étude de la corrélation linéaire</span>
+
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ a) Calculs préliminaires et coefficient \(r\)</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <div class="table-wrap">
+            <table style="font-size:0.88rem;">
+              <tr><th>\(x_i\)</th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td><strong>Σ</strong></td></tr>
+              <tr><th>\(y_i\)</th><td>50</td><td>65</td><td>88</td><td>120</td><td>162</td><td>220</td><td>300</td><td><strong>1005</strong></td></tr>
+              <tr><th>\(x_i^2\)</th><td>1</td><td>4</td><td>9</td><td>16</td><td>25</td><td>36</td><td>49</td><td><strong>140</strong></td></tr>
+              <tr><th>\(y_i^2\)</th><td>2500</td><td>4225</td><td>7744</td><td>14400</td><td>26244</td><td>48400</td><td>90000</td><td><strong>193513</strong></td></tr>
+              <tr><th>\(x_i y_i\)</th><td>50</td><td>130</td><td>264</td><td>480</td><td>810</td><td>1320</td><td>2100</td><td><strong>5154</strong></td></tr>
+            </table>
+          </div>
+          <p>\(V(X) = \dfrac{140}{7} - 4^2 = 20 - 16 = \boxed{4}\) ; \(\sigma_X = 2\)</p>
+          <p>\(V(Y) = \dfrac{193513}{7} - \left(\dfrac{1005}{7}\right)^2 \approx 27644{,}71 - 20612{,}76 \approx 7031{,}96\) ; \(\sigma_Y \approx 83{,}86\)</p>
+          <p>\(\operatorname{cov}(X,Y) = \dfrac{5154}{7} - 4 \times \dfrac{1005}{7} = \dfrac{5154 - 4020}{7} = \dfrac{1134}{7} = 162\)</p>
+          <p>\(r = \dfrac{162}{2 \times 83{,}86} \approx \boxed{0{,}97}\)</p>
+        </div>
+      </div>
+
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ b) Justification de l'ajustement affine</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>Pour la section Math &amp; Sc. Exp., on doit avoir \(|r| > \dfrac{\sqrt{3}}{2} \approx 0{,}87\).</p>
+          <p>Or \(r \approx 0{,}97 > 0{,}87\), donc <strong>l'ajustement affine est justifié</strong>.</p>
+          <p><em>Cependant, la croissance des abonnés s'accélère (50 → 300 en 7 mois), ce qui suggère qu'un modèle exponentiel pourrait être plus adapté. C'est ce qu'on étudie en question 3.</em></p>
+        </div>
+      </div>
+
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ c) Équation de la droite \(\Delta\)</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>\(a = \dfrac{\operatorname{cov}(X,Y)}{V(X)} = \dfrac{162}{4} = 40{,}5\)</p>
+          <p>\(b = \overline{Y} - a\overline{X} = 143{,}57 - 40{,}5 \times 4 = 143{,}57 - 162 = -18{,}43\)</p>
+          <p style="text-align:center; font-size:1.15rem;">\(\boxed{\Delta : Y = 40{,}5\,X - 18{,}43}\)</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Question 3 -->
+    <div class="example-box">
+      <span class="box-label">Question 3 — Changement de variable \(z = \ln(y)\)</span>
+
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ a) Tableau \((x_i, z_i)\)</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <div class="table-wrap">
+            <table style="font-size:0.9rem;">
+              <tr><th>\(x_i\)</th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td></tr>
+              <tr><th>\(y_i\)</th><td>50</td><td>65</td><td>88</td><td>120</td><td>162</td><td>220</td><td>300</td></tr>
+              <tr><th>\(z_i = \ln(y_i)\)</th><td>3,91</td><td>4,17</td><td>4,48</td><td>4,79</td><td>5,09</td><td>5,39</td><td>5,70</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ b) Coefficient de corrélation \(r'\) entre \(X\) et \(Z\)</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>\(\overline{Z} = \dfrac{3{,}91+4{,}17+4{,}48+4{,}79+5{,}09+5{,}39+5{,}70}{7} \approx 4{,}79\)</p>
+          <p>\(\sum z_i^2 \approx 15{,}29 + 17{,}39 + 20{,}07 + 22{,}94 + 25{,}91 + 29{,}05 + 32{,}49 \approx 163{,}14\)</p>
+          <p>\(V(Z) = \dfrac{163{,}14}{7} - 4{,}79^2 \approx 23{,}31 - 22{,}94 \approx 0{,}37\) ; \(\sigma_Z \approx 0{,}61\)</p>
+          <p>\(\sum x_i z_i = 1(3{,}91) + 2(4{,}17) + 3(4{,}48) + 4(4{,}79) + 5(5{,}09) + 6(5{,}39) + 7(5{,}70)\)</p>
+          <p>\(\sum x_i z_i \approx 3{,}91 + 8{,}34 + 13{,}44 + 19{,}16 + 25{,}45 + 32{,}34 + 39{,}90 = 142{,}54\)</p>
+          <p>\(\operatorname{cov}(X,Z) = \dfrac{142{,}54}{7} - 4 \times 4{,}79 \approx 20{,}36 - 19{,}16 \approx 1{,}20\)</p>
+          <p>\(r' = \dfrac{1{,}20}{2 \times 0{,}61} \approx \boxed{0{,}9998 \approx 1}\)</p>
+        </div>
+      </div>
+
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ c) Comparaison et conclusion</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>On a \(|r| \approx 0{,}97\) et \(|r'| \approx 1{,}00\).</p>
+          <p>Le coefficient \(r'\) est plus proche de 1 que \(r\), donc le nuage des points \((x_i, z_i)\) est <strong>quasi parfaitement aligné</strong>.</p>
+          <p style="text-align:center; font-size:1.05rem;"><strong>L'ajustement exponentiel \(y = A\,e^{bx}\) est plus pertinent que l'ajustement affine.</strong></p>
+        </div>
+      </div>
+
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ d) Équation de la droite D</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>\(a' = \dfrac{\operatorname{cov}(X,Z)}{V(X)} = \dfrac{1{,}20}{4} = 0{,}30\)</p>
+          <p>\(b' = \overline{Z} - a'\overline{X} = 4{,}79 - 0{,}30 \times 4 = 4{,}79 - 1{,}20 = 3{,}59\)</p>
+          <p style="text-align:center; font-size:1.15rem;">\(\boxed{D : Z = 0{,}30\,X + 3{,}59}\)</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Question 4 -->
+    <div class="example-box">
+      <span class="box-label">Question 4 — Modèle exponentiel \(y \approx 36\,e^{0{,}30x}\)</span>
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ Démonstration</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>De \(z = \ln(y) = 0{,}30\,x + 3{,}59\), on tire :</p>
+          <p>\(y = e^{0{,}30\,x + 3{,}59} = e^{3{,}59} \cdot e^{0{,}30\,x}\)</p>
+          <p>Or \(e^{3{,}59} \approx 36{,}23 \approx 36\), donc :</p>
+          <p style="text-align:center; font-size:1.2rem;">\(\boxed{y \approx 36\,e^{0{,}30\,x}}\)</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Question 5 -->
+    <div class="example-box">
+      <span class="box-label">Question 5 — Mois où \(y\) dépasse 1 000 milliers</span>
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ Résolution de l'inéquation</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>On cherche le plus petit entier \(x\) tel que \(36\,e^{0{,}30\,x} > 1000\) :</p>
+          <p>\(e^{0{,}30\,x} > \dfrac{1000}{36} \Leftrightarrow 0{,}30\,x > \ln\!\left(\dfrac{1000}{36}\right)\)</p>
+          <p>\(x > \dfrac{\ln(27{,}78)}{0{,}30} = \dfrac{3{,}324}{0{,}30} \approx 11{,}08\)</p>
+          <p style="text-align:center; font-size:1.1rem;">\(\boxed{x_{\min} = 12}\)</p>
+          <p><strong>Vérifications :</strong></p>
+          <p>\(y(11) = 36\,e^{0{,}30 \times 11} \approx 36 \times 27{,}11 \approx 976\) (insuffisant)</p>
+          <p>\(y(12) = 36\,e^{0{,}30 \times 12} \approx 36 \times 36{,}60 \approx 1318\) ✓</p>
+          <p>La plateforme dépassera 1 million d'abonnés à partir du <strong>12<sup>e</sup> mois</strong>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Question 6 -->
+    <div class="example-box">
+      <span class="box-label">Question 6 — Comparaison des deux modèles pour x = 9</span>
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ Estimations et conclusion</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p><strong>Modèle affine :</strong> \(Y = 40{,}5 \times 9 - 18{,}43 = 364{,}5 - 18{,}43 \approx 346{,}07\) milliers</p>
+          <p><strong>Modèle exponentiel :</strong> \(Y = 36\,e^{0{,}30 \times 9} = 36 \times e^{2{,}7} \approx 36 \times 14{,}88 \approx 535{,}68\) milliers</p>
+          <div class="table-wrap">
+            <table>
+              <tr><th>Modèle</th><th>Estimation pour \(x = 9\)</th><th>Cohérence</th></tr>
+              <tr><td>Affine \(\Delta\)</td><td>≈ 346 milliers</td><td>Sous-estime la croissance</td></tr>
+              <tr><td>Exponentiel</td><td>≈ 536 milliers</td><td>Suit la tendance accélérée</td></tr>
+            </table>
+          </div>
+          <p style="text-align:center; font-size:1.05rem;"><strong>Conclusion :</strong> Comme \(|r'| > |r|\), le modèle exponentiel est plus fiable. L'estimation de <strong>≈ 536 milliers d'abonnés</strong> au mois 9 est plus réaliste, en cohérence avec la dynamique de croissance observée (de 50 à 300 en 7 mois).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bilan pédagogique -->
+    <div style="background: linear-gradient(135deg, #2E7D5E 0%, #38B2AC 100%); color:white; padding:1.5rem; border-radius:12px; margin-top:2rem;">
+      <h4 style="color:white; margin-top:0;">🎯 Compétences évaluées dans cet exercice</h4>
+      <ul style="color:rgba(255,255,255,0.95); margin:0;">
+        <li>Calcul rigoureux des paramètres statistiques d'une série double.</li>
+        <li>Choix raisonné entre deux modèles d'ajustement (affine vs. exponentiel) en comparant les coefficients de corrélation.</li>
+        <li>Maîtrise du <strong>changement de variable</strong> \(z = \ln(y)\) et de la transformation inverse \(y = e^z\).</li>
+        <li>Résolution d'<strong>inéquation exponentielle</strong> avec interprétation concrète.</li>
+        <li>Esprit critique : comparer plusieurs prévisions et discuter leur réalisme.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ═══════════════ UTILISATION DE LA CALCULATRICE ═══════════════ -->
+  <section id="sectionCalc" style="background: linear-gradient(180deg, #FFFFFF 0%, #EEF3F8 100%); border: 2px solid var(--primary);">
+    <div style="display:flex; align-items:center; gap:1rem; margin-bottom:1.5rem;">
+      <div style="background:var(--primary); color:white; padding:0.5rem 1rem; border-radius:50px; font-weight:700; font-size:0.85rem; letter-spacing:0.1em;">🖩 OUTIL — CALCULATRICE</div>
+      <div style="color:var(--muted); font-size:0.9rem;">Procédures pour les modèles courants</div>
+    </div>
+    <h2 style="counter-increment:none;">Utilisation de la calculatrice</h2>
+
+    <!-- Série de référence -->
+    <div class="example-box">
+      <span class="box-label">Série de référence</span>
+      <p>Soit la série statistique suivante (résultats arrondis à \(10^{-2}\) près) :</p>
+      <div class="table-wrap">
+        <table>
+          <tr><th>\(x_i\)</th><td>30</td><td>40</td><td>50</td><td>60</td><td>70</td><td>80</td></tr>
+          <tr><th>\(y_i\)</th><td>42</td><td>60</td><td>80</td><td>90</td><td>95</td><td>110</td></tr>
+        </table>
+      </div>
+      <p>Avec une calculatrice statistique en mode régression, on obtient directement :</p>
+      <div class="info-cards">
+        <div class="info-card"><div class="info-card-value">55</div><div class="info-card-label">\(\overline{x}\)</div></div>
+        <div class="info-card"><div class="info-card-value">79,5</div><div class="info-card-label">\(\overline{y}\)</div></div>
+        <div class="info-card"><div class="info-card-value">17,08</div><div class="info-card-label">\(\sigma(x)\)</div></div>
+        <div class="info-card"><div class="info-card-value">22,61</div><div class="info-card-label">\(\sigma(y)\)</div></div>
+        <div class="info-card"><div class="info-card-value">0,98</div><div class="info-card-label">\(r\)</div></div>
+        <div class="info-card"><div class="info-card-value">1,3</div><div class="info-card-label">\(a\)</div></div>
+        <div class="info-card"><div class="info-card-value">8</div><div class="info-card-label">\(b\)</div></div>
+        <div class="info-card"><div class="info-card-value">291,67</div><div class="info-card-label">\(V(x)\)</div></div>
+        <div class="info-card"><div class="info-card-value">511,25</div><div class="info-card-label">\(V(y)\)</div></div>
+        <div class="info-card"><div class="info-card-value">379,17</div><div class="info-card-label">\(\operatorname{cov}(x,y)\)</div></div>
+      </div>
+    </div>
+
+    <!-- Onglets calculatrices -->
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:1.2rem; margin-top:1.5rem;">
+
+      <!-- Sharp EL-531WH -->
+      <div style="background:white; border:2px solid var(--border); border-radius:12px; padding:1.3rem; box-shadow:var(--shadow);">
+        <div style="display:flex; align-items:center; gap:0.6rem; margin-bottom:1rem; padding-bottom:0.7rem; border-bottom:2px solid var(--accent);">
+          <div style="background:var(--accent); color:white; width:36px; height:36px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-weight:700;">S</div>
+          <div>
+            <div style="font-weight:700; color:var(--primary);">Sharp EL-531WH</div>
+            <div style="font-size:0.8rem; color:var(--muted);">Modèle classique</div>
+          </div>
+        </div>
+        <p style="margin:0.5rem 0; font-size:0.9rem;"><strong>1️⃣ Mode statistique :</strong></p>
+        <div style="background:var(--cream); padding:0.7rem; border-radius:6px; font-family:'JetBrains Mono', monospace; font-size:0.85rem;"><kbd>MODE</kbd> 1 (STAT) 1 (LINE)</div>
+
+        <p style="margin:1rem 0 0.5rem; font-size:0.9rem;"><strong>2️⃣ Saisie des données :</strong></p>
+        <div style="background:var(--cream); padding:0.7rem; border-radius:6px; font-family:'JetBrains Mono', monospace; font-size:0.85rem; line-height:1.7;">
+          30 <kbd>STO</kbd> 42 <kbd>M+</kbd><br>
+          40 <kbd>STO</kbd> 60 <kbd>M+</kbd><br>
+          ...<br>
+          80 <kbd>STO</kbd> 110 <kbd>M+</kbd>
+        </div>
+
+        <p style="margin:1rem 0 0.5rem; font-size:0.9rem;"><strong>3️⃣ Lecture des résultats :</strong></p>
+        <div style="background:var(--light); padding:0.8rem; border-radius:6px; font-size:0.85rem; line-height:1.9;">
+          \(\overline{x}\) : <kbd>ALPHA</kbd> <kbd>4</kbd> <kbd>=</kbd><br>
+          \(\overline{y}\) : <kbd>ALPHA</kbd> <kbd>7</kbd> <kbd>=</kbd><br>
+          \(\sigma(x)\) : <kbd>ALPHA</kbd> <kbd>6</kbd> <kbd>=</kbd><br>
+          \(\sigma(y)\) : <kbd>ALPHA</kbd> <kbd>9</kbd> <kbd>=</kbd><br>
+          \(r\) : <kbd>ALPHA</kbd> <kbd>÷</kbd> <kbd>=</kbd><br>
+          \(a\) : <kbd>ALPHA</kbd> <kbd>)</kbd> <kbd>=</kbd><br>
+          \(b\) : <kbd>ALPHA</kbd> <kbd>(</kbd> <kbd>=</kbd><br>
+          \(V(x)\) : <kbd>ALPHA</kbd> <kbd>6</kbd> <kbd>x²</kbd> <kbd>=</kbd><br>
+          \(V(y)\) : <kbd>ALPHA</kbd> <kbd>9</kbd> <kbd>x²</kbd> <kbd>=</kbd>
+        </div>
+      </div>
+
+      <!-- Sharp EL-W506X -->
+      <div style="background:white; border:2px solid var(--border); border-radius:12px; padding:1.3rem; box-shadow:var(--shadow);">
+        <div style="display:flex; align-items:center; gap:0.6rem; margin-bottom:1rem; padding-bottom:0.7rem; border-bottom:2px solid var(--success);">
+          <div style="background:var(--success); color:white; width:36px; height:36px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-weight:700;">S</div>
+          <div>
+            <div style="font-weight:700; color:var(--primary);">Sharp EL-W506X</div>
+            <div style="font-size:0.8rem; color:var(--muted);">Modèle WriteView</div>
+          </div>
+        </div>
+        <p style="margin:0.5rem 0; font-size:0.9rem;"><strong>1️⃣ Mode statistique :</strong></p>
+        <div style="background:var(--cream); padding:0.7rem; border-radius:6px; font-family:'JetBrains Mono', monospace; font-size:0.85rem;"><kbd>MODE</kbd> 1 (STAT) 1 (LINE)</div>
+
+        <p style="margin:1rem 0 0.5rem; font-size:0.9rem;"><strong>2️⃣ Saisie des données :</strong></p>
+        <div style="background:var(--cream); padding:0.7rem; border-radius:6px; font-family:'JetBrains Mono', monospace; font-size:0.82rem; line-height:1.7;">
+          30 <kbd>(x,y)</kbd> 42 <kbd>CHANGE</kbd><br>
+          40 <kbd>(x,y)</kbd> 60 <kbd>CHANGE</kbd><br>
+          ...<br>
+          80 <kbd>(x,y)</kbd> 110 <kbd>CHANGE</kbd>
+        </div>
+
+        <p style="margin:1rem 0 0.5rem; font-size:0.9rem;"><strong>3️⃣ Lecture des résultats :</strong></p>
+        <p style="font-size:0.85rem; color:var(--muted); margin:0.3rem 0;">Mêmes commandes ALPHA que le modèle EL-531WH :</p>
+        <div style="background:var(--light); padding:0.8rem; border-radius:6px; font-size:0.85rem; line-height:1.9;">
+          \(\overline{x}\) : <kbd>ALPHA</kbd> <kbd>4</kbd> <kbd>=</kbd><br>
+          \(\overline{y}\) : <kbd>ALPHA</kbd> <kbd>7</kbd> <kbd>=</kbd><br>
+          \(r\) : <kbd>ALPHA</kbd> <kbd>÷</kbd> <kbd>=</kbd><br>
+          \(a\) : <kbd>ALPHA</kbd> <kbd>)</kbd> <kbd>=</kbd><br>
+          \(b\) : <kbd>ALPHA</kbd> <kbd>(</kbd> <kbd>=</kbd><br>
+          \(\operatorname{cov}(x,y)\) : <kbd>ALPHA</kbd> <kbd>6</kbd> <kbd>×</kbd> <kbd>ALPHA</kbd> <kbd>9</kbd> <kbd>×</kbd> <kbd>ALPHA</kbd> <kbd>÷</kbd> <kbd>=</kbd>
+        </div>
+      </div>
+
+      <!-- Casio fx-991ES -->
+      <div style="background:white; border:2px solid var(--border); border-radius:12px; padding:1.3rem; box-shadow:var(--shadow);">
+        <div style="display:flex; align-items:center; gap:0.6rem; margin-bottom:1rem; padding-bottom:0.7rem; border-bottom:2px solid var(--primary);">
+          <div style="background:var(--primary); color:white; width:36px; height:36px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-weight:700;">C</div>
+          <div>
+            <div style="font-weight:700; color:var(--primary);">Casio fx-991ES</div>
+            <div style="font-size:0.8rem; color:var(--muted);">Modèle scientifique</div>
+          </div>
+        </div>
+        <p style="margin:0.5rem 0; font-size:0.9rem;"><strong>1️⃣ Mode régression linéaire :</strong></p>
+        <div style="background:var(--cream); padding:0.7rem; border-radius:6px; font-family:'JetBrains Mono', monospace; font-size:0.85rem;"><kbd>MODE</kbd> 3 (STAT) 2 (A+BX)</div>
+
+        <p style="margin:1rem 0 0.5rem; font-size:0.9rem;"><strong>2️⃣ Saisie des données :</strong></p>
+        <div style="background:var(--cream); padding:0.7rem; border-radius:6px; font-size:0.82rem;">
+          Afficher l'éditeur statistique :<br>
+          <span style="font-family:'JetBrains Mono', monospace;"><kbd>SHIFT</kbd> <kbd>1</kbd> (STAT) <kbd>2</kbd> (Data)</span><br><br>
+          Remplir le tableau (valider avec <kbd>=</kbd>) :
+          <table style="width:100%; margin-top:0.5rem; font-size:0.8rem;">
+            <tr><th></th><th>x</th><th>y</th></tr>
+            <tr><td>1</td><td>30</td><td>42</td></tr>
+            <tr><td>2</td><td>40</td><td>60</td></tr>
+            <tr><td>...</td><td>...</td><td>...</td></tr>
+            <tr><td>6</td><td>80</td><td>110</td></tr>
+          </table>
+        </div>
+
+        <p style="margin:1rem 0 0.5rem; font-size:0.9rem;"><strong>3️⃣ Lecture des résultats :</strong></p>
+        <div style="background:var(--light); padding:0.8rem; border-radius:6px; font-size:0.85rem; line-height:1.7;">
+          Appuyer sur <kbd>AC</kbd> puis :<br><br>
+          <strong>Pour \(\overline{x}, \overline{y}, \sigma(x), \sigma(y)\) :</strong><br>
+          <kbd>SHIFT</kbd> <kbd>1</kbd> (STAT) <kbd>4</kbd> (Var)<br><br>
+          <strong>Pour \(r, a, b\) :</strong><br>
+          <kbd>SHIFT</kbd> <kbd>1</kbd> (STAT) <kbd>5</kbd> (Reg)
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Récap formules -->
+    <div style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); color:white; padding:1.8rem; border-radius:14px; margin-top:2rem;">
+      <h4 style="color:white; margin-top:0; font-size:1.2rem;">📋 Récapitulatif des formules</h4>
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:1rem; margin-top:1rem;">
+        <div style="background:rgba(255,255,255,0.1); padding:1rem; border-radius:8px; backdrop-filter:blur(5px);">
+          <p style="margin:0.3rem 0; color:rgba(255,255,255,0.95);">\(\overline{X} = \dfrac{1}{n}\sum_{i=1}^{n} x_i\)</p>
+          <p style="margin:0.3rem 0; color:rgba(255,255,255,0.95);">\(V(X) = \dfrac{1}{n}\sum_{i=1}^{n} x_i^2 - \overline{X}^2\)</p>
+          <p style="margin:0.3rem 0; color:rgba(255,255,255,0.95);">\(\sigma(X) = \sqrt{V(X)}\)</p>
+        </div>
+        <div style="background:rgba(255,255,255,0.1); padding:1rem; border-radius:8px; backdrop-filter:blur(5px);">
+          <p style="margin:0.3rem 0; color:rgba(255,255,255,0.95);">\(\operatorname{cov}(X,Y) = \overline{XY} - \overline{X}\,\overline{Y}\)</p>
+          <p style="margin:0.3rem 0; font-size:0.9rem; color:rgba(255,255,255,0.95);">\(= \dfrac{1}{n}\sum_{i=1}^{n} x_i y_i - \overline{X}\,\overline{Y}\)</p>
+          <p style="margin:0.3rem 0; color:rgba(255,255,255,0.95);">\(r = \dfrac{\operatorname{cov}(X,Y)}{\sigma(X) \cdot \sigma(Y)}\)</p>
+        </div>
+        <div style="background:rgba(255,255,255,0.1); padding:1rem; border-radius:8px; backdrop-filter:blur(5px);">
+          <p style="margin:0.3rem 0; color:rgba(255,255,255,0.95);"><strong>Droite \(Y = aX + b\) :</strong></p>
+          <p style="margin:0.3rem 0; color:rgba(255,255,255,0.95);">\(a = \dfrac{\operatorname{cov}(X,Y)}{V(X)}\)</p>
+          <p style="margin:0.3rem 0; color:rgba(255,255,255,0.95);">\(b = \overline{Y} - a\overline{X}\)</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Conseils pratiques -->
+    <div class="remark-box" style="margin-top:1.5rem;">
+      <span class="box-label">💡 Conseils d'utilisation</span>
+      <ul>
+        <li><strong>Toujours vérifier le mode</strong> avant de saisir les données : si la machine est restée en mode normal, les calculs statistiques échoueront.</li>
+        <li><strong>Effacer la mémoire statistique</strong> avant chaque nouvelle série : <kbd>SHIFT</kbd> <kbd>9</kbd> (CLR) <kbd>1</kbd> sur Casio.</li>
+        <li><strong>Pour un ajustement non affine</strong> (exponentiel, logarithmique, puissance) : effectuer d'abord le changement de variable manuellement, puis saisir la nouvelle série dans la calculatrice.</li>
+        <li>La calculatrice donne directement \(\sigma(X)\), mais pour obtenir \(V(X)\) il faut élever au carré (sauf sur certains modèles avec touche dédiée).</li>
+        <li><strong>Au bac :</strong> il faut savoir poser les calculs en détaillant les sommes \(\sum x_i\), \(\sum x_i^2\), \(\sum x_iy_i\), même si la calculatrice donne le résultat final.</li>
+      </ul>
+    </div>
+  </section>
+
+    <p>Soit \((X,Y)\) une série double dont la droite de régression est \(\Delta : Y = -5X + 20{,}75\).</p>
+
+    <div class="quiz-container">
+      <div class="quiz-header">
+        <div class="quiz-icon">1</div>
+        <div class="quiz-title">Question 1</div>
+      </div>
+      <p class="quiz-question">Si \(\operatorname{cov}(X,Y) = -2{,}5\), alors \(V_X\) vaut :</p>
+      <div class="quiz-options" data-quiz="qf1" data-correct="c">
+        <button class="quiz-option" data-opt="a"><span class="opt-letter">A</span>2</button>
+        <button class="quiz-option" data-opt="b"><span class="opt-letter">B</span>−0,5</button>
+        <button class="quiz-option" data-opt="c"><span class="opt-letter">C</span>0,5</button>
+      </div>
+      <div class="quiz-feedback" id="fb-qf1"></div>
+    </div>
+
+    <div class="quiz-container">
+      <div class="quiz-header">
+        <div class="quiz-icon">2</div>
+        <div class="quiz-title">Question 2</div>
+      </div>
+      <p class="quiz-question">Quelle valeur \(r\) peut-il prendre ?</p>
+      <div class="quiz-options" data-quiz="qf2" data-correct="c">
+        <button class="quiz-option" data-opt="a"><span class="opt-letter">A</span>1,01</button>
+        <button class="quiz-option" data-opt="b"><span class="opt-letter">B</span>0,97</button>
+        <button class="quiz-option" data-opt="c"><span class="opt-letter">C</span>−0,94</button>
+      </div>
+      <div class="quiz-feedback" id="fb-qf2"></div>
+    </div>
+
+    <div class="quiz-container">
+      <div class="quiz-header">
+        <div class="quiz-icon">3</div>
+        <div class="quiz-title">Question 3</div>
+      </div>
+      <p class="quiz-question">Si \(r = -0{,}9\), quelle est la valeur de \(a'\) (pente de la régression de \(X\) en \(Y\)) ?</p>
+      <div class="quiz-options" data-quiz="qf3" data-correct="b">
+        <button class="quiz-option" data-opt="a"><span class="opt-letter">A</span>0,162</button>
+        <button class="quiz-option" data-opt="b"><span class="opt-letter">B</span>−0,162</button>
+        <button class="quiz-option" data-opt="c"><span class="opt-letter">C</span>−4,05</button>
+      </div>
+      <div class="quiz-feedback" id="fb-qf3"></div>
+    </div>
+
+    <div class="quiz-container">
+      <div class="quiz-header">
+        <div class="quiz-icon">4</div>
+        <div class="quiz-title">Question 4 — Donnée manquante</div>
+      </div>
+      <p class="quiz-question">Avec la droite \(D : Y = 11{,}1X - 2{,}6\) et le tableau suivant, trouvez \(m\) (arrondi à 0,1) :</p>
+      <div class="table-wrap">
+        <table style="margin: 0.7rem 0;">
+          <tr><th>\(x_i\)</th><td>1,2</td><td>1,3</td><td>1,4</td><td>1,5</td><td>1,6</td><td>1,7</td></tr>
+          <tr><th>\(y_i\)</th><td>10</td><td>11</td><td>15</td><td>14</td><td><strong>m</strong></td><td>15</td></tr>
+        </table>
+      </div>
+      <div class="quiz-options" data-quiz="qf4" data-correct="c">
+        <button class="quiz-option" data-opt="a"><span class="opt-letter">A</span>15,5</button>
+        <button class="quiz-option" data-opt="b"><span class="opt-letter">B</span>13,2</button>
+        <button class="quiz-option" data-opt="c"><span class="opt-letter">C</span>16,0</button>
+      </div>
+      <div class="quiz-feedback" id="fb-qf4"></div>
+      <div class="reveal-block" style="margin-top:1rem;">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ Indice — méthode de résolution</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>La droite \(D\) passe par le point moyen \(G(\overline{X}, \overline{Y})\).</p>
+          <p>\(\overline{X} = \dfrac{1{,}2+1{,}3+1{,}4+1{,}5+1{,}6+1{,}7}{6} = \dfrac{8{,}7}{6} = 1{,}45\)</p>
+          <p>Donc \(\overline{Y} = 11{,}1 \times 1{,}45 - 2{,}6 = 13{,}495\)</p>
+          <p>Or \(\overline{Y} = \dfrac{10+11+15+14+m+15}{6} = \dfrac{65+m}{6}\)</p>
+          <p>D'où : \(\dfrac{65+m}{6} = 13{,}495 \Rightarrow m = 13{,}495 \times 6 - 65 = 15{,}97 \approx \boxed{16{,}0}\)</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Score final -->
+    <div class="score-banner" id="scoreBanner">
+      <h3>🎉 Bravo, quiz terminé !</h3>
+      <div class="score-value" id="scoreValue">0/7</div>
+      <p id="scoreMessage">Continuez à pratiquer !</p>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <p class="signature">— Faicel Missaoui —</p>
+  <p>Cours interactif · Statistiques Doubles · Terminale Bac</p>
+  <p style="font-size:0.75rem; opacity:0.5; margin-top:1.5rem;">© Faicel Missaoui — Tous droits réservés</p>
+</footer>
+
+<script>
+  // ── Reveal toggle ──
+  const revealedBlocks = new Set();
+  function toggleReveal(btn) {
+    const block = btn.closest('.reveal-block');
+    block.classList.toggle('revealed');
+    if (block.classList.contains('revealed')) {
+      revealedBlocks.add(block);
+      updateProgress();
+    }
+  }
+
+  // ── Quiz logic ──
+  const quizAnswers = {};
+  const totalQuizzes = document.querySelectorAll('.quiz-options').length;
+
+  document.querySelectorAll('.quiz-option').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const wrap = btn.closest('.quiz-options');
+      if (wrap.dataset.answered === 'true') return;
+      const correct = wrap.dataset.correct;
+      const chosen = btn.dataset.opt;
+      const quizId = wrap.dataset.quiz;
+      wrap.dataset.answered = 'true';
+
+      wrap.querySelectorAll('.quiz-option').forEach(b => {
+        b.classList.add('answered');
+        if (b.dataset.opt === correct) b.classList.add('correct');
+        else if (b === btn) b.classList.add('incorrect');
+      });
+
+      const fb = document.getElementById('fb-' + quizId);
+      if (chosen === correct) {
+        fb.textContent = '✅ Excellente réponse !';
+        fb.className = 'quiz-feedback show correct';
+        quizAnswers[quizId] = true;
+      } else {
+        fb.textContent = '❌ Ce n\'est pas la bonne réponse. La bonne option est en vert ci-dessus.';
+        fb.className = 'quiz-feedback show incorrect';
+        quizAnswers[quizId] = false;
+      }
+
+      updateProgress();
+      checkFinalScore();
+    });
+  });
+
+  // ── Progress bar ──
+  const totalSteps = totalQuizzes + document.querySelectorAll('.reveal-block').length;
+  function updateProgress() {
+    const answered = Object.keys(quizAnswers).length;
+    const revealed = revealedBlocks.size;
+    const pct = Math.min(100, Math.round(((answered + revealed) / totalSteps) * 100));
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressText').textContent = pct + '%';
+  }
+
+  // ── Final score ──
+  function checkFinalScore() {
+    const allQuizzes = document.querySelectorAll('.quiz-options');
+    if (Object.keys(quizAnswers).length === allQuizzes.length) {
+      const correct = Object.values(quizAnswers).filter(v => v).length;
+      const total = allQuizzes.length;
+      const banner = document.getElementById('scoreBanner');
+      document.getElementById('scoreValue').textContent = correct + '/' + total;
+      const pct = (correct / total) * 100;
+      let msg;
+      if (pct === 100) msg = '🏆 Parfait ! Vous maîtrisez le chapitre !';
+      else if (pct >= 75) msg = '✨ Très bon résultat ! Quelques révisions et c\'est parfait.';
+      else if (pct >= 50) msg = '👍 Bon début, mais il faut revoir certaines notions.';
+      else msg = '📚 Reprenez le cours et retentez le quiz.';
+      document.getElementById('scoreMessage').textContent = msg;
+      banner.classList.add('show');
+      banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+
+  // ── Calculator ──
+  function calcCorrelation() {
+    const xStr = document.getElementById('calcX').value;
+    const yStr = document.getElementById('calcY').value;
+    const X = xStr.split(',').map(s => parseFloat(s.trim())).filter(v => !isNaN(v));
+    const Y = yStr.split(',').map(s => parseFloat(s.trim())).filter(v => !isNaN(v));
+    const result = document.getElementById('calcResult');
+
+    if (X.length !== Y.length || X.length < 2) {
+      result.innerHTML = '⚠️ Erreur : les deux séries doivent avoir le même nombre de valeurs (≥ 2).';
+      result.classList.add('show');
+      return;
+    }
+    const n = X.length;
+    const meanX = X.reduce((a,b)=>a+b,0)/n;
+    const meanY = Y.reduce((a,b)=>a+b,0)/n;
+    let sxx=0, syy=0, sxy=0;
+    for (let i=0; i<n; i++) {
+      sxx += (X[i]-meanX)**2;
+      syy += (Y[i]-meanY)**2;
+      sxy += (X[i]-meanX)*(Y[i]-meanY);
+    }
+    const Vx = sxx/n, Vy = syy/n, cov = sxy/n;
+    const sx = Math.sqrt(Vx), sy = Math.sqrt(Vy);
+    const r = cov/(sx*sy);
+    const a = cov/Vx;
+    const b = meanY - a*meanX;
+
+    let interp;
+    const absR = Math.abs(r);
+    if (absR > Math.sqrt(3)/2) interp = '<strong style="color:#9AE6B4">Forte corrélation linéaire (Math &amp; Sc.Exp.: |r| &gt; √3/2 ≈ 0,866) ✓ ajustement affine justifié</strong>';
+    else if (absR >= 0.75) interp = '<strong style="color:#F6E05E">Corrélation forte pour Tech.&amp;Info. (|r| ≥ 0,75) — faible pour Math/Sc.Exp.</strong>';
+    else if (absR > 0.70) interp = '<strong style="color:#F6E05E">Corrélation forte pour Économie-Gestion uniquement (|r| &gt; 0,70)</strong>';
+    else interp = '<strong style="color:#FC8181">Corrélation faible — ajustement affine non justifié</strong>';
+
+    result.innerHTML = `
+      <strong>X̄</strong> = ${meanX.toFixed(3)} &nbsp;·&nbsp; <strong>Ȳ</strong> = ${meanY.toFixed(3)}<br>
+      <strong>V(X)</strong> = ${Vx.toFixed(3)} &nbsp;·&nbsp; <strong>V(Y)</strong> = ${Vy.toFixed(3)}<br>
+      <strong>σ(X)</strong> = ${sx.toFixed(3)} &nbsp;·&nbsp; <strong>σ(Y)</strong> = ${sy.toFixed(3)}<br>
+      <strong>cov(X,Y)</strong> = ${cov.toFixed(3)}<br>
+      <strong>r</strong> = ${r.toFixed(4)}<br>
+      Droite : <strong>Y = ${a.toFixed(3)}·X ${b>=0?'+':''} ${b.toFixed(3)}</strong><br>
+      ${interp}
+    `;
+    result.classList.add('show');
+  }
+
+  // ── Chart drawing ──
+  function drawChart() {
+    const canvas = document.getElementById('chartNuage');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    const pad = { l: 60, r: 30, t: 30, b: 50 };
+    const xMin = 700, xMax = 820, yMin = 5, yMax = 9;
+    const sx = x => pad.l + (x - xMin) / (xMax - xMin) * (W - pad.l - pad.r);
+    const sy = y => H - pad.b - (y - yMin) / (yMax - yMin) * (H - pad.t - pad.b);
+
+    ctx.clearRect(0, 0, W, H);
+
+    // Grid
+    ctx.strokeStyle = '#E2E8F0';
+    ctx.lineWidth = 1;
+    for (let x = xMin; x <= xMax; x += 20) {
+      ctx.beginPath(); ctx.moveTo(sx(x), pad.t); ctx.lineTo(sx(x), H - pad.b); ctx.stroke();
+    }
+    for (let y = yMin; y <= yMax; y += 1) {
+      ctx.beginPath(); ctx.moveTo(pad.l, sy(y)); ctx.lineTo(W - pad.r, sy(y)); ctx.stroke();
+    }
+
+    // Axes
+    ctx.strokeStyle = '#1A3A5C';
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(pad.l, pad.t); ctx.lineTo(pad.l, H - pad.b); ctx.lineTo(W - pad.r, H - pad.b); ctx.stroke();
+
+    // Labels
+    ctx.fillStyle = '#1A3A5C';
+    ctx.font = '11px Inter';
+    ctx.textAlign = 'center';
+    for (let x = xMin; x <= xMax; x += 20) ctx.fillText(x, sx(x), H - pad.b + 16);
+    ctx.textAlign = 'right';
+    for (let y = yMin; y <= yMax; y += 1) ctx.fillText(y, pad.l - 8, sy(y) + 4);
+
+    ctx.font = 'bold 12px Inter';
+    ctx.textAlign = 'center';
+    ctx.fillText('Capacité solaire (MW)', W/2, H - 12);
+    ctx.save();
+    ctx.translate(18, H/2);
+    ctx.rotate(-Math.PI/2);
+    ctx.fillText('Coût (millions DT)', 0, 0);
+    ctx.restore();
+
+    // Points
+    const data = [[720,6],[730,6.5],[740,7],[760,7.5],[800,8]];
+    ctx.fillStyle = '#E8612C';
+    data.forEach(([x,y]) => {
+      ctx.beginPath();
+      ctx.arc(sx(x), sy(y), 6, 0, 2*Math.PI);
+      ctx.fill();
+    });
+
+    // Mean point G
+    ctx.strokeStyle = '#1A3A5C';
+    ctx.lineWidth = 3;
+    const gx = sx(750), gy = sy(7);
+    ctx.beginPath();
+    ctx.moveTo(gx-8, gy-8); ctx.lineTo(gx+8, gy+8);
+    ctx.moveTo(gx+8, gy-8); ctx.lineTo(gx-8, gy+8);
+    ctx.stroke();
+    ctx.fillStyle = '#1A3A5C';
+    ctx.font = 'bold 13px Inter';
+    ctx.textAlign = 'left';
+    ctx.fillText('G(750; 7)', gx + 12, gy - 8);
+
+    // Regression line: Y = 0.024X - 11
+    ctx.strokeStyle = '#2E7D5E';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([6,4]);
+    ctx.beginPath();
+    ctx.moveTo(sx(700), sy(0.024*700 - 11));
+    ctx.lineTo(sx(820), sy(0.024*820 - 11));
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#2E7D5E';
+    ctx.font = '11px Inter';
+    ctx.fillText('Δ : Y = 0,024X − 11', sx(770), sy(0.024*770-11) - 8);
+  }
+
+  window.addEventListener('load', () => {
+    drawChart();
+    if (window.MathJax) MathJax.typesetPromise();
+  });
+
+  // Smooth scroll
+  document.querySelectorAll('.toc-list a').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      document.querySelector(a.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+
+</body>
+</html>
