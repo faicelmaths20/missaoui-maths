@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Espace Professeur – Missaoui Maths</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f0f4ff;--text:#1e293b;--muted:#64748b;--teal:#0f766e;--teal2:#14b8a6;}
+*{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+.blobs{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.12;}
+.b1{width:400px;height:400px;background:radial-gradient(circle,#14b8a6,#0f766e);top:-80px;left:-60px;}
+.b2{width:300px;height:300px;background:radial-gradient(circle,#10b981,#047857);bottom:60px;right:-40px;}
+nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.95);backdrop-filter:blur(20px);border-bottom:1px solid #e2e8f0;padding:.75rem 1.4rem;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 16px rgba(15,118,110,.07);}
+.nav-logo{display:flex;align-items:center;gap:.55rem;text-decoration:none;}
+.nav-icon{width:36px;height:36px;background:linear-gradient(135deg,#0f766e,#14b8a6);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;color:#fff;}
+.nav-brand{font-family:'Nunito',sans-serif;font-weight:900;font-size:.9rem;background:linear-gradient(135deg,#0f766e,#14b8a6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.nav-back{font-size:.76rem;font-weight:700;color:var(--muted);text-decoration:none;padding:.35rem .8rem;border-radius:8px;background:#f1f5f9;}
+.nav-back:hover{background:#e2e8f0;}
+/* LOGIN */
+.lwrap{position:relative;z-index:1;min-height:calc(100vh - 64px);display:flex;align-items:center;justify-content:center;padding:2rem;}
+.lcard{background:#fff;border-radius:24px;padding:2.5rem 2rem;max-width:380px;width:100%;box-shadow:0 20px 60px rgba(15,118,110,.12);border:1px solid rgba(15,118,110,.08);}
+.licon{width:68px;height:68px;background:linear-gradient(135deg,#0f766e,#14b8a6);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 1.2rem;box-shadow:0 8px 24px rgba(15,118,110,.3);}
+.ltitle{font-family:'Nunito',sans-serif;font-size:1.6rem;font-weight:900;text-align:center;margin-bottom:.3rem;}
+.lsub{text-align:center;color:var(--muted);font-size:.83rem;margin-bottom:1.6rem;}
+.fl{display:block;font-size:.8rem;font-weight:700;margin-bottom:.4rem;}
+.fi{width:100%;padding:.75rem 1rem;border:1.5px solid #e2e8f0;border-radius:12px;font-family:'Outfit',sans-serif;font-size:.92rem;background:#fafafa;outline:none;transition:all .2s;margin-bottom:1rem;}
+.fi:focus{border-color:#0f766e;background:#fff;box-shadow:0 0 0 3px rgba(15,118,110,.1);}
+.btn-login{width:100%;padding:.85rem;background:linear-gradient(135deg,#0f766e,#14b8a6);color:#fff;border:none;border-radius:14px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:900;cursor:pointer;transition:all .2s;box-shadow:0 6px 20px rgba(15,118,110,.35);}
+.btn-login:hover{transform:translateY(-2px);}
+.btn-login:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+.err{background:#fef2f2;border:1px solid #fecaca;color:#dc2626;padding:.6rem .9rem;border-radius:10px;font-size:.82rem;margin-top:.7rem;display:none;}
+.err.on{display:block;}
+/* DASHBOARD */
+.dash{display:none;position:relative;z-index:1;max-width:1050px;margin:0 auto;padding:1.5rem 1.2rem 4rem;}
+.dh{background:linear-gradient(135deg,#0f766e,#14b8a6);border-radius:22px;padding:1.5rem 1.8rem;color:#fff;margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;box-shadow:0 12px 40px rgba(15,118,110,.3);}
+.dh-t{font-family:'Nunito',sans-serif;font-size:1.3rem;font-weight:900;}
+.dh-s{font-size:.82rem;opacity:.8;margin-top:.15rem;}
+.btn-ref{font-size:.76rem;font-weight:700;color:#0f766e;background:#fff;border:none;border-radius:9px;padding:.42rem .9rem;cursor:pointer;margin-right:.4rem;}
+.btn-out{font-size:.76rem;font-weight:700;color:#fff;background:rgba(255,255,255,.2);border:none;border-radius:9px;padding:.42rem .9rem;cursor:pointer;}
+/* GLOBAL STATS */
+.gsg{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.8rem;margin-bottom:1.5rem;}
+.gsc{background:#fff;border-radius:16px;padding:1.1rem;text-align:center;box-shadow:0 4px 18px rgba(0,0,0,.06);}
+.gsc-n{font-family:'Nunito',sans-serif;font-size:2rem;font-weight:900;background:linear-gradient(135deg,#0f766e,#14b8a6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.gsc-l{font-size:.74rem;color:var(--muted);margin-top:.2rem;}
+/* FILTERS */
+.filters{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem;}
+.fb{font-size:.74rem;font-weight:700;padding:.32rem .8rem;border-radius:20px;border:1.5px solid #e2e8f0;background:#fff;color:var(--muted);cursor:pointer;transition:all .2s;}
+.fb.act{background:linear-gradient(135deg,#0f766e,#14b8a6);color:#fff;border-color:transparent;}
+/* TABLE */
+.tw{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.07);margin-bottom:1.5rem;overflow-x:auto;}
+table{width:100%;border-collapse:collapse;min-width:500px;}
+thead th{background:#f8fafc;padding:.8rem 1rem;text-align:left;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);border-bottom:1px solid #f1f5f9;}
+tbody td{padding:.85rem 1rem;border-bottom:1px solid #f8fafc;font-size:.88rem;vertical-align:middle;}
+tbody tr:last-child td{border:none;}
+tbody tr:hover td{background:#f8fafc;}
+.nbadge{font-size:.7rem;font-weight:700;padding:.18rem .55rem;border-radius:20px;}
+.bar-w{width:80px;height:6px;background:#f1f5f9;border-radius:6px;overflow:hidden;display:inline-block;vertical-align:middle;margin-right:.4rem;}
+.bar-f{height:100%;border-radius:6px;}
+/* DIFF CARDS */
+.dg{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.8rem;margin-bottom:1.5rem;}
+.dc{background:#fff;border-radius:14px;padding:1rem;box-shadow:0 4px 16px rgba(0,0,0,.06);}
+.dc-bad{border-left:4px solid #ef4444;}
+.dc-med{border-left:4px solid #f59e0b;}
+.dc-ok{border-left:4px solid #10b981;}
+.dc-title{font-family:'Nunito',sans-serif;font-size:.86rem;font-weight:800;margin-bottom:.3rem;}
+.dc-score{font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:700;}
+.dc-sub{font-size:.72rem;color:var(--muted);margin-top:.15rem;}
+.sec-t{font-family:'Nunito',sans-serif;font-size:1.05rem;font-weight:900;margin-bottom:1rem;}
+.loading{text-align:center;padding:2.5rem;color:var(--muted);font-size:.9rem;}
+.empty{text-align:center;padding:2rem;color:var(--muted);font-size:.87rem;}
+.spin{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;vertical-align:middle;margin-right:.4rem;}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media(max-width:600px){thead th:nth-child(4),tbody td:nth-child(4){display:none;}.nav-brand{display:none;}}
+</style>
+</head>
+<body>
+<div class="blobs"><div class="blob b1"></div><div class="blob b2"></div></div>
+<nav>
+  <a class="nav-logo" href="index.html"><div class="nav-icon">∑</div><span class="nav-brand">Missaoui Maths</span></a>
+  <a class="nav-back" href="index.html">← Accueil</a>
+</nav>
+
+<!-- LOGIN -->
+<div class="lwrap" id="lwrap">
+  <div class="lcard">
+    <div class="licon">👨‍🏫</div>
+    <div class="ltitle">Espace Professeur</div>
+    <div class="lsub">Accès réservé à M. Missaoui</div>
+    <label class="fl">🔑 Mot de passe</label>
+    <input type="password" class="fi" id="in-mdp" placeholder="••••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+    <div class="err" id="err">❌ Mot de passe incorrect.</div>
+    <button class="btn-login" id="btn-log" onclick="doLogin()">Accéder au tableau de bord →</button>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dash" id="dash">
+  <div class="dh">
+    <div><div class="dh-t">👨‍🏫 Tableau de bord – M. Missaoui</div><div class="dh-s">Vue globale de tous les élèves</div></div>
+    <div><button class="btn-ref" onclick="loadAll()">🔄 Actualiser</button><button class="btn-out" onclick="doLogout()">Déconnexion</button></div>
+  </div>
+  <div class="gsg">
+    <div class="gsc"><div class="gsc-n" id="gs-el">—</div><div class="gsc-l">Élèves inscrits</div></div>
+    <div class="gsc"><div class="gsc-n" id="gs-qz">—</div><div class="gsc-l">Quiz complétés</div></div>
+    <div class="gsc"><div class="gsc-n" id="gs-av">—</div><div class="gsc-l">Score moyen</div></div>
+    <div class="gsc"><div class="gsc-n" id="gs-ac">—</div><div class="gsc-l">Actifs (7 jours)</div></div>
+  </div>
+
+  <div class="sec-t">⚠️ Chapitres les plus difficiles</div>
+  <div class="dg" id="dg"><div class="loading">Chargement…</div></div>
+
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem;margin-bottom:.8rem;">
+    <div class="sec-t" style="margin:0;">👥 Liste des élèves</div>
+    <div class="filters" id="filters">
+      <button class="fb act" onclick="filt('tous',this)">Tous</button>
+      <button class="fb" onclick="filt('6eme',this)">6ème</button>
+      <button class="fb" onclick="filt('5eme',this)">5ème</button>
+      <button class="fb" onclick="filt('4eme',this)">4ème</button>
+      <button class="fb" onclick="filt('3eme',this)">3ème</button>
+      <button class="fb" onclick="filt('2nde',this)">2nde</button>
+      <button class="fb" onclick="filt('1ere',this)">1ère</button>
+      <button class="fb" onclick="filt('terminale',this)">Term.</button>
+    </div>
+  </div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Élève</th><th>Niveau</th><th>Quiz</th><th>Score moy.</th><th>Dernière activité</th></tr></thead>
+      <tbody id="tbody"><tr><td colspan="5" class="loading">Chargement…</td></tr></tbody>
+    </table>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-firestore.js";
+const app = initializeApp({
+  apiKey:"AIzaSyBx8_xMkIgAc2CDNSGjoPn7zxCklMvZKcs",authDomain:"missaouimaths.firebaseapp.com",
+  projectId:"missaouimaths",storageBucket:"missaouimaths.firebasestorage.app",
+  messagingSenderId:"781971966091",appId:"1:781971966091:web:d5522f8d70b008a844ac8e"
+});
+const db = getFirestore(app);
+const MDP = "MATHPROF27";
+const NV = {"6eme":"6ème","5eme":"5ème","4eme":"4ème","3eme":"3ème","2nde":"2nde","1ere":"1ère","terminale":"Terminale"};
+const COL = {"6eme":"#1d4ed8","5eme":"#0f766e","4eme":"#6d28d9","3eme":"#b45309","2nde":"#be123c","1ere":"#047857","terminale":"#7c3aed"};
+const CHAPS = {"3eme-ch7":"Statistiques 3ème","3eme-ch5":"Trigonométrie 3ème","3eme-ch1":"Calcul algébrique","1ere-ch2":"Dérivation","terminale-ch2":"Intégration","terminale-ch4":"Complexes","2nde-ch5":"Équations 2nde","4eme-ch9":"Trigonométrie 4ème","6e-ch4":"Proportionnalité","5e-ch4":"Pythagore"};
+let allEl=[],curFilt='tous';
+
+window.doLogin = function(){
+  const mdp=document.getElementById('in-mdp').value;
+  const err=document.getElementById('err');const btn=document.getElementById('btn-log');
+  err.classList.remove('on');
+  if(mdp!==MDP){err.classList.add('on');return;}
+  btn.disabled=true;btn.innerHTML='<span class="spin"></span>Chargement...';
+  sessionStorage.setItem('mm_prof','1');
+  document.getElementById('lwrap').style.display='none';
+  document.getElementById('dash').style.display='block';
+  loadAll();
+};
+
+window.doLogout = function(){
+  sessionStorage.removeItem('mm_prof');
+  document.getElementById('dash').style.display='none';
+  document.getElementById('lwrap').style.display='flex';
+  document.getElementById('in-mdp').value='';
+  const btn=document.getElementById('btn-log');btn.disabled=false;btn.innerHTML='Accéder au tableau de bord →';
+};
+
+window.filt = function(niv,el){
+  document.querySelectorAll('.fb').forEach(b=>b.classList.remove('act'));
+  el.classList.add('act');curFilt=niv;renderTable(allEl);
+};
+
+window.loadAll = async function(){
+  document.getElementById('tbody').innerHTML='<tr><td colspan="5" class="loading">🔄 Chargement...</td></tr>';
+  document.getElementById('dg').innerHTML='<div class="loading">Chargement…</div>';
+  try{
+    const snap=await getDocs(collection(db,"eleves"));
+    allEl=snap.docs.map(d=>d.data());
+    renderGlobal(allEl);renderTable(allEl);renderDiff(allEl);
+  }catch(e){console.error(e);document.getElementById('tbody').innerHTML='<tr><td colspan="5" class="empty">❌ Erreur de chargement.</td></tr>';}
+};
+
+function renderGlobal(els){
+  document.getElementById('gs-el').textContent=els.length;
+  const tot=els.reduce((s,e)=>s+(e.quizResults||[]).length,0);
+  document.getElementById('gs-qz').textContent=tot;
+  const scores=els.flatMap(e=>(e.quizResults||[]).map(r=>r.pct));
+  document.getElementById('gs-av').textContent=scores.length?Math.round(scores.reduce((a,b)=>a+b,0)/scores.length)+'%':'—';
+  const sept=new Date();sept.setDate(sept.getDate()-7);
+  document.getElementById('gs-ac').textContent=els.filter(e=>e.lastSeen&&new Date(e.lastSeen)>sept).length;
+}
+
+function renderTable(els){
+  const filtered=curFilt==='tous'?els:els.filter(e=>e.niveau===curFilt);
+  filtered.sort((a,b)=>(b.lastSeen||'').localeCompare(a.lastSeen||''));
+  const tb=document.getElementById('tbody');
+  if(!filtered.length){tb.innerHTML='<tr><td colspan="5" class="empty">Aucun élève pour ce niveau.</td></tr>';return;}
+  tb.innerHTML=filtered.map(e=>{
+    const results=e.quizResults||[];
+    const avg=results.length?Math.round(results.reduce((s,r)=>s+r.pct,0)/results.length):null;
+    const col=COL[e.niveau]||'#6366f1';
+    const avgCol=avg===null?'#94a3b8':avg>=80?'#10b981':avg>=50?'#f59e0b':'#ef4444';
+    const date=e.lastSeen?new Date(e.lastSeen).toLocaleDateString('fr-FR'):'—';
+    return `<tr>
+      <td><strong>${e.nom||'—'}</strong></td>
+      <td><span class="nbadge" style="background:${col}22;color:${col};">${NV[e.niveau]||e.niveau||'—'}</span></td>
+      <td><strong>${results.length}</strong></td>
+      <td>${avg!==null?`<span class="bar-w"><span class="bar-f" style="width:${avg}%;background:${avgCol};"></span></span><strong style="color:${avgCol}">${avg}%</strong>`:'<span style="color:#94a3b8">—</span>'}</td>
+      <td style="color:var(--muted);font-size:.82rem;">${date}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderDiff(els){
+  const cs={};
+  els.forEach(e=>(e.quizResults||[]).forEach(r=>{
+    if(!cs[r.chapitre])cs[r.chapitre]={scores:[],label:CHAPS[r.chapitre]||r.chapitre};
+    cs[r.chapitre].scores.push(r.pct);
+  }));
+  if(!Object.keys(cs).length){document.getElementById('dg').innerHTML='<div class="empty">Aucun quiz complété pour l'instant.</div>';return;}
+  const sorted=Object.entries(cs).map(([ch,{scores,label}])=>({ch,label,avg:Math.round(scores.reduce((a,b)=>a+b,0)/scores.length),nb:scores.length})).sort((a,b)=>a.avg-b.avg).slice(0,6);
+  document.getElementById('dg').innerHTML=sorted.map(({label,avg,nb})=>{
+    const cls=avg<50?'dc-bad':avg<70?'dc-med':'dc-ok';
+    const col=avg<50?'#ef4444':avg<70?'#f59e0b':'#10b981';
+    return `<div class="dc ${cls}"><div class="dc-title">${label}</div><div class="dc-score" style="color:${col}">${avg}%</div><div class="dc-sub">${nb} tentative(s)</div></div>`;
+  }).join('');
+}
+
+if(sessionStorage.getItem('mm_prof')==='1'){
+  document.getElementById('lwrap').style.display='none';
+  document.getElementById('dash').style.display='block';
+  loadAll();
+}
+</script>
+</body>
+</html>

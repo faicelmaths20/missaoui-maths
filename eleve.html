@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Espace Élève – Missaoui Maths</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f0f4ff;--text:#1e293b;--muted:#64748b;--in:#6366f1;--in2:#8b5cf6;}
+*{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+.blobs{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.12;animation:bf 9s ease-in-out infinite;}
+.b1{width:400px;height:400px;background:radial-gradient(circle,#8b5cf6,#6366f1);top:-80px;left:-60px;}
+.b2{width:300px;height:300px;background:radial-gradient(circle,#14b8a6,#0f766e);bottom:60px;right:-40px;animation-delay:4s;}
+@keyframes bf{0%,100%{transform:translateY(0)}50%{transform:translateY(-18px)}}
+nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.95);backdrop-filter:blur(20px);border-bottom:1px solid #e2e8f0;padding:.75rem 1.4rem;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 16px rgba(99,102,241,.07);}
+.nav-logo{display:flex;align-items:center;gap:.55rem;text-decoration:none;}
+.nav-icon{width:36px;height:36px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;color:#fff;}
+.nav-brand{font-family:'Nunito',sans-serif;font-weight:900;font-size:.9rem;background:linear-gradient(135deg,#6366f1,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.nav-back{font-size:.76rem;font-weight:700;color:var(--muted);text-decoration:none;padding:.35rem .8rem;border-radius:8px;background:#f1f5f9;transition:all .2s;}
+.nav-back:hover{background:#e2e8f0;}
+/* LOGIN */
+.lwrap{position:relative;z-index:1;min-height:calc(100vh - 64px);display:flex;align-items:center;justify-content:center;padding:2rem 1.2rem;}
+.lcard{background:#fff;border-radius:24px;padding:2.5rem 2rem;max-width:420px;width:100%;box-shadow:0 20px 60px rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.08);}
+.licon{width:68px;height:68px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 1.2rem;box-shadow:0 8px 24px rgba(99,102,241,.3);}
+.ltitle{font-family:'Nunito',sans-serif;font-size:1.7rem;font-weight:900;text-align:center;margin-bottom:.3rem;}
+.lsub{text-align:center;color:var(--muted);font-size:.85rem;margin-bottom:1.8rem;}
+.fg{margin-bottom:1rem;}
+.fl{display:block;font-size:.8rem;font-weight:700;margin-bottom:.4rem;}
+.fi{width:100%;padding:.75rem 1rem;border:1.5px solid #e2e8f0;border-radius:12px;font-family:'Outfit',sans-serif;font-size:.92rem;background:#fafafa;outline:none;transition:all .2s;}
+.fi:focus{border-color:#6366f1;background:#fff;box-shadow:0 0 0 3px rgba(99,102,241,.1);}
+.fsel{width:100%;padding:.75rem 1rem;border:1.5px solid #e2e8f0;border-radius:12px;font-family:'Outfit',sans-serif;font-size:.92rem;background:#fafafa;outline:none;transition:all .2s;cursor:pointer;}
+.fsel:focus{border-color:#6366f1;background:#fff;box-shadow:0 0 0 3px rgba(99,102,241,.1);}
+.btn-login{width:100%;padding:.85rem;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border:none;border-radius:14px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:900;cursor:pointer;transition:all .2s;margin-top:.5rem;box-shadow:0 6px 20px rgba(99,102,241,.35);}
+.btn-login:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(99,102,241,.45);}
+.btn-login:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+.err{background:#fef2f2;border:1px solid #fecaca;color:#dc2626;padding:.65rem .9rem;border-radius:10px;font-size:.84rem;margin-top:.8rem;display:none;}
+.err.on{display:block;}
+.hint{text-align:center;font-size:.76rem;color:var(--muted);margin-top:1rem;padding-top:.8rem;border-top:1px solid #f1f5f9;}
+.hint strong{color:#6366f1;font-family:'JetBrains Mono',monospace;letter-spacing:.1em;}
+/* DASHBOARD */
+.dash{display:none;position:relative;z-index:1;max-width:900px;margin:0 auto;padding:1.5rem 1.2rem 4rem;}
+.dh{background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:22px;padding:1.5rem 1.8rem;color:#fff;margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;box-shadow:0 12px 40px rgba(99,102,241,.3);}
+.dh-left h2{font-family:'Nunito',sans-serif;font-size:1.3rem;font-weight:900;}
+.dh-left p{font-size:.82rem;opacity:.8;margin-top:.15rem;}
+.dstats{display:flex;gap:.8rem;flex-wrap:wrap;}
+.dstat{background:rgba(255,255,255,.15);border-radius:14px;padding:.65rem 1.1rem;text-align:center;backdrop-filter:blur(10px);}
+.dstat-n{font-family:'Nunito',sans-serif;font-size:1.5rem;font-weight:900;}
+.dstat-l{font-size:.68rem;opacity:.8;}
+.btn-out{font-size:.76rem;font-weight:700;color:#fff;background:rgba(255,255,255,.2);border:none;border-radius:9px;padding:.42rem .9rem;cursor:pointer;transition:all .2s;}
+.btn-out:hover{background:rgba(255,255,255,.3);}
+.sec-t{font-family:'Nunito',sans-serif;font-size:1.05rem;font-weight:900;margin-bottom:1rem;}
+.pg{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.8rem;margin-bottom:1.5rem;}
+.pc{background:#fff;border-radius:16px;padding:1.1rem;box-shadow:0 4px 18px rgba(0,0,0,.06);border:1px solid #f1f5f9;}
+.pc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem;}
+.pc-title{font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;}
+.pc-sc{font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:700;color:#6366f1;background:#eff6ff;padding:.2rem .5rem;border-radius:6px;}
+.pbar{height:8px;background:#f1f5f9;border-radius:10px;overflow:hidden;}
+.pbar-f{height:100%;border-radius:10px;transition:width .8s ease;}
+.pc-bot{display:flex;justify-content:space-between;margin-top:.5rem;font-size:.72rem;color:var(--muted);}
+.rl{display:flex;flex-direction:column;gap:.6rem;}
+.ri{background:#fff;border-radius:14px;padding:.9rem 1.1rem;box-shadow:0 4px 14px rgba(0,0,0,.05);display:flex;align-items:center;justify-content:space-between;gap:1rem;border:1px solid #f1f5f9;}
+.ri-left{display:flex;align-items:center;gap:.8rem;}
+.ri-ico{width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:1rem;color:#fff;flex-shrink:0;}
+.ri-name{font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;}
+.ri-date{font-size:.72rem;color:var(--muted);}
+.ri-sc{font-family:'JetBrains Mono',monospace;font-size:.9rem;font-weight:700;}
+.sg{color:#10b981;}.sm{color:#f59e0b;}.sb{color:#ef4444;}
+.empty{text-align:center;padding:2.5rem;color:var(--muted);}
+.empty-i{font-size:2.5rem;margin-bottom:.5rem;}
+.empty-t{font-size:.88rem;line-height:1.6;}
+.btn-cours{display:inline-flex;align-items:center;gap:.4rem;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;font-size:.82rem;font-weight:800;padding:.5rem 1.2rem;border-radius:20px;text-decoration:none;transition:all .2s;box-shadow:0 4px 14px rgba(99,102,241,.3);}
+.btn-cours:hover{transform:translateY(-2px);}
+.spin{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;vertical-align:middle;margin-right:.4rem;}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media(max-width:540px){.dh{flex-direction:column;}.pg{grid-template-columns:1fr;}.nav-brand{display:none;}}
+</style>
+</head>
+<body>
+<div class="blobs"><div class="blob b1"></div><div class="blob b2"></div></div>
+<nav>
+  <a class="nav-logo" href="index.html"><div class="nav-icon">∑</div><span class="nav-brand">Missaoui Maths</span></a>
+  <a class="nav-back" href="index.html">← Accueil</a>
+</nav>
+
+<!-- LOGIN -->
+<div class="lwrap" id="lwrap">
+  <div class="lcard">
+    <div class="licon">🎓</div>
+    <div class="ltitle">Espace Élève</div>
+    <div class="lsub">Connecte-toi pour suivre ta progression</div>
+    <div class="fg"><label class="fl">👤 Prénom et nom</label><input type="text" class="fi" id="in-nom" placeholder="Ex : Ahmed Ben Ali"></div>
+    <div class="fg">
+      <label class="fl">🎓 Niveau</label>
+      <select class="fsel" id="in-niv">
+        <option value="">-- Choisir --</option>
+        <option value="6eme">6ème</option><option value="5eme">5ème</option>
+        <option value="4eme">4ème</option><option value="3eme">3ème</option>
+        <option value="2nde">2nde</option><option value="1ere">1ère</option>
+        <option value="terminale">Terminale</option>
+      </select>
+    </div>
+    <div class="fg"><label class="fl">🔑 Code classe</label><input type="text" class="fi" id="in-code" placeholder="MATH27" style="text-transform:uppercase;letter-spacing:.12em;font-family:'JetBrains Mono',monospace;"></div>
+    <div class="err" id="err-msg">❌ Vérifie tes informations et réessaie.</div>
+    <button class="btn-login" id="btn-log" onclick="doLogin()">Se connecter →</button>
+    <div class="hint">Code de la classe : <strong>MATH27</strong></div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dash" id="dash">
+  <div class="dh">
+    <div class="dh-left">
+      <h2>👋 Bonjour, <span id="d-nom">—</span> !</h2>
+      <p>Niveau : <span id="d-niv">—</span> · Missaoui Maths</p>
+    </div>
+    <div class="dstats">
+      <div class="dstat"><div class="dstat-n" id="s-quiz">0</div><div class="dstat-l">Quiz faits</div></div>
+      <div class="dstat"><div class="dstat-n" id="s-score">—</div><div class="dstat-l">Score moyen</div></div>
+      <div class="dstat"><div class="dstat-n" id="s-chap">0</div><div class="dstat-l">Chapitres</div></div>
+    </div>
+    <button class="btn-out" onclick="doLogout()">Déconnexion</button>
+  </div>
+
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem;margin-bottom:1rem;">
+    <div class="sec-t">📚 Ma progression</div>
+    <a id="b-cours" href="francais.html" class="btn-cours">📖 Mes cours →</a>
+  </div>
+  <div class="pg" id="pg"><div class="empty" style="grid-column:1/-1"><div class="empty-i">📝</div><div class="empty-t">Aucun quiz encore.<br>Va dans tes cours et commence !</div></div></div>
+
+  <div class="sec-t" style="margin-top:.5rem;">🕐 Activité récente</div>
+  <div class="rl" id="rl"><div class="empty"><div class="empty-i">🚀</div><div class="empty-t">Lance-toi dans un premier quiz !</div></div></div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
+import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-firestore.js";
+const app = initializeApp({
+  apiKey:"AIzaSyBx8_xMkIgAc2CDNSGjoPn7zxCklMvZKcs",authDomain:"missaouimaths.firebaseapp.com",
+  projectId:"missaouimaths",storageBucket:"missaouimaths.firebasestorage.app",
+  messagingSenderId:"781971966091",appId:"1:781971966091:web:d5522f8d70b008a844ac8e"
+});
+const db = getFirestore(app);
+const CODE = "MATH27";
+const NV = {"6eme":"6ème","5eme":"5ème","4eme":"4ème","3eme":"3ème","2nde":"2nde","1ere":"1ère","terminale":"Terminale"};
+const CL = {"6eme":"6eme.html","5eme":"5eme.html","4eme":"4eme.html","3eme":"3eme.html","2nde":"2nde.html","1ere":"1ere.html","terminale":"terminale.html"};
+const CHAPS = {"6e-ch1":"Nombres entiers","6e-ch2":"Fractions","6e-ch3":"Calcul","6e-ch4":"Proportionnalité","6e-ch5":"Géométrie","6e-ch6":"Polygones","6e-ch7":"Grandeurs","6e-ch8":"Statistiques","5e-ch1":"Fractions","5e-ch2":"Relatifs","5e-ch3":"Proportionnalité","5e-ch4":"Pythagore","5e-ch5":"Triangles","5e-ch6":"Aires & Volumes","5e-ch7":"Symétrie","5e-ch8":"Stats & Proba","4eme-ch1":"Calcul littéral","4eme-ch2":"Équations","4eme-ch3":"Relatifs ×÷","4eme-ch4":"Fractions","4eme-ch5":"Thalès","4eme-ch6":"Espace","4eme-ch7":"Probabilités","4eme-ch8":"Statistiques","4eme-ch9":"Trigonométrie","3eme-ch1":"Calcul algébrique","3eme-ch2":"Systèmes","3eme-ch3":"Fonctions affines","3eme-ch4":"Thalès","3eme-ch5":"Trigonométrie","3eme-ch6":"Espace","3eme-ch7":"Statistiques","3eme-ch8":"Probabilités","3eme-ch9":"Puissances","3eme-ch10":"Racines carrées","2nde-ch1":"Fonctions","2nde-ch2":"Fonctions réf.","2nde-ch3":"Fonctions affines","2nde-ch4":"Ensembles","2nde-ch5":"Équations","2nde-ch6":"Vecteurs","2nde-ch7":"Statistiques","2nde-ch8":"Probabilités","2nde-ch9":"Trigonométrie","1ere-ch1":"Second degré","1ere-ch2":"Dérivation","1ere-ch3":"Étude fonctions","1ere-ch4":"Suites","1ere-ch5":"Exponentielle","1ere-ch6":"Produit scalaire","1ere-ch7":"Trigonométrie","1ere-ch8":"Variables aléatoires","1ere-ch9":"Loi binomiale","1ere-ch10":"Arithmétique","terminale-ch1":"Logarithme","terminale-ch2":"Intégration","terminale-ch3":"Continuité","terminale-ch4":"Complexes","terminale-ch5":"Géom. espace","terminale-ch6":"Géom. analytique","terminale-ch7":"Lois continues","terminale-ch8":"Inférence","terminale-ch9":"Suites & limites","terminale-ch10":"Dénombrement"};
+const ICONS = {"6e":"📐","5e":"🔺","4eme":"🧮","3eme":"🎯","2nde":"📊","1ere":"∫","terminale":"🏆"};
+function ico(ch){for(const[k,v] of Object.entries(ICONS)) if(ch.startsWith(k)) return v; return "📚";}
+function mkId(nom,niv){return nom.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'').substring(0,20)+'-'+niv;}
+
+window.doLogin = async function(){
+  const nom=document.getElementById('in-nom').value.trim();
+  const niv=document.getElementById('in-niv').value;
+  const code=document.getElementById('in-code').value.trim().toUpperCase();
+  const btn=document.getElementById('btn-log');
+  const err=document.getElementById('err-msg');
+  err.classList.remove('on');
+  if(!nom||!niv||!code){err.textContent="❌ Remplis tous les champs.";err.classList.add('on');return;}
+  if(code!==CODE){err.textContent="❌ Code incorrect. Demande le code à M. Missaoui.";err.classList.add('on');return;}
+  btn.disabled=true;btn.innerHTML='<span class="spin"></span>Connexion...';
+  try{
+    const id=mkId(nom,niv);const ref=doc(db,"eleves",id);const snap=await getDoc(ref);
+    if(!snap.exists()) await setDoc(ref,{nom,niveau:niv,eleveId:id,dateInscription:new Date().toISOString(),quizResults:[],lastSeen:new Date().toISOString()});
+    else await updateDoc(ref,{lastSeen:new Date().toISOString()});
+    localStorage.setItem('mm_el',JSON.stringify({nom,niveau:niv,eleveId:id}));
+    showDash({nom,niveau:niv,eleveId:id});
+  }catch(e){console.error(e);err.textContent="❌ Erreur réseau. Réessaie.";err.classList.add('on');btn.disabled=false;btn.innerHTML='Se connecter →';}
+};
+
+window.doLogout = function(){
+  localStorage.removeItem('mm_el');
+  document.getElementById('dash').style.display='none';
+  document.getElementById('lwrap').style.display='flex';
+  document.getElementById('in-nom').value='';document.getElementById('in-niv').value='';document.getElementById('in-code').value='';
+  const btn=document.getElementById('btn-log');btn.disabled=false;btn.innerHTML='Se connecter →';
+};
+
+async function showDash(el){
+  document.getElementById('lwrap').style.display='none';
+  document.getElementById('dash').style.display='block';
+  document.getElementById('d-nom').textContent=el.nom;
+  document.getElementById('d-niv').textContent=NV[el.niveau]||el.niveau;
+  document.getElementById('b-cours').href=CL[el.niveau]||'francais.html';
+  try{const snap=await getDoc(doc(db,"eleves",el.eleveId));if(snap.exists()) renderDash(snap.data());}catch(e){console.error(e);}
+}
+
+function renderDash(data){
+  const results=data.quizResults||[];
+  document.getElementById('s-quiz').textContent=results.length;
+  document.getElementById('s-chap').textContent=new Set(results.map(r=>r.chapitre)).size;
+  if(results.length){const avg=Math.round(results.reduce((s,r)=>s+r.pct,0)/results.length);document.getElementById('s-score').textContent=avg+'%';}
+  const pg=document.getElementById('pg');
+  if(!results.length){pg.innerHTML='<div class="empty" style="grid-column:1/-1"><div class="empty-i">📝</div><div class="empty-t">Aucun quiz encore.<br>Va dans tes cours et commence !</div></div>';return;}
+  const byC={};results.forEach(r=>{if(!byC[r.chapitre])byC[r.chapitre]=[];byC[r.chapitre].push(r.pct);});
+  pg.innerHTML=Object.entries(byC).map(([ch,sc])=>{
+    const best=Math.max(...sc);const avg=Math.round(sc.reduce((a,b)=>a+b,0)/sc.length);
+    const label=CHAPS[ch]||ch;const icon=ico(ch);
+    const col=best>=80?'#10b981':best>=50?'#f59e0b':'#ef4444';
+    return `<div class="pc"><div class="pc-top"><div class="pc-title">${icon} ${label}</div><div class="pc-sc">${best}%</div></div><div class="pbar"><div class="pbar-f" style="width:${best}%;background:${col};"></div></div><div class="pc-bot"><span>${sc.length} tentative(s)</span><span>Moy: ${avg}%</span></div></div>`;
+  }).join('');
+  const rl=document.getElementById('rl');
+  rl.innerHTML=[...results].reverse().slice(0,8).map(r=>{
+    const label=CHAPS[r.chapitre]||r.chapitre;const icon=ico(r.chapitre);
+    const cls=r.pct>=80?'sg':r.pct>=50?'sm':'sb';
+    const date=r.date?new Date(r.date).toLocaleDateString('fr-FR'):'—';
+    return `<div class="ri"><div class="ri-left"><div class="ri-ico">${icon}</div><div><div class="ri-name">${label}</div><div class="ri-date">${date}</div></div></div><div class="ri-sc ${cls}">${r.score}/${r.total} <span style="font-size:.72rem;opacity:.7;">(${r.pct}%)</span></div></div>`;
+  }).join('');
+}
+
+window.saveQuizResult = async function(chapitre, score, total){
+  const saved=localStorage.getItem('mm_el');if(!saved) return;
+  try{const el=JSON.parse(saved);const pct=Math.round((score/total)*100);
+    await updateDoc(doc(db,"eleves",el.eleveId),{quizResults:arrayUnion({chapitre,score,total,pct,date:new Date().toISOString()}),lastSeen:new Date().toISOString()});
+  }catch(e){console.error("Erreur sauvegarde:",e);}
+};
+
+const saved=localStorage.getItem('mm_el');
+if(saved){try{showDash(JSON.parse(saved));}catch(e){localStorage.removeItem('mm_el');}}
+</script>
+</body>
+</html>
