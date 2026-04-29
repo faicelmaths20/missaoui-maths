@@ -1,4 +1,0 @@
-Site : https://missaoui-maths.netlify.app/
-Code élèves : MATH27
-Mot de passe prof : MATHPROF27
-https://faicelmaths20.github.io/missaoui-maths/fichiers.html
