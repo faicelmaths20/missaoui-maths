@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cours — Missaoui Maths</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1A3A5C">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #1A3A5C;
+    --tunisia: #C7385F;
+    --france: #1E40AF;
+    --accent: #E8612C;
+    --accent-light: #F6AD55;
+    --muted: #5B7B9A;
+    --light: #EEF3F8;
+    --success: #2E7D5E;
+    --error: #C53030;
+    --bg: #FAFAF7;
+    --text: #1A202C;
+    --border: #E2E8F0;
+    --shadow: 0 4px 14px rgba(26, 58, 92, 0.12);
+    --shadow-lg: 0 20px 50px rgba(26, 58, 92, 0.18);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  .topbar {
+    background: white;
+    padding: 1rem 1.5rem;
+    box-shadow: var(--shadow);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky; top: 0; z-index: 50;
+    border-bottom: 1px solid var(--border);
+  }
+  .topbar-brand {
+    display: flex; align-items: center; gap: 0.8rem;
+    text-decoration: none; color: var(--text);
+  }
+  .topbar-avatar {
+    width: 40px; height: 40px;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 700;
+  }
+  .topbar-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem; color: var(--primary);
+    font-weight: 700; line-height: 1;
+  }
+  .topbar-role { font-size: 0.75rem; color: var(--muted); }
+  .nav-link {
+    padding: 0.5rem 0.9rem;
+    text-decoration: none; color: var(--muted);
+    font-size: 0.9rem; font-weight: 500;
+    border-radius: 8px;
+  }
+  .nav-link:hover { background: var(--light); color: var(--primary); }
+
+  .hero {
+    background: linear-gradient(135deg, var(--primary) 0%, #2C5282 100%);
+    color: white;
+    padding: 3rem 2rem 4.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero.tunisia { background: linear-gradient(135deg, var(--tunisia) 0%, #8B2745 100%); }
+  .hero.france { background: linear-gradient(135deg, var(--france) 0%, #1E3A8A 100%); }
+  .hero::before, .hero::after {
+    content: ''; position: absolute;
+    border-radius: 50%; filter: blur(80px); opacity: 0.3;
+  }
+  .hero::before { width: 350px; height: 350px; background: var(--accent); top: -50%; right: -10%; }
+  .hero::after { width: 400px; height: 400px; background: var(--accent-light); bottom: -50%; left: -10%; }
+  .hero-content { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4.5vw, 3rem);
+    margin-bottom: 0.5rem;
+  }
+  .hero p { font-size: 1rem; opacity: 0.9; }
+  .breadcrumb { margin-bottom: 1rem; color: rgba(255,255,255,0.85); font-size: 0.9rem; }
+  .breadcrumb a { color: white; text-decoration: none; opacity: 0.8; }
+  .breadcrumb a:hover { opacity: 1; }
+
+  .container {
+    max-width: 1100px;
+    margin: -2.5rem auto 4rem;
+    padding: 0 1.5rem;
+    position: relative; z-index: 2;
+  }
+
+  /* Code access modal */
+  .code-modal {
+    position: fixed; inset: 0;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+  }
+  .code-modal.show { display: flex; animation: fadeIn 0.3s; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .code-box {
+    background: white;
+    border-radius: 20px;
+    padding: 2.5rem 2rem;
+    max-width: 420px;
+    width: 100%;
+    box-shadow: var(--shadow-lg);
+    animation: slideUp 0.4s;
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .code-icon {
+    width: 70px; height: 70px;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+    border-radius: 18px;
+    margin: 0 auto 1.5rem;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem;
+  }
+  .code-box h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.7rem;
+    color: var(--primary);
+    text-align: center;
+    margin-bottom: 0.4rem;
+  }
+  .code-box p {
+    text-align: center;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+    font-size: 0.92rem;
+  }
+  .code-box input {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.2rem;
+    text-align: center;
+    letter-spacing: 0.2em;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+  }
+  .code-box input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(232, 97, 44, 0.15);
+  }
+  .code-box button {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-family: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  .code-error {
+    display: none;
+    margin-top: 1rem;
+    padding: 0.7rem 1rem;
+    background: #FED7D7;
+    color: var(--error);
+    border-radius: 8px;
+    border-left: 3px solid var(--error);
+    font-size: 0.85rem;
+    text-align: center;
+  }
+  .code-error.show { display: block; animation: shake 0.4s; }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+  }
+  .code-back {
+    display: block;
+    text-align: center;
+    margin-top: 1rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+    text-decoration: none;
+  }
+
+  .courses-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.2rem;
+  }
+  .course-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    transition: all 0.3s;
+    text-decoration: none;
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+  }
+  .course-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+  }
+  .course-cover {
+    height: 110px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.5rem; color: white;
+    position: relative; overflow: hidden;
+  }
+  .course-cover.html { background: linear-gradient(135deg, #C7385F 0%, #E8617F 100%); }
+  .course-cover.pdf { background: linear-gradient(135deg, #1A3A5C 0%, #4A5F8A 100%); }
+  .course-cover::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 70% 30%, rgba(255,255,255,0.15), transparent 60%);
+  }
+  .course-body { padding: 1.3rem; flex-grow: 1; display: flex; flex-direction: column; }
+  .course-tag {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.6rem;
+    background: var(--light);
+    color: var(--primary);
+    border-radius: 50px;
+    font-weight: 600;
+    text-transform: uppercase;
+    align-self: flex-start;
+    margin-bottom: 0.6rem;
+  }
+  .course-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    color: var(--primary);
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    line-height: 1.2;
+  }
+  .course-desc {
+    font-size: 0.85rem;
+    color: var(--muted);
+    flex-grow: 1;
+    margin-bottom: 0.8rem;
+  }
+  .course-cta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 0.8rem;
+    border-top: 1px solid var(--border);
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 0.88rem;
+  }
+
+  .empty-state {
+    background: white;
+    padding: 4rem 2rem;
+    border-radius: 16px;
+    text-align: center;
+    border: 2px dashed var(--border);
+  }
+  .empty-state .icon { font-size: 3.5rem; margin-bottom: 1rem; opacity: 0.5; }
+  .empty-state h3 {
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--primary);
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .empty-state p { color: var(--muted); }
+
+  footer {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--border);
+    margin-top: 3rem;
+  }
+
+  @media (max-width: 600px) {
+    .topbar { padding: 0.8rem 1rem; }
+    .topbar-name { font-size: 1.1rem; }
+    .container { padding: 0 1rem; margin-top: -1.5rem; }
+    .code-box { padding: 2rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html" class="topbar-brand">
+    <div class="topbar-avatar">FM</div>
+    <div>
+      <div class="topbar-name">Missaoui Maths</div>
+      <div class="topbar-role" id="topRole">Cours</div>
+    </div>
+  </a>
+  <a href="#" id="backLink" class="nav-link">← Retour</a>
+</div>
+
+<div class="hero" id="hero">
+  <div class="hero-content">
+    <div class="breadcrumb" id="breadcrumb"></div>
+    <h1 id="levelTitle">Niveau</h1>
+    <p>Cours et ressources disponibles</p>
+  </div>
+</div>
+
+<div class="container">
+  <div id="coursesContainer"></div>
+</div>
+
+<!-- Code modal -->
+<div class="code-modal" id="codeModal">
+  <div class="code-box">
+    <div class="code-icon">🔐</div>
+    <h3>Code d'accès requis</h3>
+    <p>Entrez le code donné par votre professeur pour accéder à ce cours</p>
+    <input type="text" id="codeInput" placeholder="MATH..." autocomplete="off" maxlength="20">
+    <button onclick="checkCode()">Accéder au cours</button>
+    <div class="code-error" id="codeError">❌ Code incorrect</div>
+    <a href="#" class="code-back" onclick="closeModal(event)">← Annuler</a>
+  </div>
+</div>
+
+<footer>
+  <p>© Faicel Missaoui — Missaoui Maths</p>
+</footer>
+
+<script>
+  // Get URL params
+  const params = new URLSearchParams(location.search);
+  const system = params.get('system') || 'tunisie';
+  const level = params.get('level') || '';
+
+  // System / Level mapping
+  const SYSTEMS = {
+    tunisie: {
+      label: 'Système Tunisien 🇹🇳',
+      back: 'systeme-tunisie.html',
+      class: 'tunisia',
+      levels: {
+        'bac-math': 'Bac Mathématiques',
+        'bac-sc': 'Bac Sciences Expérimentales',
+        'bac-tech': 'Bac Technique',
+        'bac-eco': 'Bac Économie-Gestion',
+        '3eme': '3ème année secondaire',
+        '2eme': '2ème année secondaire'
+      }
+    },
+    france: {
+      label: 'Système Français 🇫🇷',
+      back: 'systeme-france.html',
+      class: 'france',
+      levels: {
+        'terminale-spe': 'Terminale Spécialité',
+        'terminale-comp': 'Terminale Maths Complémentaires',
+        'terminale-expert': 'Terminale Maths Expertes',
+        'premiere-spe': 'Première Spécialité',
+        'seconde': 'Seconde',
+        'college': 'Collège'
+      }
+    }
+  };
+
+  const sysData = SYSTEMS[system];
+  const levelLabel = sysData.levels[level] || 'Niveau';
+
+  document.getElementById('topRole').textContent = sysData.label;
+  document.getElementById('hero').classList.add(sysData.class);
+  document.getElementById('levelTitle').textContent = levelLabel;
+  document.getElementById('backLink').href = sysData.back;
+  document.getElementById('breadcrumb').innerHTML = `
+    <a href="index.html">Accueil</a>
+    <span style="opacity:0.5">/</span>
+    <a href="${sysData.back}">${sysData.label}</a>
+    <span style="opacity:0.5">/</span>
+    ${levelLabel}
+  `;
+
+  // Track
+  try {
+    const s = JSON.parse(localStorage.getItem('mm_stats') || '{}');
+    const k = `${system}_${level}`;
+    s[k] = (s[k] || 0) + 1;
+    s._last = new Date().toISOString();
+    localStorage.setItem('mm_stats', JSON.stringify(s));
+  } catch(e) {}
+
+  // Load courses
+  const allCourses = JSON.parse(localStorage.getItem('mm_courses') || '[]');
+  const courses = allCourses.filter(c => c.system === system && c.level === level);
+
+  const container = document.getElementById('coursesContainer');
+  if (courses.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="icon">📚</div>
+        <h3>Aucun cours disponible pour ce niveau</h3>
+        <p>Les cours seront ajoutés prochainement par le professeur.</p>
+      </div>
+    `;
+  } else {
+    const grid = document.createElement('div');
+    grid.className = 'courses-list';
+    courses.forEach(c => {
+      const card = document.createElement('a');
+      card.href = '#';
+      card.className = 'course-card';
+      card.onclick = (e) => { e.preventDefault(); requestAccess(c); };
+
+      const isPdf = c.type === 'pdf' || (c.url && c.url.toLowerCase().endsWith('.pdf'));
+      card.innerHTML = `
+        <div class="course-cover ${isPdf ? 'pdf' : 'html'}">${isPdf ? '📄' : '🎯'}</div>
+        <div class="course-body">
+          <span class="course-tag">${isPdf ? 'PDF' : 'HTML interactif'}</span>
+          <h3 class="course-title">${c.title}</h3>
+          <p class="course-desc">${c.description || 'Cours complet avec exercices et corrigés.'}</p>
+          <div class="course-cta">
+            <span>Accéder au cours</span>
+            <span>→</span>
+          </div>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+    container.appendChild(grid);
+  }
+
+  // ── Code access ──
+  let pendingCourse = null;
+  function requestAccess(course) {
+    pendingCourse = course;
+    // Vérifier si déjà autorisé pour ce code
+    const accessed = JSON.parse(sessionStorage.getItem('mm_accessed') || '[]');
+    if (accessed.includes(course.code)) {
+      openCourse(course);
+      return;
+    }
+    document.getElementById('codeModal').classList.add('show');
+    setTimeout(() => document.getElementById('codeInput').focus(), 100);
+  }
+  function checkCode() {
+    const input = document.getElementById('codeInput').value.toUpperCase().trim();
+    const error = document.getElementById('codeError');
+    if (input === pendingCourse.code) {
+      const accessed = JSON.parse(sessionStorage.getItem('mm_accessed') || '[]');
+      if (!accessed.includes(input)) accessed.push(input);
+      sessionStorage.setItem('mm_accessed', JSON.stringify(accessed));
+      openCourse(pendingCourse);
+    } else {
+      error.classList.add('show');
+      document.getElementById('codeInput').value = '';
+      setTimeout(() => error.classList.remove('show'), 3000);
+    }
+  }
+  function openCourse(c) {
+    document.getElementById('codeModal').classList.remove('show');
+    location.href = c.url;
+  }
+  function closeModal(e) {
+    e.preventDefault();
+    document.getElementById('codeModal').classList.remove('show');
+  }
+  document.getElementById('codeInput').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') checkCode();
+  });
+  document.getElementById('codeInput').addEventListener('input', e => {
+    e.target.value = e.target.value.toUpperCase();
+  });
+</script>
+
+</body>
+</html>

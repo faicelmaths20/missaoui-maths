@@ -1,0 +1,39 @@
+{
+  "name": "Missaoui Maths",
+  "short_name": "Missaoui",
+  "description": "Cours interactifs de mathématiques par Faicel Missaoui",
+  "start_url": "index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#1A3A5C",
+  "theme_color": "#1A3A5C",
+  "lang": "fr",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='32' fill='%231A3A5C'/%3E%3Ctext x='96' y='130' font-family='Georgia,serif' font-size='110' font-weight='700' text-anchor='middle' fill='%23E8612C'%3EM%3C/text%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='86' fill='%231A3A5C'/%3E%3Ctext x='256' y='350' font-family='Georgia,serif' font-size='300' font-weight='700' text-anchor='middle' fill='%23E8612C'%3EM%3C/text%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Espace Élèves",
+      "url": "eleves.html",
+      "description": "Accéder aux cours"
+    },
+    {
+      "name": "Outils",
+      "url": "outils.html",
+      "description": "Calculatrices interactives"
+    }
+  ]
+}

@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Espace Admin — Missaoui Maths</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1A3A5C">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #1A3A5C;
+    --primary-light: #2C5282;
+    --accent: #E8612C;
+    --accent-light: #F6AD55;
+    --gold: #FFD89C;
+    --tunisia: #C7385F;
+    --france: #1E40AF;
+    --muted: #5B7B9A;
+    --light: #EEF3F8;
+    --success: #2E7D5E;
+    --error: #C53030;
+    --bg: #FAFAF7;
+    --text: #1A202C;
+    --border: #E2E8F0;
+    --shadow: 0 4px 14px rgba(26, 58, 92, 0.12);
+    --shadow-lg: 0 20px 50px rgba(26, 58, 92, 0.18);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* ── Login ── */
+  .login-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    background: linear-gradient(135deg, #1A3A5C 0%, #2C5282 50%, #1A3A5C 100%);
+  }
+  .login-box {
+    background: white;
+    border-radius: 20px;
+    padding: 3rem 2.5rem;
+    width: 100%;
+    max-width: 440px;
+    box-shadow: var(--shadow-lg);
+    animation: fadeIn 0.5s;
+  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .login-icon {
+    width: 70px; height: 70px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    border-radius: 18px;
+    margin: 0 auto 1.5rem;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem;
+  }
+  .login-box h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    color: var(--primary);
+    text-align: center;
+    margin-bottom: 0.3rem;
+  }
+  .login-box .login-sub {
+    text-align: center;
+    color: var(--muted);
+    margin-bottom: 2rem;
+  }
+  .login-form input {
+    width: 100%;
+    padding: 0.9rem 1rem;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+  .login-form input:focus { outline: none; border-color: var(--accent); }
+  .login-btn {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-family: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  .login-error {
+    display: none;
+    margin-top: 1rem;
+    padding: 0.7rem 1rem;
+    background: #FED7D7;
+    color: var(--error);
+    border-radius: 8px;
+    border-left: 3px solid var(--error);
+    font-size: 0.85rem;
+    text-align: center;
+  }
+  .login-error.show { display: block; }
+  .back-link {
+    display: block;
+    text-align: center;
+    margin-top: 1.5rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+    text-decoration: none;
+  }
+
+  /* ── Dashboard ── */
+  .dashboard { display: none; }
+  .dashboard.active { display: block; }
+
+  .topbar {
+    background: white;
+    padding: 1rem 1.5rem;
+    box-shadow: var(--shadow);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky; top: 0; z-index: 50;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .topbar-brand {
+    display: flex; align-items: center; gap: 0.8rem;
+    text-decoration: none; color: var(--text);
+  }
+  .topbar-avatar {
+    width: 40px; height: 40px;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 700;
+  }
+  .topbar-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem; color: var(--primary);
+    font-weight: 700; line-height: 1;
+  }
+  .topbar-role { font-size: 0.75rem; color: var(--muted); }
+  .nav-actions { display: flex; gap: 0.5rem; }
+  .logout-btn {
+    padding: 0.5rem 1rem;
+    background: var(--light);
+    color: var(--primary);
+    border: none;
+    border-radius: 8px;
+    font-family: inherit;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+  .logout-btn:hover { background: var(--accent); color: white; }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+  }
+
+  /* ── Tabs ── */
+  .admin-tabs {
+    background: white;
+    border-radius: 14px;
+    padding: 0.4rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+    display: flex;
+    gap: 0.3rem;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+  }
+  .admin-tab {
+    padding: 0.7rem 1.2rem;
+    background: transparent;
+    color: var(--muted);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .admin-tab:hover { background: var(--light); color: var(--primary); }
+  .admin-tab.active {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: white;
+  }
+
+  /* ── Panels ── */
+  .panel { display: none; }
+  .panel.active { display: block; animation: fadeIn 0.4s; }
+
+  /* ── KPI ── */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .kpi-card {
+    background: white;
+    border-radius: 14px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+  }
+  .kpi-icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 1.3rem;
+    margin-bottom: 0.8rem;
+  }
+  .kpi-card.courses .kpi-icon { background: linear-gradient(135deg, #C7385F 0%, #E8617F 100%); }
+  .kpi-card.views .kpi-icon { background: linear-gradient(135deg, #1A3A5C 0%, #4A5F8A 100%); }
+  .kpi-card.tunisia .kpi-icon { background: linear-gradient(135deg, #C7385F 0%, #8B2745 100%); }
+  .kpi-card.france .kpi-icon { background: linear-gradient(135deg, #1E40AF 0%, #3B82F6 100%); }
+  .kpi-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    color: var(--primary);
+    font-weight: 700;
+    line-height: 1;
+  }
+  .kpi-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 0.3rem;
+  }
+
+  /* ── Section card ── */
+  .section-card {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    margin-bottom: 1.5rem;
+  }
+  .section-card h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    color: var(--primary);
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  /* ── Form ── */
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .form-group { margin-bottom: 1rem; }
+  .form-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 0.4rem;
+  }
+  .form-group label .req { color: var(--error); }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 0.7rem 0.9rem;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    background: white;
+    color: var(--text);
+    transition: all 0.2s;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(232, 97, 44, 0.15);
+  }
+  .form-group textarea { resize: vertical; min-height: 80px; }
+  .form-group .hint {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-top: 0.3rem;
+  }
+
+  .submit-btn {
+    padding: 0.9rem 1.8rem;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-family: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+    margin-right: 0.5rem;
+  }
+  .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(232, 97, 44, 0.3); }
+  .secondary-btn {
+    padding: 0.9rem 1.5rem;
+    background: var(--light);
+    color: var(--primary);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-family: inherit;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .success-toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--success);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    box-shadow: var(--shadow-lg);
+    display: none;
+    align-items: center;
+    gap: 0.7rem;
+    font-weight: 600;
+    z-index: 100;
+  }
+  .success-toast.show { display: flex; animation: slideUp 0.4s; }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ── Courses table ── */
+  .courses-list {
+    display: grid;
+    gap: 1rem;
+  }
+  .course-item {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.2rem;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1rem;
+    align-items: center;
+  }
+  .course-item-icon {
+    width: 50px; height: 50px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem; color: white;
+    flex-shrink: 0;
+  }
+  .course-item-icon.html { background: linear-gradient(135deg, #C7385F, #E8617F); }
+  .course-item-icon.pdf { background: linear-gradient(135deg, #1A3A5C, #4A5F8A); }
+  .course-item-info h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    color: var(--primary);
+    margin-bottom: 0.3rem;
+  }
+  .course-item-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    font-size: 0.78rem;
+  }
+  .meta-tag {
+    padding: 0.15rem 0.6rem;
+    background: var(--light);
+    color: var(--primary);
+    border-radius: 50px;
+    font-weight: 600;
+  }
+  .meta-tag.tunisia { background: #FFF5F7; color: var(--tunisia); }
+  .meta-tag.france { background: #EFF6FF; color: var(--france); }
+  .meta-tag.code {
+    background: linear-gradient(135deg, #FFF8F0, #FFF3DC);
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    border: 1px dashed var(--accent-light);
+  }
+  .course-item-actions { display: flex; gap: 0.4rem; }
+  .icon-btn {
+    width: 36px; height: 36px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95rem;
+    color: var(--text);
+    transition: all 0.2s;
+  }
+  .icon-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
+  .icon-btn.delete:hover { background: var(--error); border-color: var(--error); }
+
+  .empty {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--muted);
+  }
+  .empty .icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.4; }
+
+  /* ── Drag drop ── */
+  .upload-zone {
+    border: 2px dashed var(--border);
+    border-radius: 14px;
+    padding: 2rem 1rem;
+    text-align: center;
+    background: var(--light);
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 1rem;
+  }
+  .upload-zone:hover {
+    border-color: var(--accent);
+    background: #FFF8F0;
+  }
+  .upload-zone.dragover {
+    border-color: var(--accent);
+    background: #FFF3DC;
+  }
+  .upload-zone .icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
+  .upload-zone strong { color: var(--primary); }
+  .upload-zone p { font-size: 0.85rem; color: var(--muted); margin-top: 0.3rem; }
+  #fileInput { display: none; }
+
+  /* ── Stats chart ── */
+  .chart-wrap {
+    background: var(--light);
+    padding: 1rem;
+    border-radius: 10px;
+    margin-top: 1rem;
+  }
+  .chart-wrap canvas { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+
+  .stats-list { display: grid; gap: 0.5rem; }
+  .stats-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 2fr;
+    gap: 1rem;
+    align-items: center;
+    padding: 0.7rem 1rem;
+    background: var(--light);
+    border-radius: 8px;
+  }
+  .stats-name { font-weight: 600; color: var(--primary); font-size: 0.9rem; }
+  .stats-count { font-family: 'JetBrains Mono', monospace; color: var(--accent); font-weight: 600; text-align: right; }
+  .bar-track { height: 8px; background: white; border-radius: 50px; overflow: hidden; }
+  .bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-light));
+    border-radius: 50px;
+  }
+
+  /* ── Help banner ── */
+  .help-banner {
+    background: linear-gradient(135deg, #FFF8F0 0%, #FFF3DC 100%);
+    border: 1px solid var(--accent-light);
+    border-radius: 12px;
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  .help-banner .icon { font-size: 1.7rem; flex-shrink: 0; }
+  .help-banner h4 {
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--primary);
+    font-size: 1.15rem;
+    margin-bottom: 0.3rem;
+  }
+  .help-banner p { font-size: 0.88rem; color: var(--text); }
+  .help-banner code {
+    background: white;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--accent);
+  }
+
+  @media (max-width: 768px) {
+    .topbar { padding: 0.8rem 1rem; }
+    .topbar-name { font-size: 1.1rem; }
+    .container { padding: 1.5rem 1rem; }
+    .section-card { padding: 1.5rem 1.2rem; }
+    .form-row { grid-template-columns: 1fr; }
+    .course-item { grid-template-columns: 1fr; }
+    .course-item-actions { justify-content: flex-end; }
+    .stats-row { grid-template-columns: 1fr; gap: 0.4rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen" class="login-wrapper">
+  <div class="login-box">
+    <div class="login-icon">🛡️</div>
+    <h1>Espace Admin</h1>
+    <p class="login-sub">Connexion sécurisée</p>
+    <form class="login-form" onsubmit="checkPwd(event)">
+      <input type="password" id="pwd" placeholder="Mot de passe administrateur" autocomplete="off" required>
+      <button type="submit" class="login-btn">Se connecter</button>
+      <div class="login-error" id="loginError">❌ Mot de passe incorrect</div>
+    </form>
+    <a href="index.html" class="back-link">← Retour à l'accueil</a>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="dashboard">
+
+  <div class="topbar">
+    <a href="index.html" class="topbar-brand">
+      <div class="topbar-avatar">FM</div>
+      <div>
+        <div class="topbar-name">Faicel Missaoui</div>
+        <div class="topbar-role">Espace Administrateur</div>
+      </div>
+    </a>
+    <div class="nav-actions">
+      <button class="logout-btn" onclick="logout()">Déconnexion</button>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- KPIs -->
+    <div class="kpi-grid">
+      <div class="kpi-card courses">
+        <div class="kpi-icon">📚</div>
+        <div class="kpi-value" id="kpiCourses">0</div>
+        <div class="kpi-label">Cours déposés</div>
+      </div>
+      <div class="kpi-card views">
+        <div class="kpi-icon">👁️</div>
+        <div class="kpi-value" id="kpiViews">0</div>
+        <div class="kpi-label">Visites totales</div>
+      </div>
+      <div class="kpi-card tunisia">
+        <div class="kpi-icon">🇹🇳</div>
+        <div class="kpi-value" id="kpiTunisia">0</div>
+        <div class="kpi-label">Cours Tunisie</div>
+      </div>
+      <div class="kpi-card france">
+        <div class="kpi-icon">🇫🇷</div>
+        <div class="kpi-value" id="kpiFrance">0</div>
+        <div class="kpi-label">Cours France</div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="admin-tabs">
+      <button class="admin-tab active" onclick="switchTab('add', this)">➕ Ajouter un cours</button>
+      <button class="admin-tab" onclick="switchTab('list', this)">📋 Mes cours</button>
+      <button class="admin-tab" onclick="switchTab('stats', this)">📊 Statistiques</button>
+      <button class="admin-tab" onclick="switchTab('export', this)">💾 Sauvegarde</button>
+    </div>
+
+    <!-- ADD COURSE PANEL -->
+    <div class="panel active" id="panel-add">
+      <div class="help-banner">
+        <div class="icon">💡</div>
+        <div>
+          <h4>Comment déposer un cours ?</h4>
+          <p>Uploadez votre fichier <strong>HTML</strong> (cours interactif) ou <strong>PDF</strong> sur votre site (dans le même dossier que index.html), puis indiquez son nom de fichier ci-dessous. Définissez un <strong>code d'accès</strong> (ex: <code>BAC2026</code>) à donner à vos élèves.</p>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <h2>➕ Ajouter un nouveau cours</h2>
+
+        <form onsubmit="addCourse(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Système <span class="req">*</span></label>
+              <select id="courseSystem" required>
+                <option value="">— Choisir —</option>
+                <option value="tunisie">🇹🇳 Système Tunisien</option>
+                <option value="france">🇫🇷 Système Français</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Niveau <span class="req">*</span></label>
+              <select id="courseLevel" required>
+                <option value="">— Choisir d'abord un système —</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Titre du cours <span class="req">*</span></label>
+            <input type="text" id="courseTitle" placeholder="Ex: Statistiques Doubles" required>
+          </div>
+
+          <div class="form-group">
+            <label>Description courte</label>
+            <textarea id="courseDesc" placeholder="Brève description du contenu (cours, exercices, sujets bac...)"></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Type <span class="req">*</span></label>
+              <select id="courseType" required>
+                <option value="html">🎯 HTML interactif</option>
+                <option value="pdf">📄 PDF</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Code d'accès élèves <span class="req">*</span></label>
+              <input type="text" id="courseCode" placeholder="Ex: MATH27" maxlength="20" required style="text-transform:uppercase;">
+              <div class="hint">Le code que vous donnez à vos élèves pour accéder au cours</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Nom du fichier <span class="req">*</span></label>
+            <input type="text" id="courseUrl" placeholder="Ex: cours_statistiques.html OU cours.pdf" required>
+            <div class="hint">Le fichier doit être dans le <strong>même dossier</strong> que ce site (uploadez-le via votre hébergeur, GitHub, ou Google Drive)</div>
+          </div>
+
+          <button type="submit" class="submit-btn">✓ Ajouter le cours</button>
+          <button type="reset" class="secondary-btn">Réinitialiser</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- LIST PANEL -->
+    <div class="panel" id="panel-list">
+      <div class="section-card">
+        <h2>📋 Mes cours déposés</h2>
+        <div id="coursesList" class="courses-list"></div>
+      </div>
+    </div>
+
+    <!-- STATS PANEL -->
+    <div class="panel" id="panel-stats">
+      <div class="section-card">
+        <h2>📊 Statistiques de visites</h2>
+        <p style="color:var(--muted); font-size:0.88rem; margin-bottom:1rem;">
+          ℹ️ Les stats sont locales (par appareil). Pour des stats globales, ajoutez Plausible/Umami.
+        </p>
+        <div class="stats-list" id="statsList"></div>
+        <div class="chart-wrap">
+          <canvas id="statsChart" width="900" height="300"></canvas>
+        </div>
+        <div style="margin-top:1rem;">
+          <button class="secondary-btn" onclick="resetStats()">🗑️ Réinitialiser les stats</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXPORT PANEL -->
+    <div class="panel" id="panel-export">
+      <div class="section-card">
+        <h2>💾 Sauvegarde &amp; Restauration</h2>
+        <p style="color:var(--muted); margin-bottom:1.5rem;">
+          Vos cours sont sauvegardés dans le navigateur. Exportez-les régulièrement pour les sauvegarder ou les transférer sur un autre appareil.
+        </p>
+        <button class="submit-btn" onclick="exportCourses()">📥 Télécharger la sauvegarde</button>
+
+        <div style="margin-top:2rem;">
+          <h3 style="font-family:'Cormorant Garamond',serif; color:var(--primary); font-size:1.3rem; margin-bottom:0.5rem;">Restaurer une sauvegarde</h3>
+          <p style="color:var(--muted); font-size:0.88rem; margin-bottom:1rem;">
+            Importer un fichier <code>.json</code> précédemment exporté.
+          </p>
+          <div class="upload-zone" onclick="document.getElementById('importInput').click()" id="importZone">
+            <div class="icon">📂</div>
+            <strong>Cliquez pour choisir un fichier</strong>
+            <p>ou glissez-déposez votre fichier .json ici</p>
+          </div>
+          <input type="file" id="importInput" accept=".json" onchange="importCourses(event)">
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="success-toast" id="toast">
+  <span>✅</span>
+  <span id="toastMsg">Action réussie</span>
+</div>
+
+<script>
+  const ADMIN_PWD = "ADMIN27";
+
+  // Auto-login
+  if (sessionStorage.getItem('adminAuth') === 'true') showDashboard();
+
+  function checkPwd(e) {
+    e.preventDefault();
+    const input = document.getElementById('pwd').value;
+    const error = document.getElementById('loginError');
+    if (input === ADMIN_PWD) {
+      sessionStorage.setItem('adminAuth', 'true');
+      showDashboard();
+    } else {
+      error.classList.add('show');
+      document.getElementById('pwd').value = '';
+      setTimeout(() => error.classList.remove('show'), 3000);
+    }
+  }
+  function showDashboard() {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('dashboard').classList.add('active');
+    refreshAll();
+  }
+  function logout() {
+    sessionStorage.removeItem('adminAuth');
+    location.reload();
+  }
+
+  // ── Tabs ──
+  function switchTab(name, btn) {
+    document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('panel-' + name).classList.add('active');
+    if (name === 'list') renderCourses();
+    if (name === 'stats') renderStats();
+  }
+
+  // ── Levels mapping ──
+  const LEVELS = {
+    tunisie: {
+      'bac-math': 'Bac Mathématiques',
+      'bac-sc': 'Bac Sciences Expérimentales',
+      'bac-tech': 'Bac Technique',
+      'bac-eco': 'Bac Économie-Gestion',
+      '3eme': '3ème année secondaire',
+      '2eme': '2ème année secondaire'
+    },
+    france: {
+      'terminale-spe': 'Terminale Spécialité',
+      'terminale-comp': 'Terminale Maths Complémentaires',
+      'terminale-expert': 'Terminale Maths Expertes',
+      'premiere-spe': 'Première Spécialité',
+      'seconde': 'Seconde',
+      'college': 'Collège'
+    }
+  };
+
+  document.getElementById('courseSystem').addEventListener('change', (e) => {
+    const sys = e.target.value;
+    const select = document.getElementById('courseLevel');
+    select.innerHTML = '<option value="">— Choisir un niveau —</option>';
+    if (sys && LEVELS[sys]) {
+      Object.entries(LEVELS[sys]).forEach(([k, v]) => {
+        select.innerHTML += `<option value="${k}">${v}</option>`;
+      });
+    }
+  });
+
+  // ── Add course ──
+  function addCourse(e) {
+    e.preventDefault();
+    const course = {
+      id: Date.now().toString(),
+      system: document.getElementById('courseSystem').value,
+      level: document.getElementById('courseLevel').value,
+      title: document.getElementById('courseTitle').value.trim(),
+      description: document.getElementById('courseDesc').value.trim(),
+      type: document.getElementById('courseType').value,
+      code: document.getElementById('courseCode').value.toUpperCase().trim(),
+      url: document.getElementById('courseUrl').value.trim(),
+      created: new Date().toISOString()
+    };
+
+    const courses = JSON.parse(localStorage.getItem('mm_courses') || '[]');
+    courses.push(course);
+    localStorage.setItem('mm_courses', JSON.stringify(courses));
+
+    showToast('Cours ajouté avec succès !');
+    e.target.reset();
+    document.getElementById('courseLevel').innerHTML = '<option value="">— Choisir d\'abord un système —</option>';
+    refreshAll();
+  }
+
+  // ── List courses ──
+  function renderCourses() {
+    const courses = JSON.parse(localStorage.getItem('mm_courses') || '[]');
+    const container = document.getElementById('coursesList');
+
+    if (courses.length === 0) {
+      container.innerHTML = `<div class="empty"><div class="icon">📭</div><p>Aucun cours pour l'instant. Ajoutez votre premier cours dans l'onglet « Ajouter ».</p></div>`;
+      return;
+    }
+
+    courses.sort((a, b) => new Date(b.created) - new Date(a.created));
+    container.innerHTML = '';
+    courses.forEach(c => {
+      const isPdf = c.type === 'pdf';
+      const sysLabel = c.system === 'tunisie' ? '🇹🇳 Tunisie' : '🇫🇷 France';
+      const levelLabel = LEVELS[c.system]?.[c.level] || c.level;
+      const sysClass = c.system === 'tunisie' ? 'tunisia' : 'france';
+
+      const item = document.createElement('div');
+      item.className = 'course-item';
+      item.innerHTML = `
+        <div class="course-item-icon ${isPdf ? 'pdf' : 'html'}">${isPdf ? '📄' : '🎯'}</div>
+        <div class="course-item-info">
+          <h4>${c.title}</h4>
+          <div class="course-item-meta">
+            <span class="meta-tag ${sysClass}">${sysLabel}</span>
+            <span class="meta-tag">${levelLabel}</span>
+            <span class="meta-tag code">🔑 ${c.code}</span>
+            <span class="meta-tag">${c.url}</span>
+          </div>
+        </div>
+        <div class="course-item-actions">
+          <button class="icon-btn" onclick="copyCode('${c.code}')" title="Copier le code">📋</button>
+          <button class="icon-btn" onclick="previewCourse('${c.url}')" title="Prévisualiser">👁️</button>
+          <button class="icon-btn delete" onclick="deleteCourse('${c.id}')" title="Supprimer">🗑️</button>
+        </div>
+      `;
+      container.appendChild(item);
+    });
+  }
+
+  function copyCode(code) {
+    navigator.clipboard.writeText(code).then(() => showToast(`Code "${code}" copié !`));
+  }
+  function previewCourse(url) { window.open(url, '_blank'); }
+  function deleteCourse(id) {
+    if (!confirm('Supprimer ce cours ?')) return;
+    let courses = JSON.parse(localStorage.getItem('mm_courses') || '[]');
+    courses = courses.filter(c => c.id !== id);
+    localStorage.setItem('mm_courses', JSON.stringify(courses));
+    renderCourses();
+    refreshAll();
+    showToast('Cours supprimé');
+  }
+
+  // ── KPIs ──
+  function refreshAll() {
+    const courses = JSON.parse(localStorage.getItem('mm_courses') || '[]');
+    const stats = JSON.parse(localStorage.getItem('mm_stats') || '{}');
+    const totalViews = Object.entries(stats).filter(([k]) => !k.startsWith('_')).reduce((s, [, v]) => s + v, 0);
+
+    document.getElementById('kpiCourses').textContent = courses.length;
+    document.getElementById('kpiViews').textContent = totalViews;
+    document.getElementById('kpiTunisia').textContent = courses.filter(c => c.system === 'tunisie').length;
+    document.getElementById('kpiFrance').textContent = courses.filter(c => c.system === 'france').length;
+  }
+
+  // ── Stats ──
+  const STAT_LABELS = {
+    home: '🏠 Accueil',
+    systeme_tunisie: '🇹🇳 Page Tunisie',
+    systeme_france: '🇫🇷 Page France'
+  };
+
+  function renderStats() {
+    const stats = JSON.parse(localStorage.getItem('mm_stats') || '{}');
+    const list = document.getElementById('statsList');
+    const keys = Object.keys(stats).filter(k => !k.startsWith('_'));
+
+    if (keys.length === 0) {
+      list.innerHTML = `<div class="empty"><div class="icon">📭</div><p>Aucune visite enregistrée</p></div>`;
+      return;
+    }
+
+    const sorted = keys.sort((a, b) => stats[b] - stats[a]);
+    const max = Math.max(...sorted.map(k => stats[k]));
+
+    list.innerHTML = sorted.map(k => {
+      const label = STAT_LABELS[k] || k.replace(/_/g, ' › ');
+      const pct = (stats[k] / max * 100);
+      return `
+        <div class="stats-row">
+          <div class="stats-name">${label}</div>
+          <div class="stats-count">${stats[k]} vues</div>
+          <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
+        </div>
+      `;
+    }).join('');
+
+    drawChart(sorted, stats);
+  }
+
+  function drawChart(keys, stats) {
+    const canvas = document.getElementById('statsChart');
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    const pad = { l: 50, r: 30, t: 30, b: 80 };
+    ctx.clearRect(0, 0, W, H);
+
+    if (keys.length === 0) return;
+    const max = Math.max(...keys.map(k => stats[k])) * 1.15;
+    const barW = (W - pad.l - pad.r) / keys.length * 0.6;
+    const sx = i => pad.l + (i + 0.5) * (W - pad.l - pad.r) / keys.length;
+    const sy = v => H - pad.b - v / max * (H - pad.t - pad.b);
+
+    // Grid
+    ctx.strokeStyle = '#E2E8F0';
+    for (let i = 0; i <= 5; i++) {
+      const y = pad.t + i * (H - pad.t - pad.b) / 5;
+      ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(W - pad.r, y); ctx.stroke();
+    }
+
+    // Y labels
+    ctx.fillStyle = '#1A3A5C';
+    ctx.font = '11px Inter';
+    ctx.textAlign = 'right';
+    for (let i = 0; i <= 5; i++) {
+      const y = pad.t + i * (H - pad.t - pad.b) / 5;
+      ctx.fillText(Math.round(max * (1 - i/5)), pad.l - 8, y + 4);
+    }
+
+    // Bars
+    keys.forEach((k, i) => {
+      const v = stats[k];
+      const x = sx(i) - barW/2;
+      const y = sy(v);
+      const h = H - pad.b - y;
+      const grad = ctx.createLinearGradient(0, y, 0, H - pad.b);
+      grad.addColorStop(0, '#E8612C');
+      grad.addColorStop(1, '#1A3A5C');
+      ctx.fillStyle = grad;
+      ctx.fillRect(x, y, barW, h);
+
+      ctx.fillStyle = '#1A3A5C';
+      ctx.font = 'bold 11px Inter';
+      ctx.textAlign = 'center';
+      ctx.fillText(v, sx(i), y - 6);
+
+      ctx.font = '10px Inter';
+      ctx.save();
+      ctx.translate(sx(i), H - pad.b + 14);
+      ctx.rotate(-Math.PI / 6);
+      ctx.textAlign = 'right';
+      const label = (STAT_LABELS[k] || k).substring(0, 18);
+      ctx.fillText(label, 0, 0);
+      ctx.restore();
+    });
+
+    ctx.strokeStyle = '#1A3A5C';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(pad.l, pad.t); ctx.lineTo(pad.l, H - pad.b); ctx.lineTo(W - pad.r, H - pad.b);
+    ctx.stroke();
+  }
+
+  function resetStats() {
+    if (!confirm('⚠️ Effacer toutes les statistiques ?')) return;
+    localStorage.removeItem('mm_stats');
+    renderStats();
+    refreshAll();
+    showToast('Statistiques réinitialisées');
+  }
+
+  // ── Export / Import ──
+  function exportCourses() {
+    const data = {
+      courses: JSON.parse(localStorage.getItem('mm_courses') || '[]'),
+      stats: JSON.parse(localStorage.getItem('mm_stats') || '{}'),
+      exportedAt: new Date().toISOString(),
+      version: 1
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `missaoui-maths-backup-${new Date().toISOString().slice(0,10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('Sauvegarde téléchargée');
+  }
+
+  function importCourses(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      try {
+        const data = JSON.parse(ev.target.result);
+        if (data.courses) {
+          if (confirm(`Importer ${data.courses.length} cours ? Cela remplacera les cours actuels.`)) {
+            localStorage.setItem('mm_courses', JSON.stringify(data.courses));
+            if (data.stats) localStorage.setItem('mm_stats', JSON.stringify(data.stats));
+            refreshAll();
+            renderCourses();
+            showToast('Sauvegarde restaurée !');
+          }
+        } else {
+          alert('Fichier invalide');
+        }
+      } catch(err) {
+        alert('Erreur de lecture : ' + err.message);
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  // Drag & drop
+  const importZone = document.getElementById('importZone');
+  importZone.addEventListener('dragover', (e) => { e.preventDefault(); importZone.classList.add('dragover'); });
+  importZone.addEventListener('dragleave', () => importZone.classList.remove('dragover'));
+  importZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    importZone.classList.remove('dragover');
+    const file = e.dataTransfer.files[0];
+    if (file && file.name.endsWith('.json')) {
+      const input = document.getElementById('importInput');
+      const dt = new DataTransfer();
+      dt.items.add(file);
+      input.files = dt.files;
+      importCourses({ target: input });
+    }
+  });
+
+  // ── Toast ──
+  function showToast(msg) {
+    const toast = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
+  }
+
+  // Code field auto-uppercase
+  document.getElementById('courseCode').addEventListener('input', e => {
+    e.target.value = e.target.value.toUpperCase();
+  });
+</script>
+
+</body>
+</html>
