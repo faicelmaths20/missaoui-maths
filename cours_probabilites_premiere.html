@@ -1,0 +1,1542 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Probabilités & Variables Aléatoires — Première Spécialité</title>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #2D3D5C;
+    --primary-light: #4A5F8A;
+    --accent: #C7385F;
+    --accent-light: #E8617F;
+    --muted: #6B7B9A;
+    --light: #F0F2F8;
+    --cream: #FAF6F0;
+    --success: #2E7D5E;
+    --success-light: #C6F6D5;
+    --warning: #D69E2E;
+    --error: #C53030;
+    --highlight: #FFF3CD;
+    --bg: #FAFAF7;
+    --text: #1A202C;
+    --border: #E2E8F0;
+    --shadow: 0 4px 14px rgba(45, 61, 92, 0.08);
+    --shadow-lg: 0 10px 30px rgba(45, 61, 92, 0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: white;
+    padding: 3rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(199, 56, 95, 0.18) 0%, transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(107, 123, 154, 0.2) 0%, transparent 40%);
+  }
+  .header-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .big-author-block {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+  }
+  .big-author-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    background: linear-gradient(135deg, #FFFFFF 0%, #FFD89C 50%, #C7385F 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.8rem;
+    animation: fadeInDown 0.9s ease-out;
+  }
+  .big-author-divider {
+    width: 80px;
+    height: 3px;
+    background: var(--accent);
+    margin: 0 auto 0.8rem;
+    border-radius: 2px;
+  }
+  .big-author-role {
+    font-size: 1.05rem;
+    color: rgba(255,255,255,0.85);
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .header-badge {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 50px;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    backdrop-filter: blur(10px);
+  }
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.2rem, 4.5vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+  }
+  .subtitle { font-size: 1.05rem; opacity: 0.85; }
+
+  .author-watermark {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--primary);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    box-shadow: var(--shadow-lg);
+    z-index: 100;
+    opacity: 0.9;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .author-watermark .wm-avatar {
+    width: 24px; height: 24px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    font-weight: 700;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: -2rem auto 4rem;
+    padding: 0 2rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .progress-wrap {
+    background: white;
+    border-radius: 12px;
+    padding: 1.2rem 1.5rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+    border: 1px solid var(--border);
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.6rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .progress-label span:last-child { color: var(--accent); }
+  .progress-bar {
+    height: 8px;
+    background: var(--light);
+    border-radius: 50px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent) 0%, var(--accent-light) 100%);
+    border-radius: 50px;
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+
+  .toc {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 2.5rem;
+    border: 1px solid var(--border);
+  }
+  .toc h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+  }
+  .toc-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 0.5rem;
+  }
+  .toc-list a {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.7rem 1rem;
+    color: var(--text);
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.2s;
+    font-size: 0.95rem;
+  }
+  .toc-list a:hover {
+    background: var(--light);
+    color: var(--primary);
+    transform: translateX(4px);
+  }
+  .toc-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  section {
+    background: white;
+    border-radius: 16px;
+    padding: 2.5rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+    border: 1px solid var(--border);
+    scroll-margin-top: 2rem;
+  }
+  h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 3px solid var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  h2::before {
+    content: counter(section);
+    counter-increment: section;
+    background: var(--accent);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+  }
+  body { counter-reset: section; }
+
+  h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    color: var(--primary);
+    margin: 1.5rem 0 1rem;
+    font-weight: 600;
+  }
+  h4 {
+    font-size: 1.1rem;
+    color: var(--primary);
+    margin: 1.2rem 0 0.7rem;
+    font-weight: 600;
+  }
+  p { margin-bottom: 1rem; }
+  strong { color: var(--primary); font-weight: 600; }
+  ul, ol { padding-left: 1.5rem; margin: 0.7rem 0; }
+  li { margin-bottom: 0.5rem; }
+
+  .definition-box, .property-box, .theorem-box, .example-box, .remark-box {
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .definition-box { background: var(--light); border-left: 5px solid var(--primary); }
+  .property-box { background: var(--cream); border-left: 5px solid var(--muted); }
+  .theorem-box { background: var(--highlight); border-left: 5px solid var(--accent); }
+  .example-box { background: #F0FFF4; border-left: 5px solid var(--success); }
+  .remark-box { background: #FFFAF0; border-left: 5px solid var(--warning); }
+
+  .box-label {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: white;
+    margin-bottom: 0.8rem;
+  }
+  .definition-box .box-label { background: var(--primary); }
+  .property-box .box-label { background: var(--muted); }
+  .theorem-box .box-label { background: var(--accent); }
+  .example-box .box-label { background: var(--success); }
+  .remark-box .box-label { background: var(--warning); }
+
+  .reveal-block {
+    margin: 1.2rem 0;
+    border: 2px dashed var(--muted);
+    border-radius: 10px;
+    overflow: hidden;
+    background: white;
+    transition: all 0.3s;
+  }
+  .reveal-block.revealed { border-style: solid; border-color: var(--success); }
+  .reveal-toggle {
+    width: 100%;
+    padding: 1rem 1.3rem;
+    background: var(--light);
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--primary);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s;
+  }
+  .reveal-toggle:hover { background: var(--cream); }
+  .reveal-block.revealed .reveal-toggle {
+    background: var(--success-light);
+    color: var(--success);
+  }
+  .reveal-icon {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s;
+    font-size: 0.9rem;
+  }
+  .reveal-block.revealed .reveal-icon {
+    background: var(--success);
+    transform: rotate(180deg);
+  }
+  .reveal-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease, padding 0.3s;
+    padding: 0 1.3rem;
+  }
+  .reveal-block.revealed .reveal-content {
+    max-height: 5000px;
+    padding: 1.3rem;
+  }
+
+  .table-wrap { overflow-x: auto; margin: 1rem 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  th, td {
+    padding: 0.7rem 1rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.95rem;
+  }
+  th { background: var(--primary); color: white; font-weight: 600; }
+  tr:nth-child(even) td { background: var(--light); }
+  tr:last-child td { border-bottom: none; }
+
+  .tree-container {
+    background: var(--light);
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin: 1.5rem 0;
+    overflow-x: auto;
+    text-align: center;
+  }
+
+  .quiz-container {
+    background: linear-gradient(135deg, #FFF8F0 0%, #FFF3DC 100%);
+    border-radius: 14px;
+    padding: 2rem;
+    margin: 2rem 0;
+    border: 2px solid var(--accent-light);
+    box-shadow: var(--shadow);
+  }
+  .quiz-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1.2rem;
+  }
+  .quiz-icon {
+    width: 44px; height: 44px;
+    background: var(--accent);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.4rem;
+    font-weight: 700;
+  }
+  .quiz-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    color: var(--primary);
+    font-weight: 700;
+  }
+  .quiz-question { font-weight: 500; margin-bottom: 1rem; font-size: 1.05rem; }
+  .quiz-options { display: grid; gap: 0.6rem; margin-bottom: 1rem; }
+  .quiz-option {
+    padding: 0.9rem 1.2rem;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    font-size: 0.95rem;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  .quiz-option:hover:not(.answered) {
+    border-color: var(--accent);
+    background: var(--cream);
+    transform: translateX(4px);
+  }
+  .quiz-option .opt-letter {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--light);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+  .quiz-option.correct {
+    background: var(--success-light);
+    border-color: var(--success);
+    color: var(--success);
+  }
+  .quiz-option.correct .opt-letter { background: var(--success); color: white; }
+  .quiz-option.incorrect {
+    background: #FED7D7;
+    border-color: var(--error);
+    color: var(--error);
+  }
+  .quiz-option.incorrect .opt-letter { background: var(--error); color: white; }
+  .quiz-option.answered { cursor: default; }
+  .quiz-feedback {
+    margin-top: 1rem;
+    padding: 1rem 1.2rem;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    display: none;
+  }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correct {
+    background: var(--success-light);
+    color: var(--success);
+    border-left: 4px solid var(--success);
+  }
+  .quiz-feedback.incorrect {
+    background: #FED7D7;
+    color: var(--error);
+    border-left: 4px solid var(--error);
+  }
+
+  .info-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  .info-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.2rem;
+    text-align: center;
+    transition: all 0.2s;
+  }
+  .info-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+  }
+  .info-card-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .info-card-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .simulator {
+    background: linear-gradient(135deg, #2D3D5C 0%, #4A5F8A 100%);
+    color: white;
+    border-radius: 14px;
+    padding: 2rem;
+    margin: 2rem 0;
+    box-shadow: var(--shadow-lg);
+  }
+  .simulator h4 { color: white; }
+  .sim-button {
+    padding: 0.8rem 1.5rem;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-family: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.95rem;
+    margin: 0.5rem 0.3rem;
+    transition: all 0.2s;
+  }
+  .sim-button:hover {
+    background: var(--accent-light);
+    transform: translateY(-2px);
+  }
+  .sim-result {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: rgba(255,255,255,0.1);
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+  }
+
+  .score-banner {
+    background: linear-gradient(135deg, var(--success) 0%, #38B2AC 100%);
+    color: white;
+    border-radius: 14px;
+    padding: 2rem;
+    text-align: center;
+    margin: 2rem 0;
+    display: none;
+  }
+  .score-banner.show { display: block; animation: pop 0.5s; }
+  @keyframes pop {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .score-banner h3 { color: white; font-size: 2rem; }
+  .score-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 4rem;
+    font-weight: 700;
+    margin: 1rem 0;
+  }
+
+  footer {
+    background: var(--primary);
+    color: white;
+    text-align: center;
+    padding: 2.5rem 2rem;
+    margin-top: 4rem;
+  }
+  footer p { margin: 0.3rem 0; opacity: 0.9; }
+  footer .signature {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    color: var(--accent-light);
+    margin-bottom: 0.5rem;
+  }
+
+  @media (max-width: 768px) {
+    section { padding: 1.5rem; }
+    h2 { font-size: 1.5rem; }
+    .author-watermark { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="author-watermark">
+  <div class="wm-avatar">FM</div>
+  <span>Faicel Missaoui</span>
+</div>
+
+<header>
+  <div class="header-content">
+    <div class="big-author-block">
+      <div class="big-author-name">Faicel Missaoui</div>
+      <div class="big-author-divider"></div>
+      <div class="big-author-role">Professeur Agrégé de Mathématiques</div>
+    </div>
+    <span class="header-badge">Première Spécialité · Programme Eduscol</span>
+    <h1>Probabilités &amp; Variables Aléatoires</h1>
+    <p class="subtitle">Cours interactif complet — Conforme au programme officiel français</p>
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span>📚 Progression du cours</span>
+      <span id="progressText">0%</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <nav class="toc">
+    <h3>📑 Table des matières</h3>
+    <ul class="toc-list">
+      <li><a href="#section1"><span class="toc-num">1</span>Probabilités conditionnelles</a></li>
+      <li><a href="#section2"><span class="toc-num">2</span>Probabilités totales</a></li>
+      <li><a href="#section3"><span class="toc-num">3</span>Indépendance</a></li>
+      <li><a href="#section4"><span class="toc-num">4</span>Variable aléatoire</a></li>
+      <li><a href="#section5"><span class="toc-num">5</span>Loi de probabilité</a></li>
+      <li><a href="#section6"><span class="toc-num">6</span>Espérance, variance</a></li>
+      <li><a href="#sectionBac"><span class="toc-num">★</span>Sujet Bac corrigé</a></li>
+      <li><a href="#sectionQuiz"><span class="toc-num">?</span>QCM final</a></li>
+    </ul>
+  </nav>
+
+  <!-- ═══════════════ SECTION 1 ═══════════════ -->
+  <section id="section1">
+    <h2>Probabilités conditionnelles</h2>
+
+    <div class="definition-box">
+      <span class="box-label">Définition</span>
+      <p>Soient \(A\) et \(B\) deux événements d'un univers \(\Omega\), avec \(P(B) \neq 0\).</p>
+      <p>La <strong>probabilité conditionnelle</strong> de \(A\) sachant \(B\) est le réel noté \(P_B(A)\) défini par :</p>
+      <p style="text-align:center; font-size:1.2rem; margin:0.7rem 0;">
+        \(\boxed{P_B(A) = \dfrac{P(A \cap B)}{P(B)}}\)
+      </p>
+    </div>
+
+    <div class="property-box">
+      <span class="box-label">Propriété — Probabilité d'une intersection</span>
+      <p>Pour tous événements \(A\) et \(B\) de probabilités non nulles :</p>
+      <p style="text-align:center; font-size:1.1rem; margin:0.7rem 0;">
+        \(P(A \cap B) = P(A) \times P_A(B) = P(B) \times P_B(A)\)
+      </p>
+      <p><em>Astuce : sur un arbre pondéré, \(P(A \cap B)\) est le produit des probabilités le long du chemin menant à l'événement.</em></p>
+    </div>
+
+    <div class="example-box">
+      <span class="box-label">Exemple — Cadres et femmes</span>
+      <p>Une société emploie 40 % de cadres. Parmi les cadres, 55 % sont des femmes. Parmi les non-cadres, 30 % sont des femmes.</p>
+      <p>On note \(C\) : « l'employé est cadre » et \(F\) : « l'employé est une femme ».</p>
+
+      <div class="tree-container">
+        <svg viewBox="0 0 500 280" xmlns="http://www.w3.org/2000/svg" style="max-width:500px;">
+          <!-- Origin -->
+          <circle cx="50" cy="140" r="6" fill="#2D3D5C"/>
+          <text x="35" y="135" font-family="serif" font-size="14" fill="#2D3D5C">Ω</text>
+
+          <!-- Branches level 1 -->
+          <line x1="56" y1="140" x2="190" y2="60" stroke="#2D3D5C" stroke-width="2"/>
+          <line x1="56" y1="140" x2="190" y2="220" stroke="#2D3D5C" stroke-width="2"/>
+          <text x="100" y="90" font-size="13" fill="#C7385F" font-weight="600">0,4</text>
+          <text x="100" y="200" font-size="13" fill="#C7385F" font-weight="600">0,6</text>
+
+          <!-- Nodes level 1 -->
+          <circle cx="200" cy="60" r="18" fill="#F0F2F8" stroke="#2D3D5C" stroke-width="2"/>
+          <text x="195" y="65" font-family="serif" font-size="14" fill="#2D3D5C">C</text>
+          <circle cx="200" cy="220" r="18" fill="#F0F2F8" stroke="#2D3D5C" stroke-width="2"/>
+          <text x="190" y="226" font-family="serif" font-size="14" fill="#2D3D5C">C̄</text>
+
+          <!-- Branches level 2 from C -->
+          <line x1="218" y1="55" x2="370" y2="25" stroke="#2D3D5C" stroke-width="1.5"/>
+          <line x1="218" y1="65" x2="370" y2="95" stroke="#2D3D5C" stroke-width="1.5"/>
+          <text x="280" y="35" font-size="12" fill="#C7385F" font-weight="600">0,55</text>
+          <text x="280" y="90" font-size="12" fill="#C7385F" font-weight="600">0,45</text>
+
+          <!-- Branches level 2 from non-C -->
+          <line x1="218" y1="215" x2="370" y2="185" stroke="#2D3D5C" stroke-width="1.5"/>
+          <line x1="218" y1="225" x2="370" y2="255" stroke="#2D3D5C" stroke-width="1.5"/>
+          <text x="280" y="195" font-size="12" fill="#C7385F" font-weight="600">0,30</text>
+          <text x="280" y="250" font-size="12" fill="#C7385F" font-weight="600">0,70</text>
+
+          <!-- Leaves -->
+          <text x="380" y="30" font-family="serif" font-size="14" fill="#2E7D5E" font-weight="600">F</text>
+          <text x="380" y="100" font-family="serif" font-size="14" fill="#2E7D5E" font-weight="600">F̄</text>
+          <text x="380" y="190" font-family="serif" font-size="14" fill="#2E7D5E" font-weight="600">F</text>
+          <text x="380" y="260" font-family="serif" font-size="14" fill="#2E7D5E" font-weight="600">F̄</text>
+
+          <!-- Probabilités -->
+          <text x="410" y="30" font-size="11" fill="#6B7B9A">P(C∩F) = 0,22</text>
+          <text x="410" y="190" font-size="11" fill="#6B7B9A">P(C̄∩F) = 0,18</text>
+        </svg>
+      </div>
+
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ Calcul de \(P(C \cap F)\)</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>« 55 % des cadres sont des femmes » se traduit par : \(P_C(F) = 0{,}55\).</p>
+          <p>D'après la formule de l'intersection :</p>
+          <p>\(P(C \cap F) = P(C) \times P_C(F) = 0{,}4 \times 0{,}55 = \boxed{0{,}22}\)</p>
+          <p>Ainsi, 22 % des employés sont des femmes cadres.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz-container">
+      <div class="quiz-header">
+        <div class="quiz-icon">?</div>
+        <div class="quiz-title">Quiz éclair n°1</div>
+      </div>
+      <p class="quiz-question">Si \(P(A) = 0{,}3\) et \(P(A \cap B) = 0{,}12\), que vaut \(P_A(B)\) ?</p>
+      <div class="quiz-options" data-quiz="q1" data-correct="b">
+        <button class="quiz-option" data-opt="a"><span class="opt-letter">A</span>0,036</button>
+        <button class="quiz-option" data-opt="b"><span class="opt-letter">B</span>0,4</button>
+        <button class="quiz-option" data-opt="c"><span class="opt-letter">C</span>2,5</button>
+        <button class="quiz-option" data-opt="d"><span class="opt-letter">D</span>0,42</button>
+      </div>
+      <div class="quiz-feedback" id="fb-q1"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ SECTION 2 ═══════════════ -->
+  <section id="section2">
+    <h2>Formule des probabilités totales</h2>
+
+    <div class="definition-box">
+      <span class="box-label">Partition de l'univers</span>
+      <p>Des événements \(A_1, A_2, \ldots, A_n\) de probabilités non nulles forment une <strong>partition de l'univers \(\Omega\)</strong> si :</p>
+      <ul>
+        <li>Ils sont <strong>deux à deux incompatibles</strong> : \(A_i \cap A_j = \varnothing\) pour \(i \neq j\).</li>
+        <li>Leur réunion couvre tout \(\Omega\) : \(A_1 \cup A_2 \cup \cdots \cup A_n = \Omega\).</li>
+      </ul>
+      <p><em>Cas particulier important :</em> \(A\) et \(\overline{A}\) forment toujours une partition de \(\Omega\).</p>
+    </div>
+
+    <div class="theorem-box">
+      <span class="box-label">Formule des probabilités totales</span>
+      <p>Si \(A_1, A_2, \ldots, A_n\) forment une partition de \(\Omega\), alors pour tout événement \(E\) :</p>
+      <p style="text-align:center; font-size:1.1rem; margin:0.7rem 0;">
+        \(P(E) = P(E \cap A_1) + P(E \cap A_2) + \cdots + P(E \cap A_n)\)
+      </p>
+      <p>En utilisant les probabilités conditionnelles :</p>
+      <p style="text-align:center; font-size:1.1rem;">
+        \(\boxed{P(E) = \sum_{i=1}^{n} P(A_i) \times P_{A_i}(E)}\)
+      </p>
+    </div>
+
+    <div class="example-box">
+      <span class="box-label">Exemple — Suite cadres/femmes</span>
+      <p>Comme \(C\) et \(\overline{C}\) forment une partition de \(\Omega\) :</p>
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ Calcul de \(P(F)\) — proportion de femmes dans l'entreprise</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>\(P(F) = P(C \cap F) + P(\overline{C} \cap F)\)</p>
+          <p>\(P(F) = P(C) \times P_C(F) + P(\overline{C}) \times P_{\overline{C}}(F)\)</p>
+          <p>\(P(F) = 0{,}4 \times 0{,}55 + 0{,}6 \times 0{,}30\)</p>
+          <p>\(P(F) = 0{,}22 + 0{,}18 = \boxed{0{,}40}\)</p>
+          <p>Ainsi, 40 % des employés de la société sont des femmes.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="example-box">
+      <span class="box-label">Application — Feu tricolore</span>
+      <p>À un carrefour avec un feu tricolore :</p>
+      <ul>
+        <li>2 % des véhicules s'arrêtent au feu vert (V).</li>
+        <li>65 % des véhicules s'arrêtent au feu orange (O).</li>
+        <li>97 % des véhicules s'arrêtent au feu rouge (R).</li>
+      </ul>
+      <p>L'état du feu est aléatoire : \(P(V) = 0{,}6\), \(P(O) = 0{,}1\), \(P(R) = 0{,}3\). Soit \(A\) : « le véhicule s'arrête ».</p>
+
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ 1) Probabilité que le véhicule s'arrête</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>\(V, O, R\) forment une partition de \(\Omega\). D'après la formule des probabilités totales :</p>
+          <p>\(P(A) = P(V) \cdot P_V(A) + P(O) \cdot P_O(A) + P(R) \cdot P_R(A)\)</p>
+          <p>\(P(A) = 0{,}6 \times 0{,}02 + 0{,}1 \times 0{,}65 + 0{,}3 \times 0{,}97\)</p>
+          <p>\(P(A) = 0{,}012 + 0{,}065 + 0{,}291 = \boxed{0{,}368}\)</p>
+        </div>
+      </div>
+
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ 2) Le véhicule est passé. Probabilité que le feu soit rouge ?</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>« Le véhicule est passé » signifie qu'il ne s'est pas arrêté, donc \(\overline{A}\) est réalisé.</p>
+          <p>\(P(\overline{A}) = 1 - 0{,}368 = 0{,}632\)</p>
+          <p>\(P_{\overline{A}}(R) = \dfrac{P(\overline{A} \cap R)}{P(\overline{A})} = \dfrac{P(R) \times P_R(\overline{A})}{P(\overline{A})}\)</p>
+          <p>\(P_R(\overline{A}) = 1 - 0{,}97 = 0{,}03\)</p>
+          <p>\(P_{\overline{A}}(R) = \dfrac{0{,}3 \times 0{,}03}{0{,}632} = \dfrac{0{,}009}{0{,}632} \approx \boxed{0{,}014}\)</p>
+          <p>Sachant que le véhicule est passé, il n'y a qu'environ 1,4 % de chance que le feu ait été rouge.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz-container">
+      <div class="quiz-header">
+        <div class="quiz-icon">?</div>
+        <div class="quiz-title">Quiz éclair n°2</div>
+      </div>
+      <p class="quiz-question">Une urne contient 60 % de boules rouges. Parmi les rouges, 40 % sont marquées. Parmi les autres, 20 % sont marquées. Quelle est la probabilité qu'une boule tirée soit marquée ?</p>
+      <div class="quiz-options" data-quiz="q2" data-correct="c">
+        <button class="quiz-option" data-opt="a"><span class="opt-letter">A</span>0,24</button>
+        <button class="quiz-option" data-opt="b"><span class="opt-letter">B</span>0,30</button>
+        <button class="quiz-option" data-opt="c"><span class="opt-letter">C</span>0,32</button>
+        <button class="quiz-option" data-opt="d"><span class="opt-letter">D</span>0,60</button>
+      </div>
+      <div class="quiz-feedback" id="fb-q2"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ SECTION 3 ═══════════════ -->
+  <section id="section3">
+    <h2>Indépendance de deux événements</h2>
+
+    <div class="definition-box">
+      <span class="box-label">Définition</span>
+      <p>Deux événements \(A\) et \(B\) sont <strong>indépendants</strong> si et seulement si :</p>
+      <p style="text-align:center; font-size:1.2rem; margin:0.7rem 0;">
+        \(\boxed{P(A \cap B) = P(A) \times P(B)}\)
+      </p>
+    </div>
+
+    <div class="property-box">
+      <span class="box-label">Caractérisation par probabilité conditionnelle</span>
+      <p>Si \(A\) et \(B\) sont indépendants et de probabilités non nulles, alors :</p>
+      <p style="text-align:center; font-size:1.1rem; margin:0.7rem 0;">
+        \(P_A(B) = P(B) \quad \text{et} \quad P_B(A) = P(A)\)
+      </p>
+      <p>Autrement dit, la réalisation de l'un <strong>ne dépend pas</strong> de la réalisation de l'autre.</p>
+    </div>
+
+    <div class="theorem-box">
+      <span class="box-label">Indépendance et événements contraires</span>
+      <p>Si \(A\) et \(B\) sont indépendants, alors :</p>
+      <ul>
+        <li>\(\overline{A}\) et \(B\) sont indépendants ;</li>
+        <li>\(A\) et \(\overline{B}\) sont indépendants ;</li>
+        <li>\(\overline{A}\) et \(\overline{B}\) sont indépendants.</li>
+      </ul>
+
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ Démonstration — \(\overline{A}\) et \(B\) indépendants</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>Comme \(A\) et \(\overline{A}\) forment une partition de \(\Omega\), on a :</p>
+          <p>\(P(B) = P(A \cap B) + P(\overline{A} \cap B)\)</p>
+          <p>Donc \(P(\overline{A} \cap B) = P(B) - P(A \cap B)\)</p>
+          <p>\(A\) et \(B\) étant indépendants : \(P(A \cap B) = P(A) \times P(B)\)</p>
+          <p>D'où \(P(\overline{A} \cap B) = P(B) - P(A)P(B) = (1 - P(A))P(B) = P(\overline{A}) \times P(B)\)</p>
+          <p>Donc \(\overline{A}\) et \(B\) sont indépendants. ∎</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="remark-box">
+      <span class="box-label">⚠️ Attention — Ne pas confondre</span>
+      <ul>
+        <li><strong>Indépendants</strong> ≠ <strong>incompatibles</strong> !</li>
+        <li>\(A\) et \(B\) <strong>incompatibles</strong> signifie \(A \cap B = \varnothing\), donc \(P(A \cap B) = 0\).</li>
+        <li>Si \(A\) et \(B\) sont incompatibles et de probabilités non nulles, ils <strong>ne peuvent pas être indépendants</strong> (puisqu'on aurait \(P(A) \times P(B) = 0\), ce qui est impossible).</li>
+      </ul>
+    </div>
+
+    <div class="example-box">
+      <span class="box-label">Exemple — Lancer de dé</span>
+      <p>On lance un dé équilibré à 6 faces. Soient \(A\) : « obtenir un nombre pair » et \(B\) : « obtenir un multiple de 3 ».</p>
+
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ Sont-ils indépendants ?</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>\(A = \{2, 4, 6\}\), donc \(P(A) = \dfrac{3}{6} = \dfrac{1}{2}\)</p>
+          <p>\(B = \{3, 6\}\), donc \(P(B) = \dfrac{2}{6} = \dfrac{1}{3}\)</p>
+          <p>\(A \cap B = \{6\}\), donc \(P(A \cap B) = \dfrac{1}{6}\)</p>
+          <p>Or \(P(A) \times P(B) = \dfrac{1}{2} \times \dfrac{1}{3} = \dfrac{1}{6}\)</p>
+          <p>Comme \(P(A \cap B) = P(A) \times P(B)\), <strong>\(A\) et \(B\) sont indépendants</strong>. ✓</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ SECTION 4 ═══════════════ -->
+  <section id="section4">
+    <h2>Variable aléatoire</h2>
+
+    <div class="definition-box">
+      <span class="box-label">Définition</span>
+      <p>Une <strong>variable aléatoire \(X\)</strong> sur un univers \(\Omega\) est une fonction qui associe à chaque issue de \(\Omega\) un nombre réel.</p>
+      <p>L'<strong>ensemble des valeurs prises</strong> par \(X\) est noté \(\{x_1, x_2, \ldots, x_n\}\).</p>
+    </div>
+
+    <div class="example-box">
+      <span class="box-label">Exemple introductif — Jeu de dé</span>
+      <p>On lance un dé à 6 faces. Univers : \(\Omega = \{1, 2, 3, 4, 5, 6\}\). Règle du jeu :</p>
+      <ul>
+        <li>Si le résultat est 5 ou 6 : on gagne 2 €.</li>
+        <li>Sinon : on perd 1 €.</li>
+      </ul>
+      <p>On définit la variable aléatoire \(X\) qui donne le gain :</p>
+      <ul>
+        <li>Pour les issues 5 et 6 : \(X = 2\).</li>
+        <li>Pour les issues 1, 2, 3 et 4 : \(X = -1\).</li>
+      </ul>
+      <p>L'ensemble des valeurs prises par \(X\) est \(\{-1\,;\,2\}\).</p>
+    </div>
+
+    <div class="example-box">
+      <span class="box-label">Application — Tirage d'une carte</span>
+      <p>On tire une carte au hasard dans un jeu de 32 cartes (8 cartes par couleur).</p>
+      <ul>
+        <li>Si la carte est un cœur, on gagne 5 €.</li>
+        <li>Si la carte est un carreau, on gagne 2 €.</li>
+        <li>Sinon, on perd 1 €.</li>
+      </ul>
+      <p>Soit \(X\) la variable aléatoire donnant le gain. Calculer \(P(X = 5)\), \(P(X = -1)\) et \(P(X \leqslant 2)\).</p>
+
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ Solution détaillée</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>\(P(X = 5)\) : on gagne 5 € en tirant un cœur. Il y a 8 cœurs sur 32 cartes :</p>
+          <p>\(P(X = 5) = \dfrac{8}{32} = \dfrac{1}{4}\)</p>
+
+          <p>\(P(X = -1)\) : on perd 1 € si la carte n'est ni cœur ni carreau (16 cartes restantes) :</p>
+          <p>\(P(X = -1) = \dfrac{16}{32} = \dfrac{1}{2}\)</p>
+
+          <p>\(P(X \leqslant 2) = P(X = 2) + P(X = -1) = \dfrac{8}{32} + \dfrac{16}{32} = \dfrac{24}{32} = \boxed{\dfrac{3}{4}}\)</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ SECTION 5 ═══════════════ -->
+  <section id="section5">
+    <h2>Loi de probabilité</h2>
+
+    <div class="definition-box">
+      <span class="box-label">Définition</span>
+      <p>Soit \(X\) une variable aléatoire prenant les valeurs \(x_1, x_2, \ldots, x_n\).</p>
+      <p>La <strong>loi de probabilité</strong> de \(X\) est la donnée de toutes les probabilités \(P(X = x_i)\), souvent présentée sous forme de tableau.</p>
+    </div>
+
+    <div class="property-box">
+      <span class="box-label">Propriété fondamentale</span>
+      <p>La somme des probabilités d'une loi de probabilité est toujours égale à 1 :</p>
+      <p style="text-align:center; font-size:1.1rem; margin:0.7rem 0;">
+        \(\boxed{\sum_{i=1}^{n} P(X = x_i) = 1}\)
+      </p>
+    </div>
+
+    <div class="example-box">
+      <span class="box-label">Exemple — Maximum de 2 dés</span>
+      <p>On lance simultanément deux dés à 6 faces. Soit \(X\) la variable aléatoire égale à la <strong>plus grande</strong> des deux valeurs.</p>
+      <p>Établir la loi de probabilité de \(X\).</p>
+
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ Solution — dénombrement</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>L'univers \(\Omega\) contient \(6 \times 6 = 36\) couples équiprobables.</p>
+          <p>\(X\) prend les valeurs 1, 2, 3, 4, 5, 6.</p>
+          <ul>
+            <li>\(X = 1\) si on obtient (1;1), soit 1 cas. \(P(X=1) = \dfrac{1}{36}\)</li>
+            <li>\(X = 2\) : (1;2),(2;1),(2;2), soit 3 cas. \(P(X=2) = \dfrac{3}{36} = \dfrac{1}{12}\)</li>
+            <li>\(X = 3\) : 5 cas. \(P(X=3) = \dfrac{5}{36}\)</li>
+            <li>\(X = 4\) : 7 cas. \(P(X=4) = \dfrac{7}{36}\)</li>
+            <li>\(X = 5\) : 9 cas. \(P(X=5) = \dfrac{9}{36} = \dfrac{1}{4}\)</li>
+            <li>\(X = 6\) : 11 cas. \(P(X=6) = \dfrac{11}{36}\)</li>
+          </ul>
+          <p><strong>Vérification :</strong> \(\dfrac{1+3+5+7+9+11}{36} = \dfrac{36}{36} = 1\) ✓</p>
+
+          <h4>Tableau de la loi de probabilité :</h4>
+          <div class="table-wrap">
+            <table>
+              <tr><th>\(x_i\)</th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr>
+              <tr><th>\(P(X = x_i)\)</th><td>\(\dfrac{1}{36}\)</td><td>\(\dfrac{3}{36}\)</td><td>\(\dfrac{5}{36}\)</td><td>\(\dfrac{7}{36}\)</td><td>\(\dfrac{9}{36}\)</td><td>\(\dfrac{11}{36}\)</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Simulator -->
+    <div class="simulator">
+      <h4>🎲 Simulateur — Maximum de 2 dés</h4>
+      <p style="opacity:0.9; font-size:0.9rem;">Lancez les dés et comparez la fréquence observée à la probabilité théorique.</p>
+      <button class="sim-button" onclick="rollDice(100)">Lancer 100 fois</button>
+      <button class="sim-button" onclick="rollDice(1000)">Lancer 1 000 fois</button>
+      <button class="sim-button" onclick="rollDice(10000)">Lancer 10 000 fois</button>
+      <button class="sim-button" onclick="resetDice()" style="background:rgba(255,255,255,0.2);">Réinitialiser</button>
+      <div class="sim-result" id="diceResult">Aucun lancer effectué.</div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ SECTION 6 ═══════════════ -->
+  <section id="section6">
+    <h2>Espérance, variance et écart-type</h2>
+
+    <div class="definition-box">
+      <span class="box-label">Définitions</span>
+      <p>Soit \(X\) une variable aléatoire prenant les valeurs \(x_1, x_2, \ldots, x_n\) avec les probabilités \(p_i = P(X = x_i)\).</p>
+      <p><strong>Espérance :</strong></p>
+      <p style="text-align:center; font-size:1.15rem;">
+        \(\boxed{E(X) = \sum_{i=1}^{n} p_i x_i = p_1 x_1 + p_2 x_2 + \cdots + p_n x_n}\)
+      </p>
+      <p><strong>Variance :</strong></p>
+      <p style="text-align:center; font-size:1.05rem;">
+        \(V(X) = \sum_{i=1}^{n} p_i (x_i - E(X))^2\)
+      </p>
+      <p><strong>Écart-type :</strong></p>
+      <p style="text-align:center; font-size:1.15rem;">
+        \(\boxed{\sigma(X) = \sqrt{V(X)}}\)
+      </p>
+    </div>
+
+    <div class="remark-box">
+      <span class="box-label">Interprétation</span>
+      <ul>
+        <li><strong>L'espérance \(E(X)\)</strong> est la valeur moyenne de \(X\) sur un grand nombre de répétitions de l'expérience. C'est le <em>gain moyen</em> dans un jeu d'argent.</li>
+        <li><strong>L'écart-type \(\sigma(X)\)</strong> mesure la dispersion des valeurs autour de l'espérance.</li>
+        <li>Un jeu est dit <strong>équitable</strong> si \(E(X) = 0\).</li>
+      </ul>
+    </div>
+
+    <div class="property-box">
+      <span class="box-label">Propriétés de linéarité</span>
+      <p>Pour tous réels \(a\) et \(b\) :</p>
+      <p style="text-align:center; font-size:1.1rem;">
+        \(E(aX + b) = a\,E(X) + b\)
+      </p>
+      <p style="text-align:center; font-size:1.1rem;">
+        \(V(aX + b) = a^2\,V(X) \quad ; \quad \sigma(aX + b) = |a|\,\sigma(X)\)
+      </p>
+    </div>
+
+    <div class="example-box">
+      <span class="box-label">Exemple — Jeu de cartes complexe</span>
+      <p>On tire une carte dans un jeu de 32 cartes :</p>
+      <ul>
+        <li>Si on tire un cœur : on gagne 2 €.</li>
+        <li>Si on tire un roi : on gagne 5 €.</li>
+        <li>Si on tire le <strong>roi de cœur</strong> : on gagne 2 + 5 = 7 €.</li>
+        <li>Sinon : on perd 1 €.</li>
+      </ul>
+
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ 1) Loi de probabilité de \(X\)</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>\(X\) peut prendre les valeurs : \(-1, 2, 5, 7\).</p>
+          <ul>
+            <li>\(X = 7\) : on tire le roi de cœur. \(P(X=7) = \dfrac{1}{32}\)</li>
+            <li>\(X = 5\) : on tire un roi (sauf cœur), soit 3 rois. \(P(X=5) = \dfrac{3}{32}\)</li>
+            <li>\(X = 2\) : on tire un cœur (sauf le roi), soit 7 cœurs. \(P(X=2) = \dfrac{7}{32}\)</li>
+            <li>\(X = -1\) : ni cœur, ni roi. Il reste \(32 - 7 - 3 - 1 = 21\) cartes. \(P(X=-1) = \dfrac{21}{32}\)</li>
+          </ul>
+          <p><strong>Vérification :</strong> \(\dfrac{1+3+7+21}{32} = \dfrac{32}{32} = 1\) ✓</p>
+          <div class="table-wrap">
+            <table>
+              <tr><th>\(x_i\)</th><td>−1</td><td>2</td><td>5</td><td>7</td></tr>
+              <tr><th>\(P(X = x_i)\)</th><td>\(\dfrac{21}{32}\)</td><td>\(\dfrac{7}{32}\)</td><td>\(\dfrac{3}{32}\)</td><td>\(\dfrac{1}{32}\)</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ 2) Calcul de l'espérance \(E(X)\)</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>\(E(X) = (-1) \times \dfrac{21}{32} + 2 \times \dfrac{7}{32} + 5 \times \dfrac{3}{32} + 7 \times \dfrac{1}{32}\)</p>
+          <p>\(E(X) = \dfrac{-21 + 14 + 15 + 7}{32} = \dfrac{15}{32} \approx \boxed{0{,}47\ \text{€}}\)</p>
+          <p><strong>Interprétation :</strong> Si l'on répète l'expérience un grand nombre de fois, on peut espérer gagner en moyenne <strong>environ 0,47 € par tirage</strong>. L'organisateur du jeu pourrait demander 0,50 € pour faire un léger bénéfice.</p>
+        </div>
+      </div>
+
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ 3) Calcul de la variance et de l'écart-type</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>Avec \(E(X) = \dfrac{15}{32}\) :</p>
+          <p>\(V(X) = \dfrac{21}{32}\left(-1 - \dfrac{15}{32}\right)^2 + \dfrac{7}{32}\left(2 - \dfrac{15}{32}\right)^2 + \dfrac{3}{32}\left(5 - \dfrac{15}{32}\right)^2 + \dfrac{1}{32}\left(7 - \dfrac{15}{32}\right)^2\)</p>
+          <p>\(V(X) \approx 5{,}19\)</p>
+          <p>\(\sigma(X) = \sqrt{V(X)} \approx \boxed{2{,}28}\)</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz-container">
+      <div class="quiz-header">
+        <div class="quiz-icon">?</div>
+        <div class="quiz-title">Quiz éclair n°3</div>
+      </div>
+      <p class="quiz-question">\(X\) prend les valeurs −2, 0, 3 avec les probabilités \(\dfrac{1}{4}, \dfrac{1}{2}, \dfrac{1}{4}\). Que vaut \(E(X)\) ?</p>
+      <div class="quiz-options" data-quiz="q3" data-correct="b">
+        <button class="quiz-option" data-opt="a"><span class="opt-letter">A</span>0</button>
+        <button class="quiz-option" data-opt="b"><span class="opt-letter">B</span>0,25</button>
+        <button class="quiz-option" data-opt="c"><span class="opt-letter">C</span>1</button>
+        <button class="quiz-option" data-opt="d"><span class="opt-letter">D</span>−0,5</button>
+      </div>
+      <div class="quiz-feedback" id="fb-q3"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ EXERCICE BAC ═══════════════ -->
+  <section id="sectionBac" style="background: linear-gradient(180deg, #FFFFFF 0%, #FFF8F0 100%); border: 2px solid var(--accent);">
+    <div style="display:flex; align-items:center; gap:1rem; margin-bottom:1.5rem;">
+      <div style="background:var(--accent); color:white; padding:0.5rem 1rem; border-radius:50px; font-weight:700; font-size:0.85rem; letter-spacing:0.1em;">★ SUJET TYPE BAC</div>
+      <div style="color:var(--muted); font-size:0.9rem;">Épreuve anticipée — Première Spécialité</div>
+    </div>
+    <h2 style="counter-increment:none;">Sujet corrigé — Contrôle qualité d'une production</h2>
+
+    <div style="background:white; border-left:5px solid var(--primary); padding:1.5rem; border-radius:10px; margin-bottom:1.5rem;">
+      <p><strong>Énoncé.</strong> Une entreprise fabrique des composants électroniques sur deux chaînes de production \(A\) et \(B\). La chaîne \(A\) produit 60 % des composants et la chaîne \(B\) en produit 40 %.</p>
+      <p>On constate que :</p>
+      <ul>
+        <li>3 % des composants produits par la chaîne \(A\) sont défectueux.</li>
+        <li>5 % des composants produits par la chaîne \(B\) sont défectueux.</li>
+      </ul>
+      <p>On prélève au hasard un composant de la production. On note les événements :</p>
+      <ul>
+        <li>\(A\) : « le composant provient de la chaîne \(A\) »,</li>
+        <li>\(B\) : « le composant provient de la chaîne \(B\) »,</li>
+        <li>\(D\) : « le composant est défectueux ».</li>
+      </ul>
+
+      <div style="background:var(--light); padding:1rem 1.3rem; border-radius:8px; margin-top:1rem;">
+        <p style="margin-bottom:0.5rem;"><strong>1)</strong> Représenter la situation par un arbre pondéré.</p>
+        <p style="margin-bottom:0.5rem;"><strong>2)</strong> Calculer \(P(A \cap D)\) et \(P(B \cap D)\).</p>
+        <p style="margin-bottom:0.5rem;"><strong>3)</strong> En déduire \(P(D)\), la probabilité qu'un composant pris au hasard soit défectueux.</p>
+        <p style="margin-bottom:0.5rem;"><strong>4)</strong> Un composant est défectueux. Quelle est la probabilité qu'il provienne de la chaîne \(B\) ? (Arrondir à \(10^{-3}\).)</p>
+        <p style="margin-bottom:0.5rem;"><strong>5)</strong> L'entreprise vend chaque composant non défectueux 8 € et perd 12 € (frais de remplacement) sur chaque composant défectueux. Soit \(X\) la variable aléatoire donnant le gain par composant.
+        <strong>a)</strong> Donner la loi de \(X\). <strong>b)</strong> Calculer \(E(X)\) et interpréter le résultat.</p>
+        <p><strong>6)</strong> Calculer la variance et l'écart-type de \(X\).</p>
+      </div>
+    </div>
+
+    <h3 style="color:var(--accent);">📝 Corrigé détaillé</h3>
+
+    <div class="example-box">
+      <span class="box-label">Question 1 — Arbre pondéré</span>
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ Voir l'arbre</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <div class="tree-container">
+            <svg viewBox="0 0 500 280" xmlns="http://www.w3.org/2000/svg" style="max-width:500px;">
+              <circle cx="50" cy="140" r="6" fill="#2D3D5C"/>
+              <text x="35" y="135" font-family="serif" font-size="14" fill="#2D3D5C">Ω</text>
+
+              <line x1="56" y1="140" x2="190" y2="60" stroke="#2D3D5C" stroke-width="2"/>
+              <line x1="56" y1="140" x2="190" y2="220" stroke="#2D3D5C" stroke-width="2"/>
+              <text x="100" y="90" font-size="13" fill="#C7385F" font-weight="600">0,6</text>
+              <text x="100" y="200" font-size="13" fill="#C7385F" font-weight="600">0,4</text>
+
+              <circle cx="200" cy="60" r="18" fill="#F0F2F8" stroke="#2D3D5C" stroke-width="2"/>
+              <text x="195" y="65" font-family="serif" font-size="14" fill="#2D3D5C">A</text>
+              <circle cx="200" cy="220" r="18" fill="#F0F2F8" stroke="#2D3D5C" stroke-width="2"/>
+              <text x="195" y="226" font-family="serif" font-size="14" fill="#2D3D5C">B</text>
+
+              <line x1="218" y1="55" x2="370" y2="25" stroke="#2D3D5C" stroke-width="1.5"/>
+              <line x1="218" y1="65" x2="370" y2="95" stroke="#2D3D5C" stroke-width="1.5"/>
+              <text x="280" y="35" font-size="12" fill="#C7385F" font-weight="600">0,03</text>
+              <text x="280" y="90" font-size="12" fill="#C7385F" font-weight="600">0,97</text>
+
+              <line x1="218" y1="215" x2="370" y2="185" stroke="#2D3D5C" stroke-width="1.5"/>
+              <line x1="218" y1="225" x2="370" y2="255" stroke="#2D3D5C" stroke-width="1.5"/>
+              <text x="280" y="195" font-size="12" fill="#C7385F" font-weight="600">0,05</text>
+              <text x="280" y="250" font-size="12" fill="#C7385F" font-weight="600">0,95</text>
+
+              <text x="380" y="30" font-family="serif" font-size="14" fill="#2E7D5E" font-weight="600">D</text>
+              <text x="380" y="100" font-family="serif" font-size="14" fill="#2E7D5E" font-weight="600">D̄</text>
+              <text x="380" y="190" font-family="serif" font-size="14" fill="#2E7D5E" font-weight="600">D</text>
+              <text x="380" y="260" font-family="serif" font-size="14" fill="#2E7D5E" font-weight="600">D̄</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="example-box">
+      <span class="box-label">Question 2 — Calcul des intersections</span>
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ Solution</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>D'après l'arbre :</p>
+          <p>\(P(A \cap D) = P(A) \times P_A(D) = 0{,}6 \times 0{,}03 = \boxed{0{,}018}\)</p>
+          <p>\(P(B \cap D) = P(B) \times P_B(D) = 0{,}4 \times 0{,}05 = \boxed{0{,}020}\)</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="example-box">
+      <span class="box-label">Question 3 — Probabilité totale \(P(D)\)</span>
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ Solution</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>\(A\) et \(B\) forment une partition de \(\Omega\). D'après la formule des probabilités totales :</p>
+          <p>\(P(D) = P(A \cap D) + P(B \cap D) = 0{,}018 + 0{,}020 = \boxed{0{,}038}\)</p>
+          <p>Soit 3,8 % de composants défectueux.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="example-box">
+      <span class="box-label">Question 4 — Probabilité conditionnelle \(P_D(B)\)</span>
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ Solution</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>\(P_D(B) = \dfrac{P(B \cap D)}{P(D)} = \dfrac{0{,}020}{0{,}038} \approx \boxed{0{,}526}\)</p>
+          <p><strong>Interprétation :</strong> Bien que la chaîne \(B\) ne produise que 40 % des composants, elle est responsable d'environ 52,6 % des défauts.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="example-box">
+      <span class="box-label">Question 5 — Loi et espérance de \(X\)</span>
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ a) Loi de probabilité de \(X\)</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>\(X\) prend deux valeurs :</p>
+          <ul>
+            <li>\(X = 8\) si le composant n'est pas défectueux : \(P(X = 8) = P(\overline{D}) = 1 - 0{,}038 = 0{,}962\)</li>
+            <li>\(X = -12\) si le composant est défectueux : \(P(X = -12) = P(D) = 0{,}038\)</li>
+          </ul>
+          <div class="table-wrap">
+            <table>
+              <tr><th>\(x_i\)</th><td>−12</td><td>8</td></tr>
+              <tr><th>\(P(X = x_i)\)</th><td>0,038</td><td>0,962</td></tr>
+            </table>
+          </div>
+          <p><strong>Vérification :</strong> \(0{,}038 + 0{,}962 = 1\) ✓</p>
+        </div>
+      </div>
+
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ b) Espérance de \(X\)</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>\(E(X) = (-12) \times 0{,}038 + 8 \times 0{,}962 = -0{,}456 + 7{,}696 = \boxed{7{,}24\ \text{€}}\)</p>
+          <p><strong>Interprétation :</strong> En moyenne, l'entreprise gagne 7,24 € par composant produit. Sur une grande quantité, l'activité est rentable.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="example-box">
+      <span class="box-label">Question 6 — Variance et écart-type</span>
+      <div class="reveal-block">
+        <button class="reveal-toggle" onclick="toggleReveal(this)">
+          <span>👁️ Solution</span>
+          <span class="reveal-icon">▼</span>
+        </button>
+        <div class="reveal-content">
+          <p>\(V(X) = 0{,}038 \times (-12 - 7{,}24)^2 + 0{,}962 \times (8 - 7{,}24)^2\)</p>
+          <p>\(V(X) = 0{,}038 \times (-19{,}24)^2 + 0{,}962 \times (0{,}76)^2\)</p>
+          <p>\(V(X) = 0{,}038 \times 370{,}1776 + 0{,}962 \times 0{,}5776\)</p>
+          <p>\(V(X) \approx 14{,}067 + 0{,}556 \approx \boxed{14{,}62}\)</p>
+          <p>\(\sigma(X) = \sqrt{V(X)} \approx \boxed{3{,}82\ \text{€}}\)</p>
+          <p><strong>Interprétation :</strong> L'écart-type est important par rapport à l'espérance, ce qui traduit une forte volatilité des gains à cause des pertes ponctuelles importantes (−12 €) sur les composants défectueux.</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); color:white; padding:1.5rem; border-radius:12px; margin-top:2rem;">
+      <h4 style="color:white; margin-top:0;">🎯 Compétences évaluées</h4>
+      <ul style="color:rgba(255,255,255,0.95); margin:0;">
+        <li>Représenter une situation par un arbre pondéré.</li>
+        <li>Utiliser la formule des probabilités totales.</li>
+        <li>Calculer une probabilité conditionnelle (formule de Bayes implicite).</li>
+        <li>Définir une variable aléatoire à partir d'un énoncé concret.</li>
+        <li>Calculer espérance, variance et écart-type — interpréter les résultats.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ═══════════════ QCM FINAL ═══════════════ -->
+  <section id="sectionQuiz">
+    <h2>QCM final — Épreuve anticipée</h2>
+    <p>Quatre questions de type bac, sans calculatrice.</p>
+
+    <div class="quiz-container">
+      <div class="quiz-header">
+        <div class="quiz-icon">1</div>
+        <div class="quiz-title">Question 1</div>
+      </div>
+      <p class="quiz-question">On lance un dé cubique trois fois de suite. Le dé est truqué. La probabilité d'obtenir au moins un 6 lors des trois lancers est égale à 0,19. La probabilité de n'obtenir aucun 6 est :</p>
+      <div class="quiz-options" data-quiz="qf1" data-correct="a">
+        <button class="quiz-option" data-opt="a"><span class="opt-letter">A</span>0,81</button>
+        <button class="quiz-option" data-opt="b"><span class="opt-letter">B</span>0,91</button>
+        <button class="quiz-option" data-opt="c"><span class="opt-letter">C</span>1,19</button>
+        <button class="quiz-option" data-opt="d"><span class="opt-letter">D</span>0,19</button>
+      </div>
+      <div class="quiz-feedback" id="fb-qf1"></div>
+    </div>
+
+    <div class="quiz-container">
+      <div class="quiz-header">
+        <div class="quiz-icon">2</div>
+        <div class="quiz-title">Question 2</div>
+      </div>
+      <p class="quiz-question">Sur un groupe de 300 personnes, 170 lisent au moins une heure par semaine. Parmi les 80 personnes de plus de 50 ans, 70 lisent au moins une heure par semaine. La quantité \(\dfrac{70}{80}\) correspond à :</p>
+      <div class="quiz-options" data-quiz="qf2" data-correct="c">
+        <button class="quiz-option" data-opt="a"><span class="opt-letter">A</span>\(P(A_3)\)</button>
+        <button class="quiz-option" data-opt="b"><span class="opt-letter">B</span>\(P(L \cap A_3)\)</button>
+        <button class="quiz-option" data-opt="c"><span class="opt-letter">C</span>\(P_{A_3}(L)\)</button>
+        <button class="quiz-option" data-opt="d"><span class="opt-letter">D</span>\(P_L(A_3)\)</button>
+      </div>
+      <div class="quiz-feedback" id="fb-qf2"></div>
+    </div>
+
+    <div class="quiz-container">
+      <div class="quiz-header">
+        <div class="quiz-icon">3</div>
+        <div class="quiz-title">Question 3</div>
+      </div>
+      <p class="quiz-question">On lance un dé cubique. La probabilité d'obtenir chaque face est : Face 1 : 0,1 ; Face 2 : 0,1 ; Face 3 : 0,25 ; Face 4 : 0,3 ; Face 5 : 0,1 ; Face 6 : 0,15. La probabilité d'obtenir un nombre inférieur ou égal à 4 est :</p>
+      <div class="quiz-options" data-quiz="qf3" data-correct="d">
+        <button class="quiz-option" data-opt="a"><span class="opt-letter">A</span>0,3</button>
+        <button class="quiz-option" data-opt="b"><span class="opt-letter">B</span>0,45</button>
+        <button class="quiz-option" data-opt="c"><span class="opt-letter">C</span>1 − 0,1 × 0,15</button>
+        <button class="quiz-option" data-opt="d"><span class="opt-letter">D</span>0,75</button>
+      </div>
+      <div class="quiz-feedback" id="fb-qf3"></div>
+    </div>
+
+    <div class="quiz-container">
+      <div class="quiz-header">
+        <div class="quiz-icon">4</div>
+        <div class="quiz-title">Question 4</div>
+      </div>
+      <p class="quiz-question">Parmi les nombres suivants, lequel ne peut <strong>pas</strong> être une probabilité ?</p>
+      <div class="quiz-options" data-quiz="qf4" data-correct="b">
+        <button class="quiz-option" data-opt="a"><span class="opt-letter">A</span>\(10^{-3}\)</button>
+        <button class="quiz-option" data-opt="b"><span class="opt-letter">B</span>\(\dfrac{20}{19}\)</button>
+        <button class="quiz-option" data-opt="c"><span class="opt-letter">C</span>\(\dfrac{1}{\sqrt{2}}\)</button>
+        <button class="quiz-option" data-opt="d"><span class="opt-letter">D</span>0,42</button>
+      </div>
+      <div class="quiz-feedback" id="fb-qf4"></div>
+    </div>
+
+    <div class="score-banner" id="scoreBanner">
+      <h3>🎉 QCM terminé !</h3>
+      <div class="score-value" id="scoreValue">0/7</div>
+      <p id="scoreMessage">Continuez à pratiquer !</p>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <p class="signature">— Faicel Missaoui —</p>
+  <p>Cours interactif · Probabilités &amp; Variables Aléatoires · Première Spécialité</p>
+  <p style="font-size:0.8rem; opacity:0.6; margin-top:0.5rem;">Conforme au programme officiel français (Eduscol)</p>
+  <p style="font-size:0.75rem; opacity:0.5; margin-top:1.5rem;">© Faicel Missaoui — Tous droits réservés</p>
+</footer>
+
+<script>
+  const revealedBlocks = new Set();
+  function toggleReveal(btn) {
+    const block = btn.closest('.reveal-block');
+    block.classList.toggle('revealed');
+    if (block.classList.contains('revealed')) {
+      revealedBlocks.add(block);
+      updateProgress();
+    }
+  }
+
+  const quizAnswers = {};
+  const totalQuizzes = document.querySelectorAll('.quiz-options').length;
+
+  document.querySelectorAll('.quiz-option').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const wrap = btn.closest('.quiz-options');
+      if (wrap.dataset.answered === 'true') return;
+      const correct = wrap.dataset.correct;
+      const chosen = btn.dataset.opt;
+      const quizId = wrap.dataset.quiz;
+      wrap.dataset.answered = 'true';
+
+      wrap.querySelectorAll('.quiz-option').forEach(b => {
+        b.classList.add('answered');
+        if (b.dataset.opt === correct) b.classList.add('correct');
+        else if (b === btn) b.classList.add('incorrect');
+      });
+
+      const fb = document.getElementById('fb-' + quizId);
+      if (chosen === correct) {
+        fb.textContent = '✅ Excellente réponse !';
+        fb.className = 'quiz-feedback show correct';
+        quizAnswers[quizId] = true;
+      } else {
+        fb.textContent = '❌ Ce n\'est pas la bonne réponse. La bonne option est en vert.';
+        fb.className = 'quiz-feedback show incorrect';
+        quizAnswers[quizId] = false;
+      }
+
+      updateProgress();
+      checkFinalScore();
+    });
+  });
+
+  const totalSteps = totalQuizzes + document.querySelectorAll('.reveal-block').length;
+  function updateProgress() {
+    const answered = Object.keys(quizAnswers).length;
+    const revealed = revealedBlocks.size;
+    const pct = Math.min(100, Math.round(((answered + revealed) / totalSteps) * 100));
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressText').textContent = pct + '%';
+  }
+
+  function checkFinalScore() {
+    const finalQs = ['qf1', 'qf2', 'qf3', 'qf4'];
+    const allAnswered = finalQs.every(q => q in quizAnswers);
+    if (allAnswered) {
+      const correct = finalQs.filter(q => quizAnswers[q]).length;
+      const banner = document.getElementById('scoreBanner');
+      document.getElementById('scoreValue').textContent = correct + '/4';
+      const pct = (correct / 4) * 100;
+      let msg;
+      if (pct === 100) msg = '🏆 Parfait ! Vous maîtrisez le chapitre !';
+      else if (pct >= 75) msg = '✨ Très bon résultat !';
+      else if (pct >= 50) msg = '👍 Bon début, mais à revoir.';
+      else msg = '📚 Reprenez le cours et retentez le QCM.';
+      document.getElementById('scoreMessage').textContent = msg;
+      banner.classList.add('show');
+      banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+
+  // Dice simulator
+  let totalRolls = 0;
+  let counts = {1:0, 2:0, 3:0, 4:0, 5:0, 6:0};
+  function rollDice(n) {
+    for (let i = 0; i < n; i++) {
+      const d1 = Math.floor(Math.random()*6) + 1;
+      const d2 = Math.floor(Math.random()*6) + 1;
+      counts[Math.max(d1, d2)]++;
+    }
+    totalRolls += n;
+    displayDice();
+  }
+  function resetDice() {
+    totalRolls = 0;
+    counts = {1:0, 2:0, 3:0, 4:0, 5:0, 6:0};
+    document.getElementById('diceResult').textContent = 'Aucun lancer effectué.';
+  }
+  function displayDice() {
+    const theory = [1/36, 3/36, 5/36, 7/36, 9/36, 11/36];
+    let html = `<strong>Total : ${totalRolls} lancers</strong><br><br>`;
+    html += `<table style="background:rgba(255,255,255,0.05); color:white; width:100%;"><tr><th style="background:rgba(255,255,255,0.1)">k</th>`;
+    for (let k = 1; k <= 6; k++) html += `<th style="background:rgba(255,255,255,0.1)">${k}</th>`;
+    html += `</tr><tr><td>Fréquence</td>`;
+    for (let k = 1; k <= 6; k++) {
+      const f = counts[k]/totalRolls;
+      html += `<td>${(f*100).toFixed(1)}%</td>`;
+    }
+    html += `</tr><tr><td>Théorique</td>`;
+    for (let k = 1; k <= 6; k++) html += `<td style="color:#FFD89C">${(theory[k-1]*100).toFixed(1)}%</td>`;
+    html += `</tr></table>`;
+    document.getElementById('diceResult').innerHTML = html;
+  }
+
+  document.querySelectorAll('.toc-list a').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      document.querySelector(a.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+
+</body>
+</html>
