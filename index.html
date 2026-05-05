@@ -154,22 +154,43 @@
   .system-card:hover { transform: translateY(-10px) scale(1.02); }
   .system-card:hover::before { transform: scaleX(1); }
 
-  .flag-icon {
-    width: 90px; height: 60px;
-    border-radius: 8px; margin: 0 auto 1.5rem;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
-    overflow: hidden; position: relative;
+  .country-label {
+    margin: 0 auto 1.5rem;
+    text-align: center;
+    position: relative;
   }
-  .flag-tunisia { background: #E70013; }
-  .flag-tunisia::after {
-    content: '☪'; position: absolute;
-    color: white; font-size: 2.4rem;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -55%);
+  .country-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 2.4rem;
+    letter-spacing: 0.12em;
+    display: block;
     line-height: 1;
   }
-  .flag-france {
-    background: linear-gradient(to right, #002395 33.33%, #FFFFFF 33.33% 66.66%, #ED2939 66.66%);
+  .country-underline {
+    display: block;
+    height: 2px;
+    width: 60px;
+    margin: 8px auto 0;
+    border-radius: 2px;
+  }
+  .system-card.tunisia .country-name {
+    background: linear-gradient(135deg, var(--tunisia), #E8617F);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .system-card.tunisia .country-underline {
+    background: linear-gradient(90deg, var(--tunisia), #E8617F);
+  }
+  .system-card.france .country-name {
+    background: linear-gradient(135deg, var(--france), var(--france-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .system-card.france .country-underline {
+    background: linear-gradient(90deg, var(--france), var(--france-light));
   }
   .system-title {
     font-family: 'Cormorant Garamond', serif;
@@ -229,14 +250,20 @@
 
     <div class="systems-grid">
       <a href="systeme-tunisie.html" class="system-card tunisia">
-        <div class="flag-icon flag-tunisia"></div>
+        <div class="country-label">
+          <span class="country-name">Tunisie</span>
+          <span class="country-underline"></span>
+        </div>
         <h2 class="system-title">Système Tunisien</h2>
         <p class="system-subtitle">Baccalauréat Tunisie</p>
         <div class="system-arrow">Accéder <span>→</span></div>
       </a>
 
       <a href="systeme-france.html" class="system-card france">
-        <div class="flag-icon flag-france"></div>
+        <div class="country-label">
+          <span class="country-name">France</span>
+          <span class="country-underline"></span>
+        </div>
         <h2 class="system-title">Système Français</h2>
         <p class="system-subtitle">Programme Eduscol</p>
         <div class="system-arrow">Accéder <span>→</span></div>
