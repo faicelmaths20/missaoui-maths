@@ -1,0 +1,20 @@
+[build]
+  publish = "."
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+[[redirects]]
+  from = "/tunisie"
+  to = "/systeme-tunisie.html"
+  status = 301
+
+[[redirects]]
+  from = "/france"
+  to = "/systeme-france.html"
+  status = 301

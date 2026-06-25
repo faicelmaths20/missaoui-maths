@@ -1,291 +1,124 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Missaoui Maths — Faicel Missaoui</title>
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#1A3A5C">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --primary: #1A3A5C;
-    --primary-light: #2C5282;
-    --accent: #E8612C;
-    --accent-light: #F6AD55;
-    --gold: #FFD89C;
-    --tunisia: #C7385F;
-    --france: #1E40AF;
-    --france-light: #3B82F6;
-    --muted: #5B7B9A;
-    --bg: #FAFAF7;
-    --text: #1A202C;
-    --shadow-lg: 0 20px 50px rgba(26, 58, 92, 0.18);
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { height: 100%; }
-  body {
-    font-family: 'Inter', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-  .bg {
-    position: fixed; inset: 0;
-    background: linear-gradient(135deg, #1A3A5C 0%, #2C5282 50%, #1A3A5C 100%);
-    z-index: -2;
-  }
-  .bg::before, .bg::after {
-    content: ''; position: absolute;
-    border-radius: 50%; filter: blur(80px); opacity: 0.4;
-    animation: float 12s ease-in-out infinite;
-  }
-  .bg::before { width: 500px; height: 500px; background: var(--accent); top: -10%; left: -10%; }
-  .bg::after { width: 600px; height: 600px; background: var(--accent-light); bottom: -15%; right: -15%; animation-delay: -6s; }
-  @keyframes float {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    50% { transform: translate(50px, 30px) scale(1.1); }
-  }
-  .deco {
-    position: fixed; color: rgba(255,255,255,0.06);
-    font-family: 'Cormorant Garamond', serif; font-weight: 700;
-    pointer-events: none; z-index: -1; user-select: none;
-  }
-  .deco.s1 { top: 10%; left: 5%; font-size: 12rem; transform: rotate(-15deg); }
-  .deco.s2 { bottom: 15%; right: 8%; font-size: 10rem; transform: rotate(20deg); }
-  .deco.s3 { top: 50%; right: 10%; font-size: 7rem; }
-
-  .container {
-    min-height: 100vh;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    padding: 2rem 1rem; position: relative; z-index: 1;
-  }
-  .brand-top {
-    position: absolute; top: 1.5rem; left: 50%;
-    transform: translateX(-50%);
-    color: rgba(255,255,255,0.7);
-    font-size: 0.85rem; letter-spacing: 0.3em;
-    text-transform: uppercase; font-weight: 500;
-  }
-  .admin-link {
-    position: absolute; top: 1.5rem; right: 1.5rem;
-    color: rgba(255,255,255,0.6);
-    font-size: 0.8rem; text-decoration: none;
-    padding: 0.4rem 0.9rem;
-    border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 50px; transition: all 0.2s;
-  }
-  .admin-link:hover {
-    color: white; background: rgba(255,255,255,0.1);
-    border-color: rgba(255,255,255,0.4);
-  }
-  .hero {
-    text-align: center; color: white;
-    max-width: 900px; width: 100%;
-    animation: fadeInUp 1s ease-out;
-  }
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .hero-tagline {
-    display: inline-block;
-    padding: 0.4rem 1.1rem;
-    background: rgba(255,255,255,0.12);
-    border: 1px solid rgba(255,255,255,0.25);
-    border-radius: 50px;
-    font-size: 0.75rem; letter-spacing: 0.15em;
-    text-transform: uppercase; margin-bottom: 1.5rem;
-    backdrop-filter: blur(10px);
-    color: rgba(255,255,255,0.95);
-  }
-  .hero-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(3rem, 8vw, 6rem);
-    font-weight: 700; line-height: 1;
-    letter-spacing: -0.03em; margin-bottom: 1rem;
-    background: linear-gradient(135deg, #FFFFFF 0%, var(--gold) 50%, var(--accent) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .hero-divider {
-    width: 70px; height: 3px;
-    background: var(--accent);
-    margin: 1.2rem auto; border-radius: 2px;
-  }
-  .hero-role {
-    font-size: 0.9rem; color: rgba(255,255,255,0.75);
-    letter-spacing: 0.2em; text-transform: uppercase;
-    margin-bottom: 0.8rem; font-weight: 500;
-  }
-  .choose-text {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.3rem;
-    color: rgba(255,255,255,0.85);
-    margin: 2rem 0 1.5rem; font-style: italic;
-  }
-  .systems-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem; max-width: 750px;
-    margin: 0 auto; width: 100%;
-  }
-  .system-card {
-    background: rgba(255,255,255,0.97);
-    border-radius: 20px;
-    padding: 2.5rem 2rem;
-    text-decoration: none; color: var(--text);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative; overflow: hidden;
-    box-shadow: var(--shadow-lg);
-    backdrop-filter: blur(20px);
-  }
-  .system-card::before {
-    content: ''; position: absolute;
-    top: 0; left: 0; width: 100%; height: 6px;
-    transform: scaleX(0); transform-origin: left;
-    transition: transform 0.5s ease;
-  }
-  .system-card.tunisia::before { background: linear-gradient(90deg, var(--tunisia), #E8617F); }
-  .system-card.france::before { background: linear-gradient(90deg, var(--france), var(--france-light)); }
-  .system-card:hover { transform: translateY(-10px) scale(1.02); }
-  .system-card:hover::before { transform: scaleX(1); }
-
-  .country-label {
-    margin: 0 auto 1.5rem;
-    text-align: center;
-    position: relative;
-  }
-  .country-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-weight: 600;
-    font-size: 2.4rem;
-    letter-spacing: 0.12em;
-    display: block;
-    line-height: 1;
-  }
-  .country-underline {
-    display: block;
-    height: 2px;
-    width: 60px;
-    margin: 8px auto 0;
-    border-radius: 2px;
-  }
-  .system-card.tunisia .country-name {
-    background: linear-gradient(135deg, var(--tunisia), #E8617F);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .system-card.tunisia .country-underline {
-    background: linear-gradient(90deg, var(--tunisia), #E8617F);
-  }
-  .system-card.france .country-name {
-    background: linear-gradient(135deg, var(--france), var(--france-light));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .system-card.france .country-underline {
-    background: linear-gradient(90deg, var(--france), var(--france-light));
-  }
-  .system-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.9rem; color: var(--primary);
-    font-weight: 700; margin-bottom: 0.4rem;
-    text-align: center;
-  }
-  .system-subtitle {
-    font-size: 0.85rem; color: var(--muted);
-    text-align: center; margin-bottom: 1.5rem;
-    letter-spacing: 0.05em; text-transform: uppercase;
-  }
-  .system-arrow {
-    display: flex; align-items: center; justify-content: center;
-    gap: 0.4rem; color: var(--accent);
-    font-weight: 600; font-size: 0.95rem;
-    transition: gap 0.3s;
-    padding-top: 1rem;
-    border-top: 1px solid rgba(0,0,0,0.08);
-  }
-  .system-card:hover .system-arrow { gap: 0.9rem; }
-  .system-card.tunisia .system-arrow { color: var(--tunisia); }
-  .system-card.france .system-arrow { color: var(--france); }
-
-  footer {
-    margin-top: 2.5rem; text-align: center;
-    color: rgba(255,255,255,0.6); font-size: 0.85rem; z-index: 1;
-  }
-
-  @media (max-width: 600px) {
-    .container { padding: 1.5rem 1rem; }
-    .hero-name { font-size: 3.2rem; }
-    .system-card { padding: 2rem 1.5rem; }
-    .system-title { font-size: 1.6rem; }
-    .brand-top { font-size: 0.7rem; letter-spacing: 0.2em; }
-    .admin-link { font-size: 0.7rem; padding: 0.3rem 0.7rem; }
-  }
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Cours, exercices et ressources de mathématiques de Faicel Missaoui pour les systèmes tunisien et français.">
+  <title>Missaoui Mathématiques</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script defer src="assets/js/app.js"></script>
 </head>
 <body>
-<div class="bg"></div>
-<div class="deco s1">∫</div>
-<div class="deco s2">π</div>
-<div class="deco s3">∑</div>
+<header class="site-header">
+  <a class="brand" href="index.html" aria-label="Accueil Missaoui Mathématiques">
+    <span class="brand-mark">FM</span>
+    <span><strong>Missaoui Mathématiques</strong><small>Faicel Missaoui — Professeur agrégé</small></span>
+  </a>
+  <button class="menu-toggle" aria-expanded="false" aria-controls="main-nav">Menu</button>
+  <nav id="main-nav" class="main-nav">
+    <a class="active" href="index.html">Accueil</a>
+    <a href="systeme-tunisie.html">Système tunisien</a>
+    <a href="systeme-france.html">Système français</a>
+    <a href="#apropos">À propos</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
 
-<div class="container">
-  <div class="brand-top">📚 Missaoui Maths</div>
-  <a href="admin.html" class="admin-link">🔐 Admin</a>
+<main>
+  <section class="hero">
+    <div class="hero-content">
+      <p class="eyebrow">Plateforme pédagogique de mathématiques</p>
+      <h1>Comprendre, s’entraîner et progresser.</h1>
+      <p class="hero-text">Cours, exercices, corrections, fiches de synthèse et ressources interactives pour les élèves du système tunisien et du système français.</p>
+      <div class="hero-actions">
+        <a class="button primary" href="#parcours">Choisir mon parcours</a>
+        <a class="button secondary" href="#ressources">Voir les ressources</a>
+      </div>
+    </div>
+    <div class="math-panel" aria-hidden="true">
+      <span>f(x)=ax²+bx+c</span>
+      <span>∫<sub>a</sub><sup>b</sup> f(x) dx</span>
+      <span>P(A∩B)=P(A)P<sub>A</sub>(B)</span>
+      <span>u<sub>n+1</sub>=f(u<sub>n</sub>)</span>
+    </div>
+  </section>
 
-  <div class="hero">
-    <span class="hero-tagline">Cours · Exercices · Bac</span>
-    <h1 class="hero-name">Faicel Missaoui</h1>
-    <div class="hero-divider"></div>
-    <p class="hero-role">Professeur Agrégé de Mathématiques</p>
+  <section id="parcours" class="section">
+    <div class="section-heading">
+      <p class="eyebrow">Choisissez votre programme</p>
+      <h2>Deux parcours clairement séparés</h2>
+      <p>Chaque espace est organisé par niveau, puis par chapitre et par type de ressource.</p>
+    </div>
 
-    <p class="choose-text">Choisissez votre système éducatif</p>
-
-    <div class="systems-grid">
-      <a href="systeme-tunisie.html" class="system-card tunisia">
-        <div class="country-label">
-          <span class="country-name">Tunisie</span>
-          <span class="country-underline"></span>
+    <div class="system-grid">
+      <a class="system-card tunisia" href="systeme-tunisie.html">
+        <div class="card-icon">TN</div>
+        <div>
+          <p class="card-label">Programme tunisien</p>
+          <h3>Système tunisien</h3>
+          <p>De la 1re à la 4e année secondaire, avec préparation au baccalauréat.</p>
+          <span class="card-link">Accéder aux niveaux →</span>
         </div>
-        <h2 class="system-title">Système Tunisien</h2>
-        <p class="system-subtitle">Baccalauréat Tunisie</p>
-        <div class="system-arrow">Accéder <span>→</span></div>
       </a>
 
-      <a href="systeme-france.html" class="system-card france">
-        <div class="country-label">
-          <span class="country-name">France</span>
-          <span class="country-underline"></span>
+      <a class="system-card france" href="systeme-france.html">
+        <div class="card-icon">FR</div>
+        <div>
+          <p class="card-label">Programme français</p>
+          <h3>Système français</h3>
+          <p>Du collège à la Terminale, avec ressources conformes aux programmes.</p>
+          <span class="card-link">Accéder aux niveaux →</span>
         </div>
-        <h2 class="system-title">Système Français</h2>
-        <p class="system-subtitle">Programme Eduscol</p>
-        <div class="system-arrow">Accéder <span>→</span></div>
       </a>
     </div>
-  </div>
+  </section>
 
-  <footer>
-    <p>© Faicel Missaoui — Tous droits réservés</p>
-  </footer>
-</div>
+  <section id="ressources" class="section soft-section">
+    <div class="section-heading">
+      <p class="eyebrow">Bibliothèque pédagogique</p>
+      <h2>Des ressources structurées</h2>
+    </div>
+    <div class="feature-grid">
+      <article class="feature-card"><span>01</span><h3>Cours</h3><p>Des leçons progressives, rigoureuses et illustrées.</p></article>
+      <article class="feature-card"><span>02</span><h3>Exercices</h3><p>Des séries d’application et d’approfondissement.</p></article>
+      <article class="feature-card"><span>03</span><h3>Corrections</h3><p>Des rédactions détaillées et des méthodes explicitées.</p></article>
+      <article class="feature-card"><span>04</span><h3>Révisions</h3><p>Des fiches de synthèse et des sujets d’examen.</p></article>
+    </div>
+  </section>
 
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => navigator.serviceWorker.register('service-worker.js').catch(() => {}));
-  }
-  try {
-    const s = JSON.parse(localStorage.getItem('mm_stats') || '{}');
-    s.home = (s.home || 0) + 1;
-    s._last = new Date().toISOString();
-    localStorage.setItem('mm_stats', JSON.stringify(s));
-  } catch(e) {}
-</script>
+  <section id="apropos" class="section split-section">
+    <div>
+      <p class="eyebrow">À propos</p>
+      <h2>Faicel Missaoui</h2>
+      <p>Professeur agrégé de mathématiques, ancien enseignant au lycée pilote de Sfax et enseignant dans le système français à l’ISC Carthage.</p>
+      <p>Cette plateforme vise à proposer des ressources fiables, progressives et directement exploitables par les élèves.</p>
+    </div>
+    <aside class="profile-box">
+      <strong>Domaines</strong>
+      <ul>
+        <li>Analyse et algèbre</li>
+        <li>Probabilités et statistiques</li>
+        <li>Préparation au baccalauréat</li>
+        <li>Olympiades et approfondissement</li>
+      </ul>
+    </aside>
+  </section>
+
+  <section id="contact" class="section contact-section">
+    <div>
+      <p class="eyebrow">Contact</p>
+      <h2>Une question sur une ressource ?</h2>
+      <p>Vous pouvez contacter directement Faicel Missaoui.</p>
+    </div>
+    <div class="contact-links">
+      <a href="mailto:missaoui.faicel@gmail.com">missaoui.faicel@gmail.com</a>
+      <a href="tel:+21652266771">+216 52 266 771</a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p>© <span id="current-year"></span> Faicel Missaoui — Tous droits réservés.</p>
+</footer>
 </body>
 </html>
