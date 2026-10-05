@@ -1,0 +1,52 @@
+{
+  "width": 720,
+  "height": 1280,
+  "fps": 15,
+  "duration": 222,
+  "chapters": [
+    {
+      "start": 0,
+      "title": "Quelle limite ?"
+    },
+    {
+      "start": 12,
+      "title": "Un point fixe"
+    },
+    {
+      "start": 29,
+      "title": "Construire les termes"
+    },
+    {
+      "start": 58,
+      "title": "Conjecturer"
+    },
+    {
+      "start": 72,
+      "title": "Définir et encadrer"
+    },
+    {
+      "start": 94,
+      "title": "Prouver la croissance"
+    },
+    {
+      "start": 116,
+      "title": "Justifier la convergence"
+    },
+    {
+      "start": 136,
+      "title": "Passer à la limite"
+    },
+    {
+      "start": 156,
+      "title": "Déterminer la limite"
+    },
+    {
+      "start": 178,
+      "title": "Le piège à éviter"
+    },
+    {
+      "start": 202,
+      "title": "La méthode à retenir"
+    }
+  ]
+}

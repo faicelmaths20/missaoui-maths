@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#17324d">
+  <meta name="description" content="Comprendre le théorème du point fixe en Terminale : construction des termes, convergence, continuité et passage à la limite. Une vidéo de Faicel Missaoui.">
+  <meta property="og:title" content="Théorème du point fixe · Faicel Missaoui">
+  <meta property="og:description" content="Une animation de 3 min 42 : comprendre le graphique, démontrer la convergence et identifier la limite.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://faicelmaths20.github.io/missaoui-maths/point-fixe/">
+  <meta property="og:image" content="https://faicelmaths20.github.io/missaoui-maths/point-fixe/poster.jpg">
+  <title>Théorème du point fixe · Faicel Missaoui</title>
+  <style>
+    :root{color-scheme:light;--navy:#17324d;--ink:#20394f;--teal:#087f72;--blue:#2767af;--muted:#566a7e;--line:#dbe4ed;--bg:#f3f6fa}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.65 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    button,select{font:inherit}button,a,select{-webkit-tap-highlight-color:transparent}button{cursor:pointer}a{color:var(--blue)}button:focus-visible,a:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #bd8b2f;outline-offset:4px}
+    header{background:var(--navy);color:white}.header-inner{max-width:1080px;margin:auto;padding:18px 24px;display:flex;justify-content:space-between;align-items:center;gap:18px}.author{font-size:1.12rem;font-weight:720}.level{color:#d5e6f3;font-size:.88rem}
+    main{max-width:1080px;margin:auto;padding:34px 24px 46px}h1{margin:0 0 10px;font-size:clamp(1.8rem,4.2vw,2.65rem);line-height:1.18;letter-spacing:-.025em}h2{font-size:1.2rem;line-height:1.4;margin:0 0 15px}h3{font-size:1rem;margin:0 0 9px}p{margin:0 0 14px}.lead{color:var(--muted);max-width:760px}.eyebrow{color:var(--teal);font-size:.82rem;letter-spacing:.1em;font-weight:750;margin-bottom:10px}
+    .layout{display:grid;grid-template-columns:minmax(0,440px) minmax(0,1fr);gap:30px;align-items:start;margin:26px 0 28px}.player{border:1px solid var(--line);background:#17324d;border-radius:18px;overflow:hidden;box-shadow:0 12px 30px #17324d16}.player video{display:block;width:100%;height:auto;aspect-ratio:9/16;background:var(--bg)}
+    .tools{display:flex;justify-content:space-between;gap:14px;align-items:center;margin:16px 0 0;flex-wrap:wrap}.tools label{font-size:.92rem;color:var(--muted)}select{background:white;color:var(--ink);border:1px solid var(--line);border-radius:9px;min-height:44px;padding:8px 12px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;background:white;border:1px solid var(--line);border-radius:10px;padding:10px 16px;color:var(--navy);font-weight:650;text-decoration:none;line-height:1.45}.btn.primary{background:var(--teal);color:white;border-color:var(--teal)}.btn:hover{filter:brightness(.97)}
+    .note{font-size:.86rem;color:var(--muted);margin:13px 0 0}.card{background:white;border:1px solid var(--line);border-radius:16px;padding:23px;margin-bottom:20px}.card.theorem{background:#e7f4ef;border-color:#bedccd}.formula{font-family:Georgia,"Times New Roman",serif;font-size:1.35rem;text-align:center;line-height:1.6;margin:14px 0;color:var(--navy)}.formula strong{color:var(--teal)}.chapters{display:grid;gap:5px}.chapter{display:flex;gap:15px;align-items:center;text-align:left;border:1px solid transparent;background:transparent;color:var(--ink);border-radius:9px;min-height:42px;padding:8px 10px;line-height:1.4}.chapter:hover{background:#eef4f9}.chapter[aria-current=true]{background:#e7f4ef;border-color:#bedccd;color:var(--teal);font-weight:680}.time{font-variant-numeric:tabular-nums;color:var(--muted);font-size:.85rem;min-width:39px}.chapter[aria-current=true] .time{color:var(--teal)}
+    details{background:white;border:1px solid var(--line);border-radius:15px;padding:18px 23px;margin:20px 0}summary{font-weight:680;cursor:pointer}.transcript{padding-top:22px;max-width:810px}.transcript ol{padding-left:25px}.transcript li{padding-left:6px;margin-bottom:18px}.warning{padding:16px 20px;border-left:4px solid #b43a47;border-radius:8px;background:#fff1f1;margin-top:20px}.warning strong{color:#b43a47}footer{margin-top:30px;display:flex;justify-content:space-between;gap:15px;align-items:center;flex-wrap:wrap;font-size:.9rem;color:var(--muted)}.share-actions{display:flex;gap:12px;flex-wrap:wrap}#status{font-size:.85rem;color:var(--teal)}[hidden]{display:none!important}
+    @media(max-width:760px){.header-inner{padding:15px 18px;flex-wrap:wrap;gap:4px 15px}main{padding:27px 17px 34px}.layout{grid-template-columns:1fr;gap:25px}.video-column{width:100%;max-width:440px;margin:auto}.card{padding:20px}.player{border-radius:13px}.tools{gap:12px}.tools .btn{font-size:.92rem}.chapter{min-height:46px}footer{align-items:flex-start}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+  </style>
+</head>
+<body>
+  <header><div class="header-inner"><div class="author">Faicel Missaoui</div><div class="level">Mathématiques · Terminale spécialité</div></div></header>
+  <main>
+    <div class="eyebrow">SUITES RÉCURRENTES</div>
+    <h1>Théorème du point fixe</h1>
+    <p class="lead">Comment trouver la limite d’une suite définie par u<sub>n+1</sub> = f(u<sub>n</sub>) ? Une construction graphique, une démonstration et un contre-exemple.</p>
+    <div class="layout">
+      <div class="video-column">
+        <div class="player">
+          <video id="video" controls playsinline preload="metadata" poster="poster.jpg" aria-label="Animation pédagogique de 3 minutes 42 sur le théorème du point fixe">
+            <source src="Point_fixe_Faicel_Missaoui.mp4" type="video/mp4">
+            <track kind="chapters" src="chapitres.vtt" srclang="fr" label="Chapitres">
+            Votre navigateur ne permet pas la lecture de la vidéo. <a href="Point_fixe_Faicel_Missaoui.mp4">Télécharger la vidéo</a>.
+          </video>
+        </div>
+        <div class="tools"><label for="speed">Vitesse <select id="speed"><option value="0.75">0,75×</option><option value="1" selected>1×</option><option value="1.25">1,25×</option><option value="1.5">1,5×</option></select></label><a class="btn" href="Point_fixe_Faicel_Missaoui.mp4" download="Point_fixe_Faicel_Missaoui.mp4">Télécharger le MP4</a></div>
+        <p class="note">3 min 42 · Format vertical · Les explications sont écrites dans la vidéo. Utilise la pause pour lire à ton rythme.</p>
+        <p id="video-error" class="warning" hidden>La lecture n’a pas démarré. Tu peux <a href="Point_fixe_Faicel_Missaoui.mp4">ouvrir directement la vidéo</a> ou la télécharger.</p>
+      </div>
+      <div>
+        <section class="card theorem" aria-labelledby="theorem-heading">
+          <h2 id="theorem-heading">Ce que dit le théorème</h2>
+          <p>Soit une suite bien définie telle que u<sub>n+1</sub> = f(u<sub>n</sub>). <strong>Si elle converge vers un réel ℓ</strong> et si <strong>f est continue en ℓ</strong>, alors :</p>
+          <div class="formula"><strong>f(ℓ) = ℓ</strong></div>
+          <p class="note">La limite ℓ appartient au domaine de f. Pour vérifier la continuité sans connaître sa valeur, on peut utiliser un intervalle contenant ℓ.</p>
+        </section>
+        <nav class="card" aria-labelledby="chapters-heading"><h2 id="chapters-heading">Revoir une étape</h2><div id="chapters" class="chapters">
+          <button class="chapter" data-time="0"><span class="time">0:00</span>Quelle limite ?</button>
+          <button class="chapter" data-time="12"><span class="time">0:12</span>Un point fixe</button>
+          <button class="chapter" data-time="29"><span class="time">0:29</span>Construire les termes</button>
+          <button class="chapter" data-time="58"><span class="time">0:58</span>Conjecturer</button>
+          <button class="chapter" data-time="72"><span class="time">1:12</span>Définir et encadrer</button>
+          <button class="chapter" data-time="94"><span class="time">1:34</span>Prouver la croissance</button>
+          <button class="chapter" data-time="116"><span class="time">1:56</span>Justifier la convergence</button>
+          <button class="chapter" data-time="136"><span class="time">2:16</span>Passer à la limite</button>
+          <button class="chapter" data-time="156"><span class="time">2:36</span>Déterminer la limite</button>
+          <button class="chapter" data-time="178"><span class="time">2:58</span>Le piège à éviter</button>
+          <button class="chapter" data-time="202"><span class="time">3:22</span>La méthode à retenir</button>
+        </div></nav>
+      </div>
+    </div>
+    <details><summary>Lire la démonstration et les points essentiels</summary><div class="transcript">
+      <p><strong>Un point fixe de f</strong> est un réel ℓ de son domaine tel que f(ℓ) = ℓ. Le point (ℓ ; ℓ) est donc une intersection de la courbe de f et de la droite y = x.</p>
+      <p>On étudie la suite définie par <strong>u<sub>0</sub> = 0</strong> et <strong>u<sub>n+1</sub> = √(u<sub>n</sub> + 2)</strong>.</p>
+      <ol>
+        <li><strong>Définition et encadrement.</strong> Le premier terme appartient à [0 ; 2]. Si un terme u<sub>n</sub> est défini et appartient à [0 ; 2], alors 2 ≤ u<sub>n</sub> + 2 ≤ 4, donc √2 ≤ √(u<sub>n</sub> + 2) ≤ 2. Le terme suivant est défini et appartient lui aussi à [0 ; 2]. Par récurrence, la suite est bien définie à tout rang et 0 ≤ u<sub>n</sub> ≤ 2.</li>
+        <li><strong>Croissance.</strong> La fonction f : x ↦ √(x + 2) est croissante sur [0 ; 2]. On a u<sub>0</sub> = 0 ≤ √2 = u<sub>1</sub>. Si u<sub>n</sub> ≤ u<sub>n+1</sub>, alors f(u<sub>n</sub>) ≤ f(u<sub>n+1</sub>), soit u<sub>n+1</sub> ≤ u<sub>n+2</sub>. Par récurrence, la suite est croissante.</li>
+        <li><strong>Convergence.</strong> La suite est croissante et majorée par 2 : le théorème de convergence monotone assure qu’elle converge vers un réel ℓ. En passant à la limite dans 0 ≤ u<sub>n</sub> ≤ 2, on obtient ℓ ∈ [0 ; 2].</li>
+        <li><strong>Passage à la limite.</strong> La fonction f est continue sur [0 ; 2], donc en ℓ. Ainsi f(u<sub>n</sub>) tend vers f(ℓ). De plus, u<sub>n+1</sub> tend vers ℓ. L’égalité u<sub>n+1</sub> = f(u<sub>n</sub>) donne donc ℓ = f(ℓ).</li>
+        <li><strong>Calcul de la limite.</strong> On a ℓ = √(ℓ + 2) et ℓ ≥ 0. Après élévation au carré, (ℓ − 2)(ℓ + 1) = 0. La valeur −1 est impossible, car elle est négative ; elle n’est d’ailleurs pas un point fixe : f(−1) = 1 ≠ −1. La limite est donc <strong>2</strong>.</li>
+      </ol>
+      <p><strong>À quoi sert la stabilité ?</strong> Ici, f([0 ; 2]) ⊂ [0 ; 2] permet de prouver que les termes sont bien définis et bornés. Un intervalle stable n’est pas une hypothèse supplémentaire nécessaire au passage à la limite si la suite est déjà bien définie, convergente, et f continue en sa limite.</p>
+      <p><strong>Pourquoi choisir [0 ; 2] ?</strong> Cet intervalle fournit directement le majorant 2. On pourrait aussi étudier f sur [−2 ; +∞[, son domaine, mais ce domaine ne donne pas à lui seul une borne supérieure pour la suite.</p>
+      <div class="warning"><strong>Contre-exemple.</strong> Pour f(x) = 1 − x et u<sub>0</sub> = 0, les termes alternent entre 0 et 1. Les sous-suites de rang pair et impair ont des limites différentes : la suite ne converge pas, bien que f soit continue, que [0 ; 1] soit stable et que f ait un unique point fixe, 1/2.</div>
+    </div></details>
+    <footer><span>Faicel Missaoui · Terminale spécialité</span><div class="share-actions"><button id="copy" class="btn" type="button">Copier le lien</button><a id="whatsapp" class="btn primary" href="https://wa.me/?text=Th%C3%A9or%C3%A8me%20du%20point%20fixe%20%E2%80%94%20Faicel%20Missaoui%20%3A%20https%3A%2F%2Ffaicelmaths20.github.io%2Fmissaoui-maths%2Fpoint-fixe%2F" target="_blank" rel="noopener">Partager sur WhatsApp</a></div><span id="status" role="status" aria-live="polite"></span></footer>
+  </main>
+  <script>
+    'use strict';
+    const video = document.getElementById('video');
+    const chapters = [...document.querySelectorAll('.chapter')];
+    function markChapter(){let active=0;chapters.forEach((b,i)=>{if(Number(b.dataset.time)<=video.currentTime)active=i;});chapters.forEach((b,i)=>b.setAttribute('aria-current',i===active?'true':'false'));}
+    video.addEventListener('timeupdate',markChapter);markChapter();
+    chapters.forEach(button=>button.addEventListener('click',()=>{video.currentTime=Number(button.dataset.time);video.play().catch(()=>{});markChapter();if(matchMedia('(max-width:760px)').matches)document.querySelector('.player').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth',block:'start'});}));
+    document.getElementById('speed').addEventListener('change',event=>{video.playbackRate=Number(event.target.value);});
+    video.addEventListener('error',()=>{document.getElementById('video-error').hidden=false;});
+    document.getElementById('copy').addEventListener('click',async()=>{const url='https://faicelmaths20.github.io/missaoui-maths/point-fixe/';try{await navigator.clipboard.writeText(url);document.getElementById('status').textContent='Lien copié.';}catch{document.getElementById('status').textContent=url;}});
+  </script>
+</body>
+</html>
