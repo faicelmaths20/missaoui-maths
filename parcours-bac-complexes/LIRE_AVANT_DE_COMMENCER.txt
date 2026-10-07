@@ -1,0 +1,32 @@
+Faïsel Missaoui
+Parcours de soutien : nombres complexes, bac tunisien, section Mathématiques
+
+Pour chaque étape :
+1. Lire le rappel, puis chercher et rédiger l'exercice.
+2. Consulter le corrigé séparé ; refaire les questions qui ont posé problème.
+3. Faire le quiz du même niveau, avec des données différentes.
+4. Expliquer sans aide les méthodes, puis passer à l'étape suivante.
+
+Dix exercices en vingt PDF ; deux TD de récapitulation avec deux corrigés séparés.
+Dix quiz de vingt questions, avec un coup de pouce, une correction après validation,
+un score et une navigation pour relire les erreurs. Les quiz sont entièrement locaux :
+aucun compte, aucun envoi des réponses au professeur. L'historique reste dans le navigateur.
+Les questions d'intégration sont à traiter après les primitives ; les parties analyse des TD
+supposent les acquis en limites, continuité et dérivabilité.
+
+Pour travailler en ligne et partager :
+https://faicelmaths20.github.io/missaoui-maths/parcours-bac-complexes/
+
+Pour travailler hors ligne : extraire toute l'archive, ouvrir index.html.
+Les fichiers PDF sont dans pdf/ ; les quiz dans quiz/.
+Un navigateur peut limiter la mémorisation lorsqu'on ouvre un fichier local.
+Les sources LaTeX des vingt-quatre PDF et la banque de questions sont dans sources/.
+Les figures des TD sont redessinées ; elles ne sont pas des copies photographiques.
+
+Points explicités dans les TD :
+- Données et propriétés de la courbe admises, distinction entre conjecture graphique et preuve.
+- Hypothèse d'asymptote y=x/2 explicitement posée pour la limite de différence.
+- Continuité de la restriction de f à [-2,-1], donc de f∘g sur [-3,1].
+- Zéro sans argument, dénominateurs non nuls et réciproques des conditions nécessaires.
+- Rayons admissibles écrits 4π/3 + 2kπ, k entier naturel.
+- Barres de conjugaison conservées dans les isométries.
