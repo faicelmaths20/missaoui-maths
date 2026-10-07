@@ -4,7 +4,63 @@ const num=Number(new URLSearchParams(location.search).get('niveau'));
 const valid=Number.isInteger(num)&&num>=1&&num<=LEVELS.length;
 let pos=0,answers=Array(20).fill(null),locked=Array(20).fill(false),ended=false;
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const math=s=>esc(s).replace(/e\^\(([^()]*)\)/g,'e<sup>$1</sup>').replaceAll('abs(f(z))','|f(z)|').replaceAll('abs(1 + e^(it))','|1 + e^(it)|');
+// Render written quotients as stacked fractions, including nested fractions.
+// All ordinary text is escaped before insertion into the page.
+function math(value, inheritedNodes = []) {
+  let source = String(value);
+  const nodes = [...inheritedNodes];
+  const atom = c => !!c && /[\p{L}\p{N}\p{M}√\uE000-\uF8FF]/u.test(c);
+  function closeAt(s,start){let depth=0;for(let i=start;i<s.length;i++){if(s[i]==='(')depth++;else if(s[i]===')'&&--depth===0)return i+1;}return start;}
+  function leftStart(s,end){
+    let p=end;
+    if(s[p-1]===')'){
+      let depth=1;p-=1;
+      while(p>0&&depth){p--;if(s[p]===')')depth++;else if(s[p]==='(')depth--;}
+      // Keep a function name, radical or coefficient with its argument.
+      while(p>0&&atom(s[p-1]))p--;
+    }else if(s[p-1]==='|'){
+      p=s.lastIndexOf('|',p-2);if(p<0)return end;
+    }else{while(p>0&&atom(s[p-1]))p--;}
+    // A spaced function such as sin u remains a single operand.
+    const prefix=s.slice(0,p).match(/(?:sin|cos|tan|cot|Re|Im|arg)\s+$/);
+    if(prefix)p-=prefix[0].length;
+    return p;
+  }
+  function rightEnd(s,start){
+    let p=start;
+    if(s[p]==='−'||s[p]==='-')p++;
+    if(s[p]==='(')return closeAt(s,p);
+    if(s[p]==='|'){const end=s.indexOf('|',p+1);return end<0?start:end+1;}
+    while(atom(s[p]))p++;
+    if(s[p]==='(')p=closeAt(s,p);
+    else if(/^(sin|cos|tan|cot|Re|Im|arg)$/.test(s.slice(start,p))){
+      while(s[p]===' ')p++;
+      if(s[p]==='(')p=closeAt(s,p);else while(atom(s[p]))p++;
+    }
+    return p;
+  }
+  const ungroup=s=>s[0]==='('&&closeAt(s,0)===s.length?s.slice(1,-1):s;
+  // Nodes use private markers so generated HTML is never parsed as input.
+  while(source.includes('/')){
+    const slash=source.indexOf('/');let endLeft=slash,startRight=slash+1;
+    while(source[endLeft-1]===' ')endLeft--;
+    while(source[startRight]===' ')startRight++;
+    const start=leftStart(source,endLeft),end=rightEnd(source,startRight);
+    if(start===endLeft||end===startRight){
+      const marker=String.fromCharCode(0xE000+nodes.length);nodes.push('/');
+      source=source.slice(0,slash)+marker+source.slice(slash+1);continue;
+    }
+    const numerator=ungroup(source.slice(start,endLeft));
+    const denominator=ungroup(source.slice(startRight,end));
+    const top=math(numerator,nodes),bottom=math(denominator,nodes);
+    const node=`<span class="fraction"><span class="fraction-top">${top}</span><span class="fraction-bottom">${bottom}</span></span>`;
+    const marker=String.fromCharCode(0xE000+nodes.length);nodes.push(node);
+    source=source.slice(0,start)+marker+source.slice(end);
+  }
+  let html=esc(source).replace(/e\^\(([^()]*)\)/g,'e<sup class="math-power">$1</sup>');
+  return html.replace(/[\uE000-\uF8FF]/g,c=>nodes[c.charCodeAt(0)-0xE000]);
+}
+
 function best(i){try{return Number(localStorage.getItem('qfm-complexes-v2-'+i))||0;}catch{return 0;}}
 function totals(){return {done:locked.filter(Boolean).length,score:valid?locked.reduce((s,v,i)=>s+(v&&answers[i]===LEVELS[num-1].questions[i].answer?1:0),0):0};}
 function remember(score){try{localStorage.setItem('qfm-complexes-v2-'+num,String(Math.max(best(num),score)));}catch{}}
