@@ -43,7 +43,7 @@ SCENES=[
 CAPTIONS=[
  (0,10,'Comment mesurer la pente d’une courbe en un point ?'),
  (10,17,'A reste fixe. B se déplace sur la courbe de la fonction carré.'),
- (17,25,'h est la différence des abscisses : h = xB − xA. Ici, a = 1.'),
+ (17,25,'Abscisses sur l’axe horizontal ; images sur l’axe vertical. Ici, a = 1.'),
  (25,34,'La pente de (AB) est la variation verticale divisée par la variation horizontale.'),
  (34,43,'Avec h = 1 : on avance de 1 et on monte de 3. La pente vaut 3.'),
  (43,52,'On développe (1 + h)², puis on factorise le numérateur par h.'),
@@ -124,8 +124,6 @@ def plate(i):
     for y in range(0,5):d.line((*pt(-1.5,y),*pt(4.6,y)),fill='#1d2b42',width=1)
     d.line((*pt(-1.5,0),*pt(4.6,0)),fill='#8494ac',width=2)
     d.line((*pt(0,-.55),*pt(0,4.4)),fill='#8494ac',width=2)
-    for x in [-1,1,2,3,4]:text(im,(pt(x,0)[0],GY+13),str(x),16,SOFT,anchor='mt')
-    for y in [1,2,3,4]:text(im,(GX-12,pt(0,y)[1]),str(y),16,SOFT,anchor='rm')
     text(im,(GX-9,GY+10),'0',16,SOFT,anchor='rt')
     text(im,(1200,GY+10),'x',18,SOFT);text(im,(GX+12,151),'y',18,SOFT)
     pts=[pt(x,x*x) for x in np.linspace(-1.5,math.sqrt(4.4),400)]
@@ -133,6 +131,34 @@ def plate(i):
     text(im,(1045,158),'f(x) = x²',23,BLUE,True)
     text(im,(1200,579),'Faicel Missaoui',12,'#5a6a82',anchor='ra')
     return im
+
+def projections(im,point,origin,h,mobile=False):
+    """Project the exact points; separate labels with leaders when h is small."""
+    d=ImageDraw.Draw(im);ox,oy=origin;A=point(1,1)
+    s=23 if mobile else 19
+    dash(d,(A[0],oy),A,'#7a8395',2)
+    dash(d,(ox,A[1]),A,'#7a8395',2)
+    text(im,(A[0],oy+10),'a',s,INK,True,anchor='mt')
+    text(im,(ox-13,A[1]+9),'f(a)',s,INK,anchor='rt')
+    if h is None:return
+    B=point(1+h,(1+h)**2)
+    dash(d,(B[0],oy),B,'#4d849f',2)
+    dash(d,(ox,B[1]),B,'#4d849f',2)
+    # The labels never replace or move the actual tick marks.
+    d.line((B[0],oy-5,B[0],oy+5),fill=BLUE,width=2)
+    d.line((ox-5,B[1],ox+5,B[1]),fill=BLUE,width=2)
+    lx=B[0]
+    gap=68 if mobile else 58
+    if abs(lx-A[0])<gap:lx=A[0]+(gap if h>0 else -gap)
+    ly=oy+39
+    d.line((B[0],oy+6,lx,ly-2),fill=BLUE,width=1)
+    text(im,(lx,ly),'a+h',s,BLUE,anchor='mt')
+    ylabel=B[1]
+    if abs(B[1]-A[1])<46:ylabel=A[1]-36 if h>0 else A[1]+53
+    d.line((ox-7,B[1],ox-15,ylabel),fill=BLUE,width=1)
+    box=d.textbbox((ox-19,ylabel),'f(a+h)',font=font(s),anchor='rm')
+    d.rounded_rectangle((box[0]-3,box[1]-2,box[2]+3,box[3]+2),radius=3,fill='#0b1930')
+    text(im,(ox-19,ylabel),'f(a+h)',s,BLUE,anchor='rm')
 
 def slopeline(im,m,color,width=3):
     d=ImageDraw.Draw(im);low=max(-1.5,1+(-.55-1)/m) if m>0 else -1.5
@@ -148,6 +174,7 @@ def frame(t):
     if i==3:h=1-.5*ease(u)
     if i==4:h=10**(-3*ease(u))
     if i==5:h=-.8*10**(-3*ease(u))
+    projections(im,pt,(GX,GY),h if i<6 else None)
     if i in (4,5):slopeline(im,2,'#864f74',2)
     if i<6:
         slopeline(im,2+h,GOLD,3)

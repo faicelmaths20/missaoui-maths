@@ -54,8 +54,6 @@ def phone_plate(i):
     for y in range(5):d.line((*ppoint(-1.7,y),*ppoint(4.5,y)),fill='#24334a',width=1)
     d.line((*ppoint(-1.7,0),*ppoint(4.5,0)),fill='#899bb5',width=2)
     d.line((*ppoint(0,-.4),*ppoint(0,4.1)),fill='#899bb5',width=2)
-    for x in [-1,1,2,3,4]:text(im,(ppoint(x,0)[0],765),str(x),23,SOFT,anchor='mt')
-    for y in range(1,5):text(im,(212,ppoint(0,y)[1]),str(y),23,SOFT,anchor='rm')
     text(im,(211,762),'0',23,SOFT,anchor='rt')
     text(im,(672,765),'x',24,SOFT);text(im,(239,329),'y',24,SOFT)
     pts=[ppoint(x,x*x) for x in np.linspace(-1.7,math.sqrt(4.1),400)]
@@ -76,6 +74,7 @@ def phone_frame(t):
     if i==3:h=1-.5*ease(u)
     if i==4:h=10**(-3*ease(u))
     if i==5:h=-.8*10**(-3*ease(u))
+    projections(im,ppoint,(225,748),h if i<6 else None,mobile=True)
     A=ppoint(1,1)
     if i in (4,5):phone_line(im,2,'#a3658a',2)
     if i<6:
