@@ -9,7 +9,12 @@ function selectFilmFormat(format,initial=false){
  video.load();
 }
 $('film-format').addEventListener('change',e=>selectFilmFormat(e.target.value));
-$('fullscreen').addEventListener('click',()=>{if(video.webkitEnterFullscreen){video.webkitEnterFullscreen();}else if(video.requestFullscreen){video.requestFullscreen().catch(()=>{});}});
+function closeExpandedFilm(){document.body.classList.remove('film-expanded');if(document.fullscreenElement&&document.exitFullscreen)document.exitFullscreen().catch(()=>{});}
+$('fullscreen').addEventListener('click',()=>{document.body.classList.add('film-expanded');if(video.webkitEnterFullscreen){video.webkitEnterFullscreen();}else if(video.requestFullscreen){video.requestFullscreen().catch(()=>{});}});
+$('exit-fullscreen').addEventListener('click',closeExpandedFilm);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeExpandedFilm();});
+document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement)document.body.classList.remove('film-expanded');});
+video.addEventListener('webkitendfullscreen',closeExpandedFilm);
 function toggleFilm(){if(video.paused){if(video.ended)video.currentTime=0;video.play().catch(()=>{play.textContent='▶ Lire avec les commandes vidéo';});}else video.pause();}
 play.addEventListener('click',toggleFilm);
 video.addEventListener('play',()=>play.textContent='Ⅱ Pause');
