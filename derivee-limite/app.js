@@ -1,5 +1,15 @@
 'use strict';
 const $=id=>document.getElementById(id),video=$('video'),play=$('play');
+const filmFormats={portrait:{file:'Derivee_limite_Faicel_Missaoui_mobile.mp4?v=2',poster:'affiche-mobile.jpg?v=2'},landscape:{file:'Derivee_limite_Faicel_Missaoui.mp4?v=2',poster:'affiche.jpg?v=2'}};
+function selectFilmFormat(format,initial=false){
+ const media=filmFormats[format],time=initial?0:video.currentTime,playing=!initial&&!video.paused;
+ video.pause();$('screen').classList.toggle('portrait',format==='portrait');$('screen').classList.toggle('landscape',format==='landscape');
+ video.poster=media.poster;video.src=media.file;$('download-film').href=media.file;$('film-format').value=format;
+ video.addEventListener('loadedmetadata',()=>{video.currentTime=Math.min(time,video.duration||140);video.playbackRate=Number($('speed').value);if(playing)video.play().catch(()=>{});},{once:true});
+ video.load();
+}
+$('film-format').addEventListener('change',e=>selectFilmFormat(e.target.value));
+$('fullscreen').addEventListener('click',()=>{if(video.webkitEnterFullscreen){video.webkitEnterFullscreen();}else if(video.requestFullscreen){video.requestFullscreen().catch(()=>{});}});
 function toggleFilm(){if(video.paused){if(video.ended)video.currentTime=0;video.play().catch(()=>{play.textContent='▶ Lire avec les commandes vidéo';});}else video.pause();}
 play.addEventListener('click',toggleFilm);
 video.addEventListener('play',()=>play.textContent='Ⅱ Pause');
@@ -41,3 +51,4 @@ document.querySelectorAll('[data-h]').forEach(b=>b.addEventListener('click',()=>
 $('show-tangent').addEventListener('change',e=>$('tangent').style.display=e.target.checked?'':'none');
 $('animate').addEventListener('click',()=>{if(animation){stop();return;}let h=Number($('h').value);if(Math.abs(h)<.02)h=h<0?-1:1;const initial=h,start=performance.now();$('animate').textContent='Ⅱ Arrêter';function tick(now){const t=Math.min((now-start)/8500,1),value=Math.sign(initial)*Math.exp(Math.log(Math.abs(initial))*(1-t)+Math.log(.001)*t);draw(value);if(t<1)animation=requestAnimationFrame(tick);else{stop();draw(Math.sign(initial)*.001);}}animation=requestAnimationFrame(tick);});
 document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();});draw(1);
+selectFilmFormat(window.matchMedia('(max-width:750px)').matches?'portrait':'landscape',true);

@@ -82,7 +82,7 @@ def plate(i):
     d.line((58,96,1222,96),fill='#665b40',width=1)
     text(im,(58,126),SCENES[i][2].upper(),17,GOLD,True)
     title=SCENES[i][3].split('\n')
-    for j,s in enumerate(title):text(im,(58,168+j*64),s,43 if i==0 else 32,INK,True)
+    for j,s in enumerate(title):text(im,(58,168+j*49),s,31 if i==0 else 26,INK,True)
     if i==0:
         lines(im,330,['De la sécante à la tangente.','Voir. Comprendre. Retenir.'],25)
         eq(im,(58,455),r"f'(a)=\lim_{h\to 0}\frac{f(a+h)-f(a)}{h}",25,GOLD)
@@ -91,20 +91,20 @@ def plate(i):
         lines(im,330,['A(1 ; 1) est fixe.','B(1 + h ; (1 + h)²) est mobile.','La droite (AB) est une sécante.'],23)
         text(im,(58,500),'h ≠ 0 : A et B sont distincts.',24,GOLD,True)
     elif i==2:
-        eq(im,(58,250),r'm(h)=\frac{f(a+h)-f(a)}{h}',28,GOLD)
+        eq(im,(58,250),r'\mathcal{T}(h)=\frac{f(a+h)-f(a)}{h}',28,GOLD)
         lines(im,350,['Au numérateur : variation de f.','Au dénominateur : variation de x.'],23)
-        eq(im,(58,454),r'm(1)=\frac{4-1}{1}=3',30,GOLD)
+        eq(im,(58,454),r'\mathcal{T}(1)=\frac{4-1}{1}=3',30,GOLD)
         text(im,(58,555),'C’est la pente de (AB).',25,INK,True)
     elif i==3:
-        eq(im,(58,240),r'm(h)=\frac{(1+h)^2-1}{h}',26)
+        eq(im,(58,240),r'\mathcal{T}(h)=\frac{(1+h)^2-1}{h}',26)
         eq(im,(58,335),r'=\frac{2h+h^2}{h}=\frac{h(2+h)}{h}',26)
         eq(im,(58,445),r'=2+h\quad (h\ne 0)',33,GOLD)
         text(im,(58,549),'La simplification exige h ≠ 0.',23,SOFT)
     elif i in (4,5):
-        eq(im,(58,242),r'm(h)=2+h',30,GOLD)
+        eq(im,(58,242),r'\mathcal{T}(h)=2+h',30,GOLD)
         vals=['1','0,5','0,1','0,01'] if i==4 else ['−0,8','−0,5','−0,1','−0,01']
         slopes=['3','2,5','2,1','2,01'] if i==4 else ['1,2','1,5','1,9','1,99']
-        text(im,(90,330),'h',23,BLUE,True);text(im,(285,330),'pente',23,GOLD,True)
+        text(im,(90,330),'h',23,BLUE,True);eq(im,(285,325),r'\mathcal{T}(h)',22,GOLD)
         for j,(a,b) in enumerate(zip(vals,slopes)):
             text(im,(90,375+j*42),a,23,BLUE);text(im,(285,375+j*42),b,23,GOLD)
         text(im,(58,564),'Même destination : 2.',27,INK,True)
@@ -164,7 +164,7 @@ def frame(t):
         if i>=3:
             d.rounded_rectangle((995,440,1205,515),radius=12,fill='#15263e')
             text(im,(1010,451),'h = '+fmt(h),19,BLUE)
-            text(im,(1010,483),'pente = '+fmt(2+h),19,GOLD,True)
+            eq(im,(1010,483),r'\mathcal{T}(h)='+fmt(2+h).replace(',',r'{,}'),16,GOLD)
     else:
         slopeline(im,2,PINK,4)
         text(im,(1010,330),'Tangente',22,PINK,True)
