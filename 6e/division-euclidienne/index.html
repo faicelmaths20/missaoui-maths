@@ -1,0 +1,505 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#142f51">
+<meta name="description" content="30 automatismes de sixième sur la division euclidienne, avec coups de pouce et corrections. Faicel Missaoui · ISC Carthage.">
+<meta property="og:title" content="Division euclidienne · 30 automatismes de 6e">
+<meta property="og:description" content="Cinq séries progressives pour calculer, vérifier et raisonner. Faicel Missaoui · ISC Carthage.">
+<title>Division euclidienne · 6e · Faicel Missaoui</title>
+<style>
+*{box-sizing:border-box}
+:root{color-scheme:light;--ink:#142f51;--dim:#425876;--blue:#204d82;--line:#c3d1dc;--sky:#eef4f8;--gold:#ffcc68;--paper:#fff;--teal:#0b6451}
+body{margin:0;background:#f2f6f9;color:var(--ink);font:1.0625rem/1.45 "Aptos","Inter",system-ui,-apple-system,"Segoe UI",sans-serif}
+body:has(dialog[open]){overflow:hidden}
+[hidden]{display:none!important}
+button,input,select{font:inherit}
+button,select{cursor:pointer}
+button{color:var(--ink);font-weight:680;border:1px solid var(--line);border-radius:12px;background:white;padding:.6rem 1rem;min-height:46px;display:inline-flex;align-items:center;justify-content:center;gap:.6rem}
+button:hover{border-color:#597493;background:#edf4fa}
+button:disabled{opacity:.45;cursor:default}
+:focus-visible{outline:3px solid #cb7404;outline-offset:3px}
+svg.icon{width:1.23em;height:1.23em;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.wrap{width:min(1216px,calc(100% - clamp(28px,7vw,112px)));margin:auto}
+.mast{background:white;border-bottom:1px solid var(--line)}
+.mast .wrap{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.6rem 0}
+.logo{display:block;width:clamp(255px,32vw,414px);height:auto;max-width:100%}
+.signature{text-align:right;font-weight:750;font-size:1.08rem;line-height:1.25}
+.signature small{display:block;font-weight:500;color:var(--dim);font-size:.9rem;margin-top:.18rem}
+main{padding:clamp(1rem,2.6vh,2rem) 0 1.75rem}
+.topline,.ribbon,.controlrow,.pager,.practicebar,.topbtns,.stepbuttons,.actbuttons,.dialogtitle{display:flex;align-items:center;gap:.65rem}
+.topline,.ribbon,.controlrow,.practicebar,.dialogtitle{justify-content:space-between}
+.kicker,.boardlabel,.stage,.panelname,.eyebrow{font-size:.875rem;font-weight:780;letter-spacing:.095em;text-transform:uppercase}
+.kicker,.eyebrow{color:#3e5a7d}
+h1{font-size:clamp(1.85rem,3.5vw,3.3rem);line-height:1.05;margin:.2rem 0 .1rem;letter-spacing:-.05em;font-weight:770}
+.topbtns{flex-wrap:wrap;justify-content:flex-end}
+.progress{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:clamp(.9rem,2vh,1.5rem) 0 .8rem}
+.track{height:6px;overflow:hidden;background:#d5e0e9;border-radius:8px}
+.track i{height:100%;display:block;background:var(--blue);border-radius:inherit}
+.card{border-radius:22px;overflow:hidden;background:white;border:1px solid #bfccd7;box-shadow:0 7px 18px #172c4610}
+.board{background:linear-gradient(113deg,#142f51 0%,#1b3d66 74%,#214a78 100%);color:white;padding:clamp(1.25rem,3vw,2.5rem)}
+.ribbon{justify-content:flex-start;gap:.85rem;flex-wrap:wrap}
+.num{font-size:1rem;font-weight:760;letter-spacing:.015em;background:#fff;color:var(--ink);border-radius:7px;padding:.28rem .7rem}
+.stage{color:#ffdb95;letter-spacing:.06em}
+.boardbody{display:grid;align-items:center;grid-template-columns:minmax(0,1.68fr) minmax(0,1fr);gap:clamp(1rem,3.1vw,3rem);min-height:clamp(206px,30vh,310px);padding-top:1rem}
+.given{color:#eff5ff;font-size:clamp(1.3rem,2.05vw,1.95rem);line-height:1.35;margin:0 0 .62rem;max-width:39em}
+h2{font-size:clamp(1.95rem,3.3vw,3.35rem);line-height:1.13;letter-spacing:-.028em;margin:0;font-weight:720;text-wrap:pretty}
+h2:focus{outline:none}
+.visual{align-self:stretch;display:flex;align-items:center;justify-content:center;flex-direction:column;min-height:155px;border:1px solid #7891aa;border-radius:15px;overflow:hidden;background-color:#123153;background-image:linear-gradient(#829ebb1c 1px,transparent 1px),linear-gradient(90deg,#829ebb1c 1px,transparent 1px);background-size:22px 22px;padding:1rem .75rem}
+.boardlabel{color:#dae9fa;text-align:center;letter-spacing:.1em;margin:0 0 .8rem}
+.sketch{text-align:center;font-weight:740;font-variant-numeric:tabular-nums;line-height:1.3;color:var(--gold);font-size:clamp(1.4rem,2.8vw,2.65rem);max-width:100%}
+.sketch.math{font-size:clamp(1.3rem,2.35vw,2.3rem);line-height:1.5}
+.facts div+div{color:white;font-size:.79em;margin-top:2px;font-weight:620}
+.counters{display:grid;grid-template-columns:repeat(7,1fr);gap:clamp(5px,1vw,14px);justify-content:center;padding:.25rem}
+.counter{width:clamp(17px,2vw,32px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 32% 30%,#fff2bf 0,#ffcf68 31%,#edac40 88%);border:1px solid #ffde92;box-shadow:0 3px 0 #9a662d}
+.potence{display:grid;grid-template-columns:1.25fr 1fr;width:max-content;min-width:130px;text-align:center;font:700 clamp(1.7rem,3vw,3rem)/1.08 "Aptos","Inter",system-ui,sans-serif}
+.potence span{padding:.04em .36em .1em}
+.potence span:nth-child(even){border-left:3px solid #eef6ff}
+.potence span:nth-child(4){border-top:3px solid #eef6ff}
+.potence span:nth-child(n+3){color:#e9f3ff}
+.controlrow{padding:1rem clamp(1rem,2.8vw,2.4rem);gap:1rem;flex-wrap:wrap}
+.primary{background:var(--ink);color:white;border-color:var(--ink)}
+.primary:hover{background:#254e7c;color:white}
+.hintbtn{background:#fff6df;border-color:#dbb664;color:#664812}
+.hintbtn:hover,.hintbtn[aria-expanded=true]{background:#ffebbc;border-color:#ae8537}
+.fillblue,.fillblue:hover{background:#e2edf9;border-color:#6482a3}
+.pager{gap:.5rem}
+.panel{margin:0 clamp(1rem,2.8vw,2.4rem) 1rem;padding:.85rem 1.15rem;border-left:5px solid #ae7d19;background:#fff5d9;border-radius:0 10px 10px 0;color:#4c360e}
+.panel.answer{background:#e4f5ef;color:#0e4639;border-left-color:var(--teal)}
+.panel p{margin:.2rem 0 0;font-size:clamp(1.2rem,2vw,1.85rem);line-height:1.35}
+.panel strong{font-size:clamp(1.45rem,2.4vw,2.15rem)}
+.practice{margin-top:.9rem}
+.practicebar{color:var(--dim);flex-wrap:wrap;gap:.6rem}
+.linkbtn{border-color:transparent;background:transparent;color:var(--blue);padding:.42rem .1rem;min-height:44px}
+.linkbtn:hover{background:transparent;border-color:transparent;text-decoration:underline}
+.shortcuts{font-size:.9rem}
+form{margin:.45rem 0;padding:1rem;border:1px solid var(--line);border-radius:12px;background:white}
+.fields{display:flex;gap:.8rem;align-items:end;flex-wrap:wrap}
+label{display:flex;flex-direction:column;gap:.25rem;font-size:1rem;font-weight:640}
+input,select{border:1px solid #839ab0;background:white;color:var(--ink);border-radius:8px;padding:.45rem .6rem;max-width:100%;min-height:45px;min-width:6rem}
+input{width:8rem}
+#feedback{margin:.5rem 0 0;font-weight:720;color:var(--blue)}
+dialog{border:1px solid #9aaec1;border-radius:18px;background:#fff;color:var(--ink);padding:1.3rem;width:min(530px,calc(100% - 28px));max-height:85vh;overflow:auto;box-shadow:0 20px 55px #10264045}
+dialog::backdrop{background:#10243bc4}
+.dialogtitle{position:sticky;top:-1.3rem;background:white;z-index:1;padding:.35rem 0 .5rem}
+h3{font-size:1.5rem;letter-spacing:-.025em;line-height:1.2;margin:.24rem 0}
+.jumprow{border-top:1px solid var(--line);padding:.65rem 0}
+.jumprow p{margin:0 0 .4rem;font-weight:650}
+.jumprow div{display:grid;grid-template-columns:repeat(6,1fr);gap:.35rem}
+.jumprow button{padding:.3rem}
+.jumprow button[aria-current=step]{background:var(--ink);color:white}
+#finish{padding:2rem;background:white;border:1px solid var(--line);border-radius:18px}
+#finish p{font-size:1.22rem}
+#finish button{margin:.2rem .4rem .2rem 0}
+.presentation .shortcuts{display:none}.presentation .mast .logo{width:min(330px,90vw)}.presentation .mast .wrap{padding:.25rem 0}
+.presentation main{padding-top:.75rem}
+.presentation .wrap{width:min(1500px,96%)}
+.presentation .boardbody{min-height:clamp(240px,40vh,510px)}
+.presentation .given{font-size:clamp(1.4rem,2.65vw,2.75rem)}
+.presentation h2{font-size:clamp(2.2rem,4.15vw,4.6rem)}
+.presentation .panel p{font-size:clamp(1.45rem,2.3vw,2.45rem)}
+@media(max-width:760px){.signature{font-size:1rem}.signature small{font-size:.82rem}.topline{align-items:end}.topbtns button{padding:.5rem .65rem}.shortcuts{display:none}.boardbody{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)}.controlrow{padding:.85rem}.actbuttons,.pager{gap:.4rem}.controlrow button{padding:.5rem .75rem}}
+@media(max-width:600px){.wrap{width:calc(100% - 24px)}.mast .wrap{flex-direction:column;align-items:flex-start;gap:3px;padding:.45rem 0}.logo{width:min(100%,360px);align-self:center}.signature{text-align:center;align-self:center;font-size:.9rem}.signature small{display:none}main{padding-top:.9rem}.topline{flex-wrap:wrap;gap:.5rem}.topbtns{justify-content:flex-start}.topbtns button{min-height:44px;padding:.35rem .6rem;font-size:.94rem}.kicker{font-size:.78rem}.board{padding:1rem}.boardbody{display:flex;flex-direction:column;align-items:stretch;gap:.95rem;min-height:0}.ribbon{gap:.5rem}.stage,.boardlabel{font-size:.78rem}.stage{letter-spacing:.025em}.num{font-size:.88rem}.given{font-size:1.27rem}.visual{min-height:96px;padding:.65rem}.boardlabel{margin-bottom:.35rem}.sketch{font-size:1.55rem}.sketch.math{font-size:1.65rem}.counters{gap:7px}.counter{width:19px}.potence{min-width:95px;font-size:1.5rem}.controlrow{display:grid;gap:.65rem}.actbuttons,.pager{display:grid;grid-template-columns:1fr 1fr}.controlrow button{font-size:.94rem;padding:.45rem .25rem;gap:.3rem}.card{border-radius:15px}.progress{margin:.7rem 0}.presentation .boardbody{min-height:0}.panel{margin:0 .85rem .9rem}.practice{margin-top:.35rem}.jumprow{font-size:1rem}}
+@media(max-height:680px) and (min-width:761px){.mast .logo{width:280px}.mast .wrap{padding:.24rem 0}main{padding:.65rem 0}.board{padding:1.15rem 1.55rem}.boardbody{min-height:158px}.progress{margin:.6rem 0}.controlrow{padding:.65rem 1.5rem}.presentation .boardbody{min-height:195px}}
+</style>
+</head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+ <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.4"/><rect x="14" y="3" width="7" height="7" rx="1.4"/><rect x="3" y="14" width="7" height="7" rx="1.4"/><rect x="14" y="14" width="7" height="7" rx="1.4"/></symbol>
+ <symbol id="i-screen" viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></symbol>
+ <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 17c0-3-4-4-4-8a7 7 0 1 1 14 0c0 4-4 5-4 8zM9 20h6m-5 3h4"/></symbol>
+ <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
+ <symbol id="i-pencil" viewBox="0 0 24 24"><path d="m14 5 5 5M4 20l5-1L21 7l-4-4L5 15z"/></symbol>
+</svg>
+<header class="mast"><div class="wrap"><img class="logo" src="data:image/webp;base64,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" width="700" height="117" alt="ISC Carthage, établissement partenaire AEFE. Grandir en confiance."><div class="signature">Faicel Missaoui<small>Mathématiques · Sixième</small></div></div></header>
+<main class="wrap">
+ <div class="topline"><div><div class="kicker">Automatismes · Sixième</div><h1>Division euclidienne</h1></div><div class="topbtns">
+ <button type="button" id="openmap" aria-haspopup="dialog"><svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg>Parcours</button>
+ <button type="button" id="project" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-screen"/></svg><span id="projecttext">Projeter</span></button>
+ </div></div>
+ <div class="progress" id="progress" aria-hidden="true"></div>
+ <section class="card" id="activity" aria-labelledby="ask"><div class="board"><div class="ribbon"><span class="num" id="num"></span><span class="stage" id="stage"></span></div>
+ <div class="boardbody"><div><p class="given" id="given"></p><h2 id="ask" tabindex="-1"></h2></div><div class="visual"><div class="boardlabel" id="boardlabel"></div><div id="sketch" class="sketch"></div></div></div></div>
+ <div class="controlrow"><div class="actbuttons"><button type="button" id="hintbtn" class="hintbtn" aria-expanded="false" aria-controls="hintpanel"><svg class="icon" aria-hidden="true"><use href="#i-bulb"/></svg>Coup de pouce</button>
+ <button type="button" id="ansbtn" aria-controls="anspanel" aria-expanded="false"><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg>Correction</button></div>
+ <nav class="pager" aria-label="Questions"><button type="button" id="prev">Précédente</button><button type="button" id="next" class="primary">Suivante</button></nav></div>
+ <div id="hintpanel" class="panel" hidden><div class="panelname">Coup de pouce</div><p id="hint"></p></div>
+ <div id="anspanel" class="panel answer" hidden><div class="panelname">Correction</div><p><strong id="answer"></strong></p><p id="why"></p></div>
+ </section>
+ <div class="practice" id="practice"><div class="practicebar"><button id="entrybtn" type="button" class="linkbtn" aria-expanded="false" aria-controls="entry"><svg class="icon" aria-hidden="true"><use href="#i-pencil"/></svg>Saisir ma réponse</button><span class="shortcuts">Clavier : ← précédente · → suivante</span></div>
+ <form id="entry" hidden><div class="fields" id="fields"></div><p id="feedback" role="status" hidden></p></form></div>
+ <section id="finish" hidden><div class="eyebrow">Fin du parcours</div><h2 tabindex="-1" id="finishhead">Fin des 30 automatismes</h2><p>Retrouvez une question dans le parcours ou recommencez depuis la première série.</p><button type="button" id="again" class="primary">Recommencer</button><button type="button" id="review">Revoir une question</button></section>
+</main>
+<dialog id="map" aria-labelledby="maptitle"><div class="dialogtitle"><h3 id="maptitle">Choisir une question</h3><button type="button" id="closemap">Fermer</button></div><div id="maplist"></div></dialog>
+<noscript>Activez JavaScript pour afficher les questions interactives.</noscript>
+<script>
+const stages = [
+  "Partager et grouper",
+  "Calculer de tête",
+  "Compléter une division",
+  "Interpréter le reste",
+  "Relever les défis"
+];
+
+function field(label, value, options) {
+  return {label, value: String(value), options};
+}
+function pair(q, r) {
+  return [field("Quotient", q), field("Reste", r)];
+}
+function slate(title, lines, style = "facts") {
+  return {title, lines, style};
+}
+function division(a, b) {
+  return slate("Division à compléter", [a, b], "division");
+}
+function question(given, ask, board, fields, hint, answer, why) {
+  return {given, ask, board, fields, hint, answer, why};
+}
+const questions = [
+  question("On partage équitablement 14 jetons entre 3 élèves.",
+    "Combien de jetons entiers chaque élève reçoit-il au maximum ?",
+    slate("Jetons à partager", [14], "tokens"), [field("Jetons par élève", 4)],
+    "Imagine que tu donnes un jeton à chacun, puis que tu recommences. Chaque tour utilise 3 jetons.",
+    "4 jetons par élève.", "14 = 3 × 4 + 2. Il reste 2 jetons, trop peu pour faire un tour de plus."),
+  question("On range 23 cubes dans des sachets de 5. On remplit le plus de sachets possible.",
+    "Combien de cubes restent en dehors des sachets ?",
+    slate("Le rangement", ["23 cubes", "5 par sachet"]), [field("Cubes restants", 3)],
+    "Compte de 5 en 5. Arrête-toi juste avant de dépasser 23.",
+    "3 cubes restent.", "23 = 5 × 4 + 3. Les 4 sachets pleins contiennent 20 cubes."),
+  question("Il y a 24 élèves. On forme des équipes de 6.",
+    "Combien d’équipes complètes peut-on former ?",
+    slate("Les équipes", ["24 élèves", "6 par équipe"]), [field("Équipes", 4)],
+    "Cherche par quel nombre multiplier 6 pour obtenir 24.",
+    "4 équipes.", "24 = 6 × 4 + 0. Tous les élèves ont une équipe."),
+  question("On effectue la division euclidienne de 38 par 5.",
+    "Lis l’égalité. Quel est le quotient ?",
+    slate("L’égalité", ["38 = 5 × 7 + 3"], "math"), [field("Quotient", 7)],
+    "Le quotient indique combien de groupes complets de 5 on peut former.",
+    "Le quotient est 7.", "38 contient 7 groupes complets de 5. Le reste est 3, et 3 < 5."),
+  question("On effectue la division euclidienne de 47 par 6.",
+    "Comment appelle-t-on le nombre 47 ?",
+    division(47, 6), [field("Nom du nombre 47", "dividende", ["diviseur", "quotient", "dividende", "reste"])],
+    "Repère le nombre que l’on partage. Le nombre de parts joue un autre rôle.",
+    "47 est le dividende.", "Le dividende est le nombre à diviser. Ici, 6 est le diviseur."),
+  question("Dans une division euclidienne, le diviseur est 8.",
+    "Quel est le plus grand reste possible ?",
+    slate("Le diviseur", ["8"], "math"), [field("Plus grand reste", 7)],
+    "Avec 8 unités restantes, on pourrait encore former un groupe. Quel entier vient juste avant 8 ?",
+    "Le plus grand reste est 7.", "Les restes possibles sont 0, 1, 2, 3, 4, 5, 6 et 7."),
+  question("Effectue la division euclidienne de 34 par 4.", "Quels sont le quotient et le reste ?",
+    division(34, 4), pair(8, 2), "Cherche le plus grand multiple de 4 inférieur ou égal à 34.",
+    "Quotient 8 · Reste 2", "4 × 8 = 32 et 34 − 32 = 2. Donc 34 = 4 × 8 + 2."),
+  question("Effectue la division euclidienne de 48 par 6.", "Quels sont le quotient et le reste ?",
+    division(48, 6), pair(8, 0), "48 figure dans la table de 6. Que reste-t-il lorsque tout est partagé ?",
+    "Quotient 8 · Reste 0", "48 = 6 × 8 + 0. La division est exacte."),
+  question("Effectue la division euclidienne de 59 par 7.", "Quels sont le quotient et le reste ?",
+    division(59, 7), pair(8, 3), "7 × 9 dépasse 59. Essaie avec un groupe de moins.",
+    "Quotient 8 · Reste 3", "7 × 8 = 56 et 59 − 56 = 3. Donc 59 = 7 × 8 + 3."),
+  question("On veut former des groupes de 12 avec seulement 9 jetons.",
+    "Dans la division de 9 par 12, quels sont le quotient et le reste ?",
+    division(9, 12), pair(0, 9), "Peux-tu former un seul groupe complet de 12 jetons ?",
+    "Quotient 0 · Reste 9", "9 = 12 × 0 + 9. Les 9 jetons restent, et 9 < 12."),
+  question("Effectue la division euclidienne de 76 par 10.", "Quels sont le quotient et le reste ?",
+    division(76, 10), pair(7, 6), "Décompose 76 en dizaines entières et en unités restantes.",
+    "Quotient 7 · Reste 6", "76 = 10 × 7 + 6. On compte 7 dizaines et 6 unités."),
+  question("Effectue la division euclidienne de 96 par 9.", "Quels sont le quotient et le reste ?",
+    division(96, 9), pair(10, 6), "Prends d’abord 10 groupes de 9. Que manque-t-il pour atteindre 96 ?",
+    "Quotient 10 · Reste 6", "96 = 9 × 10 + 6 et 6 < 9."),
+  question("Dans la division de 95 par 8, le reste est 7.", "Quel nombre manque dans l’égalité ?",
+    slate("L’égalité à compléter", ["95 = 8 × □ + 7"], "math"), [field("Quotient", 11)],
+    "Enlève le reste à 95. Cherche ensuite combien de groupes de 8 tu obtiens.",
+    "Le quotient est 11.", "95 − 7 = 88 et 88 = 8 × 11. Ainsi, 95 = 8 × 11 + 7."),
+  question("Le diviseur est 12, le quotient est 9 et le reste est 5.", "Retrouve le dividende.",
+    slate("L’égalité à compléter", ["□ = 12 × 9 + 5"], "math"), [field("Dividende", 113)],
+    "Calcule d’abord le nombre d’unités dans les 9 groupes, puis ajoute les unités restantes.",
+    "Le dividende est 113.", "12 × 9 = 108, puis 108 + 5 = 113. Le reste 5 est inférieur à 12."),
+  question("Le dividende est 143, le quotient est 11 et le reste est nul.", "Quel est le diviseur ?",
+    slate("L’égalité à compléter", ["143 = □ × 11"], "math"), [field("Diviseur", 13)],
+    "11 × 10 = 110. Combien de fois 11 faut-il encore ajouter pour arriver à 143 ?",
+    "Le diviseur est 13.", "143 = 13 × 11 + 0. On vérifie que 11 × 10 + 11 × 3 = 143."),
+  question("Effectue la division euclidienne de 167 par 12.", "Quels sont le quotient et le reste ?",
+    division(167, 12), pair(13, 11), "12 × 14 = 168. Si tu retires un groupe de 12, combien te manque-t-il pour atteindre 167 ?",
+    "Quotient 13 · Reste 11", "167 = 12 × 13 + 11. Avec un groupe de plus, on atteindrait 168."),
+  question("Effectue la division euclidienne de 156 par 15.", "Quels sont le quotient et le reste ?",
+    division(156, 15), pair(10, 6), "Commence par 10 groupes de 15 et compare leur total à 156.",
+    "Quotient 10 · Reste 6", "156 = 15 × 10 + 6. Les 6 unités restantes ne forment pas un groupe de 15."),
+  question("Pose ou effectue de tête la division de 427 par 4.", "Quels sont le quotient et le reste ?",
+    division(427, 4), pair(106, 3), "Décompose 427 en 400 + 27. Combien de groupes de 4 obtiens-tu avec chaque partie ?",
+    "Quotient 106 · Reste 3", "400 = 4 × 100 et 27 = 4 × 6 + 3. On obtient 427 = 4 × 106 + 3."),
+  question("Un album contient 8 cartes par page. Inès y range ses 58 cartes, page après page.",
+    "Combien de pages remplit-elle entièrement ?",
+    slate("L’album", ["58 cartes", "8 par page"]), [field("Pages pleines", 7)],
+    "Cherche combien de paquets complets de 8 cartes tu peux faire.",
+    "7 pages pleines.", "58 = 8 × 7 + 2. Sept pages contiennent 56 cartes et il reste 2 cartes."),
+  question("Inès range toujours ses 58 cartes, avec 8 places par page.", "Combien de pages lui faut-il au minimum pour tout ranger ?",
+    slate("Le même album", ["58 cartes", "8 par page"]), [field("Pages nécessaires", 8)],
+    "Sept pages offrent 56 places. Où ranger les cartes qui restent ?",
+    "Il lui faut 8 pages.", "58 = 8 × 7 + 2. Il faut 7 pages pleines et une huitième pour les 2 dernières cartes."),
+  question("On partage 74 caramels entre 9 enfants. Chacun en reçoit autant et le plus possible.", "Combien de caramels restent à partager ?",
+    slate("Le partage", ["74 caramels", "9 enfants"]), [field("Caramels restants", 2)],
+    "Calcule d’abord le total distribué si chaque enfant reçoit 8 caramels.",
+    "Il reste 2 caramels.", "74 = 9 × 8 + 2. Les enfants reçoivent 72 caramels en tout."),
+  question("On veut ranger 54 balles dans des boîtes de 9.", "Combien de boîtes faut-il au minimum ?",
+    slate("Le rangement", ["54 balles", "9 par boîte"]), [field("Boîtes nécessaires", 6)],
+    "54 est-il un multiple de 9 ? Vérifie s’il reste une balle après avoir rempli les boîtes.",
+    "6 boîtes suffisent.", "54 = 9 × 6 + 0. Les 6 boîtes sont pleines et toutes les balles sont rangées."),
+  question("On dispose 85 chaises par rangées de 6 et on remplit chaque rangée avant de commencer la suivante.",
+    "Combien de chaises faut-il ajouter pour compléter la dernière rangée ?",
+    slate("La salle", ["85 chaises", "6 par rangée"]), [field("Chaises à ajouter", 5)],
+    "Combien de chaises sont déjà dans la dernière rangée ? Combien lui en manque-t-il pour en avoir 6 ?",
+    "Il faut ajouter 5 chaises.", "85 = 6 × 14 + 1. La dernière rangée contient 1 chaise et il en manque 6 − 1 = 5."),
+  question("On range 135 plants sur des plateaux de 12. On remplit chaque plateau avant de passer au suivant.",
+    "Combien de plants met-on sur le dernier plateau ?",
+    slate("La serre", ["135 plants", "12 par plateau"]), [field("Plants sur le dernier plateau", 3)],
+    "Commence par remplir 10 plateaux. Peux-tu en remplir encore un avec les plants restants ?",
+    "3 plants.", "135 = 12 × 11 + 3. Après les 11 plateaux pleins, le douzième reçoit 3 plants."),
+  question("Nora écrit 86 = 7 × 11 + 9 pour diviser 86 par 7.",
+    "L’égalité est vraie. Corrige le quotient et le reste.",
+    slate("La proposition de Nora", ["86 = 7 × 11 + 9"], "math"), pair(12, 2),
+    "Compare 9 au diviseur 7. Peux-tu former un groupe de plus avec les 9 unités restantes ?",
+    "Quotient 12 · Reste 2", "Le reste doit être inférieur à 7. Or 9 = 7 + 2, donc 86 = 7 × 12 + 2."),
+  question("Avec 119 perles, on fait 9 colliers de 12 perles et il reste 11 perles. On ajoute une perle.",
+    "Quels sont le nouveau quotient et le nouveau reste ?",
+    slate("Avant l’ajout", ["119 = 12 × 9 + 11"], "math"), pair(10, 0),
+    "Ajoute la perle aux 11 qui restent. Que peux-tu fabriquer maintenant ?",
+    "Quotient 10 · Reste 0", "Les 12 perles permettent un collier de plus. Ainsi, 120 = 12 × 10 + 0."),
+  question("Une division euclidienne a pour diviseur 9 et pour quotient 7.", "Quel est le plus grand dividende possible ?",
+    slate("Le dividende cherché", ["9 × 7 + reste"], "math"), [field("Plus grand dividende", 71)],
+    "Garde les 7 groupes de 9. Quel est le plus grand reste autorisé quand on divise par 9 ?",
+    "Le plus grand dividende est 71.", "Le reste maximal est 8. On calcule 9 × 7 + 8 = 71. Avec 72, le quotient serait déjà 8."),
+  question("Je suis un entier strictement compris entre 50 et 56. Quand on me divise par 8, le reste est 3.",
+    "Quel nombre suis-je ?",
+    slate("Les indices", ["50 < □ < 56", "Reste 3"], "math"), [field("Nombre cherché", 51)],
+    "Si tu enlèves 3 au nombre cherché, tu dois obtenir un multiple de 8.",
+    "Le nombre est 51.", "51 = 8 × 6 + 3. Le nombre suivant qui laisse aussi un reste de 3 est 59, déjà trop grand."),
+  question("Un sac de billes permet de faire des groupes de 7, avec 5 billes restantes. On réunit deux sacs identiques.",
+    "Quel sera le reste si l’on refait des groupes de 7 ?",
+    slate("Deux sacs", ["5 billes restantes", "dans chaque sac"]), [field("Nouveau reste", 3)],
+    "Garde les groupes déjà formés et réunis seulement les billes qui restaient dans chaque sac.",
+    "Le nouveau reste est 3.", "Les deux restes donnent 5 + 5 = 10 billes. On forme un groupe de 7 de plus et il reste 3 billes."),
+  question("J’ai entre 40 et 70 jetons. Par groupes de 6, il en reste 2. Par groupes de 5, il en reste 3.",
+    "Combien ai-je de jetons ?",
+    slate("Deux conditions", ["Par 6 : reste 2", "Par 5 : reste 3"]), [field("Nombre de jetons", 68)],
+    "Pars de 44, qui laisse un reste de 2 par 6. Avance de 6 en 6, puis teste le reste par 5.",
+    "Il y a 68 jetons.", "Les candidats par 6 sont 44, 50, 56, 62 et 68. Seul 68 laisse aussi un reste de 3 par 5 : 68 = 5 × 13 + 3.")
+];
+
+const el = id => document.getElementById(id);
+const count = questions.length;
+const perStage = 6;
+let index = 0;
+let isDone = false;
+const typed = questions.map(() => []);
+const mapDialog = el("map");
+
+function textNode(tag, text) {
+  const node = document.createElement(tag);
+  node.textContent = text;
+  return node;
+}
+function togglePanel(buttonId, panelId, open) {
+  const button = el(buttonId);
+  el(panelId).hidden = !open;
+  button.setAttribute("aria-expanded", String(open));
+  if (buttonId === "ansbtn") button.classList.toggle("fillblue", open);
+}
+function drawBoard(board) {
+  el("boardlabel").textContent = board.title;
+  const sketch = el("sketch");
+  sketch.className = "sketch " + board.style;
+  sketch.replaceChildren();
+  sketch.removeAttribute("aria-label");
+  sketch.removeAttribute("role");
+  if (board.style === "tokens") {
+    sketch.setAttribute("role", "img");
+    sketch.setAttribute("aria-label", board.lines[0] + " jetons");
+    const counters = document.createElement("div");
+    counters.className = "counters";
+    for (let i = 0; i < board.lines[0]; i++) {
+      const token = document.createElement("span");
+      token.className = "counter";
+      counters.append(token);
+    }
+    sketch.append(counters);
+  } else if (board.style === "division") {
+    sketch.setAttribute("role", "img");
+    sketch.setAttribute("aria-label", "Division de " + board.lines[0] + " par " + board.lines[1] + ", reste et quotient à compléter.");
+    const frame = document.createElement("div");
+    frame.className = "potence";
+    for (const value of [...board.lines, "⋯", "⋯"]) frame.append(textNode("span", value));
+    sketch.append(frame);
+  } else {
+    for (const line of board.lines) sketch.append(textNode("div", line));
+  }
+}
+function makeFields(items) {
+  const fields = el("fields");
+  fields.replaceChildren();
+  items.forEach((item, k) => {
+    const label = textNode("label", item.label);
+    const input = document.createElement(item.options ? "select" : "input");
+    if (item.options) {
+      input.add(new Option("Choisir…", ""));
+      item.options.forEach(option => input.add(new Option(option, option)));
+    } else {
+      input.type = "text";
+      input.inputMode = "numeric";
+      input.pattern = "[0-9]+";
+      input.maxLength = 10;
+      input.autocomplete = "off";
+    }
+    input.name = "answer" + k;
+    input.required = true;
+    input.value = typed[index][k] || "";
+    input.addEventListener("input", () => {
+      typed[index][k] = input.value;
+      el("feedback").hidden = true;
+    });
+    label.append(input);
+    fields.append(label);
+  });
+  const check = textNode("button", "Vérifier");
+  check.type = "submit";
+  check.className = "primary";
+  fields.append(check);
+}
+function paintProgress(n) {
+  const progress = el("progress");
+  progress.replaceChildren();
+  stages.forEach((_, k) => {
+    const track = document.createElement("span");
+    track.className = "track";
+    const bar = document.createElement("i");
+    const filled = Math.max(0, Math.min(perStage, n - k * perStage));
+    bar.style.width = (100 * filled / perStage) + "%";
+    track.append(bar);
+    progress.append(track);
+  });
+}
+function markMap() {
+  const buttons = el("maplist").querySelectorAll("button");
+  buttons.forEach((b, k) => {
+    if (k === index && !isDone) b.setAttribute("aria-current", "step");
+    else b.removeAttribute("aria-current");
+  });
+}
+function go(i, focus = true) {
+  index = Math.min(Math.max(0, i), count - 1);
+  isDone = false;
+  const q = questions[index];
+  el("activity").hidden = false;
+  el("practice").hidden = false;
+  el("finish").hidden = true;
+  el("num").textContent = "Question " + (index + 1) + " / " + count;
+  el("stage").textContent = stages[Math.floor(index / perStage)];
+  for (const key of ["given", "ask", "hint", "answer", "why"]) el(key).textContent = q[key];
+  drawBoard(q.board);
+  togglePanel("hintbtn", "hintpanel", false);
+  togglePanel("ansbtn", "anspanel", false);
+  togglePanel("entrybtn", "entry", false);
+  el("feedback").hidden = true;
+  el("prev").disabled = index === 0;
+  el("next").textContent = index === count - 1 ? "Terminer" : "Suivante";
+  makeFields(q.fields);
+  paintProgress(index + 1);
+  markMap();
+  if (focus) {
+    el("ask").focus({preventScroll:true});
+    window.scrollTo(0,0);
+    try { history.replaceState(null, "", "#q" + (index + 1)); } catch {}
+  }
+}
+function next() {
+  if (index < count - 1) { go(index + 1); return; }
+  isDone = true;
+  el("activity").hidden = true;
+  el("practice").hidden = true;
+  el("finish").hidden = false;
+  markMap();
+  el("finishhead").focus();
+}
+function makeMap() {
+  stages.forEach((stage, block) => {
+    const row = document.createElement("div");
+    row.className = "jumprow";
+    row.append(textNode("p", stage));
+    const buttons = document.createElement("div");
+    for (let i = block * perStage; i < (block + 1) * perStage; i++) {
+      const b = textNode("button", i + 1);
+      b.type = "button";
+      b.setAttribute("aria-label", "Question " + (i + 1) + " – " + stage);
+      b.addEventListener("click", () => { mapDialog.close(); go(i); });
+      buttons.append(b);
+    }
+    row.append(buttons);
+    el("maplist").append(row);
+  });
+}
+function openMap() {
+  mapDialog.showModal();
+}
+function project(enabled) {
+  document.body.classList.toggle("presentation", enabled);
+  el("project").setAttribute("aria-pressed", String(enabled));
+  el("projecttext").textContent = enabled ? "Quitter la projection" : "Projeter";
+}
+el("project").addEventListener("click", async () => {
+  const enabled = !document.body.classList.contains("presentation");
+  project(enabled);
+  try {
+    if (enabled && document.documentElement.requestFullscreen) await document.documentElement.requestFullscreen();
+    if (!enabled && document.fullscreenElement) await document.exitFullscreen();
+  } catch { /* The enlarged layout also works inside mobile browsers. */ }
+});
+document.addEventListener("fullscreenchange", () => { if (!document.fullscreenElement) project(false); });
+el("openmap").addEventListener("click", openMap);
+el("review").addEventListener("click", openMap);
+el("closemap").addEventListener("click", () => mapDialog.close());
+el("prev").addEventListener("click", () => go(index - 1));
+el("next").addEventListener("click", next);
+el("again").addEventListener("click", () => { typed.forEach(x => x.length = 0); go(0); });
+function reveal(button, panel) {
+  const open = el(panel).hidden;
+  if (button === "hintbtn" && open) togglePanel("ansbtn", "anspanel", false);
+  if (button === "ansbtn" && open) togglePanel("hintbtn", "hintpanel", false);
+  togglePanel(button, panel, open);
+  if (open) el(panel).scrollIntoView({block:"nearest"});
+}
+el("hintbtn").addEventListener("click", () => reveal("hintbtn", "hintpanel"));
+el("ansbtn").addEventListener("click", () => reveal("ansbtn", "anspanel"));
+el("entrybtn").addEventListener("click", () => {
+  const open = el("entry").hidden;
+  togglePanel("entrybtn", "entry", open);
+  if (open) el("entry").querySelector("input,select").focus();
+});
+el("entry").addEventListener("submit", event => {
+  event.preventDefault();
+  const inputs = Array.from(el("entry").querySelectorAll("input,select"));
+  const misses = [];
+  questions[index].fields.forEach((item, k) => {
+    const value = inputs[k].value.trim();
+    const valid = item.options ? value === item.value : /^\d+$/.test(value) && Number(value) === Number(item.value);
+    if (!valid) misses.push(item.label.toLowerCase());
+  });
+  const feedback = el("feedback");
+  feedback.textContent = misses.length ? (inputs.length === 1 ? "Essaie encore. Le coup de pouce peut t’aider." : "À revoir : " + misses.join(" et ") + ".") : "Bravo, ta réponse est juste !";
+  feedback.hidden = false;
+});
+document.addEventListener("keydown", event => {
+  if (event.altKey || event.ctrlKey || event.metaKey || mapDialog.open || isDone || /^(INPUT|SELECT|TEXTAREA)$/.test(event.target.tagName)) return;
+  if (event.key === "ArrowLeft" && index > 0) { event.preventDefault(); go(index - 1); }
+  if (event.key === "ArrowRight") { event.preventDefault(); next(); }
+});
+function startIndex() {
+  const match = /^#q([1-9]\d*)$/.exec(location.hash);
+  const n = match ? Number(match[1]) : 1;
+  return n >= 1 && n <= count ? n - 1 : 0;
+}
+makeMap();
+go(startIndex(), false);
+window.addEventListener("hashchange", () => go(startIndex(), false));
+
+</script>
+</body></html>
